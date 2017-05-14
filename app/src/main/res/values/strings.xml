@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Score Board</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="nav_dashboard_title">Dashboard</string>
+    <string name="open_drawer">open drawer</string>
+    <string name="close_drawer">close drawer</string>
+
+    <!--Games name-->
+    <string name="game_name_phase_dix">Phase 10</string>
+    <string name="game_name_uno">Uno</string>
+    <string name="game_name_tarot">Tarot</string>
+    <string name="jacket">jacket</string>
+    <string name="action_next">Next</string>
+    <string name="action_validate">Validate</string>
+    <string name="phase">Phase :</string>
+    <string name="points">Points :</string>
+    <string name="image_of_game">image of game</string>
+    <string name="choose_game">Choose game</string>
+    <string name="choose_rules">Choose Rules</string>
+
+    <string-array name="rules_array">
+        <item>Partie rapide</item>
+        <item>Partie Complete</item>
+    </string-array>
+
+</resources>
