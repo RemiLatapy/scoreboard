@@ -44,6 +44,7 @@ public class FragmentGameChooser extends Fragment {
 
     private ArrayList<ItemGameChooser> mockGameList() {
         ArrayList<ItemGameChooser> data = new ArrayList<>();
+        data.add(new ItemGameChooser(R.drawable.thumbnail_squash, getString(R.string.game_name_squash), FragmentGamePlayer.class));
         data.add(new ItemGameChooser(R.drawable.thumbail_phase_10, getString(R.string.game_name_phase_dix), FragmentGamePlayer.class));
         data.add(new ItemGameChooser(R.drawable.thumbail_uno, getString(R.string.game_name_uno), FragmentGamePlayer.class));
         data.add(new ItemGameChooser(R.drawable.thumbail_tarot, getString(R.string.game_name_tarot), FragmentGamePlayer.class));

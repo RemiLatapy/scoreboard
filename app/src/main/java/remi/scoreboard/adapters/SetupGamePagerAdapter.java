@@ -14,9 +14,10 @@ import remi.scoreboard.fragments.FragmentGameRules;
 
 public class SetupGamePagerAdapter extends FragmentPagerAdapter {
 
-    final private int NUM_FRAGS = 3;
+    final int NUM_FRAGS = 3;
     private Context ctx;
     private FragmentGamePlayer fragmentGamePlayer;
+    private FragmentGameChooser fragmentGameChooser;
 
     public SetupGamePagerAdapter(FragmentManager fm, Context ctx) {
         super(fm);
@@ -27,7 +28,8 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return FragmentGameChooser.instantiate(ctx, FragmentGameChooser.class.getName());
+                fragmentGameChooser = (FragmentGameChooser) FragmentGameChooser.instantiate(ctx, FragmentGameChooser.class.getName());
+                return fragmentGameChooser;
             case 1:
                 fragmentGamePlayer = (FragmentGamePlayer) FragmentGamePlayer.instantiate(ctx, FragmentGamePlayer.class.getName());
                 return fragmentGamePlayer;

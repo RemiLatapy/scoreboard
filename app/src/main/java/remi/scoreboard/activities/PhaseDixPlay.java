@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import remi.scoreboard.R;
-import remi.scoreboard.model.Player;
+import remi.scoreboard.model.PhaseDixPlayer;
 
 public class PhaseDixPlay extends AppCompatActivity {
 
@@ -28,7 +28,7 @@ public class PhaseDixPlay extends AppCompatActivity {
     private LinearLayout playerContainerView;
     private ArrayList<String> playersName;
     private Toolbar toolbar;
-    private ArrayList<Player> playerList;
+    private ArrayList<PhaseDixPlayer> playerList;
 
 
     @Override
@@ -48,7 +48,7 @@ public class PhaseDixPlay extends AppCompatActivity {
     private void createPlayers() {
         playerList = new ArrayList<>();
         for (int i = 0; i < playersName.size(); i++) {
-            playerList.add(new Player(playersName.get(i), (i + 1)));
+            playerList.add(new PhaseDixPlayer(playersName.get(i), (i + 1)));
         }
     }
 
@@ -67,13 +67,13 @@ public class PhaseDixPlay extends AppCompatActivity {
             view = getLayoutInflater().inflate(R.layout.item_card_player, playerContainerView, false);
             findViews(view);
             fillTextViews(i);
-            final Player currentPlayer = playerList.get(i);
+            final PhaseDixPlayer currentPlayer = playerList.get(i);
             buildAlertDialog(view, currentPlayer);
             playerContainerView.addView(view);
         }
     }
 
-    private void buildAlertDialog(View view, final Player currentPlayer) {
+    private void buildAlertDialog(View view, final PhaseDixPlayer currentPlayer) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +99,7 @@ public class PhaseDixPlay extends AppCompatActivity {
     }
 
     @NonNull
-    private DialogInterface.OnClickListener getValidateListener(final Player currentPlayer) {
+    private DialogInterface.OnClickListener getValidateListener(final PhaseDixPlayer currentPlayer) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -115,7 +115,7 @@ public class PhaseDixPlay extends AppCompatActivity {
         };
     }
 
-    private void updateViews(Player player) {
+    private void updateViews(PhaseDixPlayer player) {
         findViews(playerContainerView.getChildAt(player.getNum() - 1));
         playerPhase.setText("Phase " + player.getPhase());
         playerPoints.setText(player.getPoints() + " points");

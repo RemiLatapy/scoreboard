@@ -1,7 +1,7 @@
 package remi.scoreboard.model;
 
 public class ItemGameChooser {
-    private int imageResId;
+    public int imageResId;
     private String gameTitle;
     private Class gameToLaunch;
 

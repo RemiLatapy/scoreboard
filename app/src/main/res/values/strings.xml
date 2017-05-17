@@ -18,8 +18,9 @@
     <string name="image_of_game">image of game</string>
     <string name="choose_game">Choose game</string>
     <string name="choose_rules">Choose Rules</string>
+    <string name="game_name_squash">Squash</string>
 
-    <string-array name="rules_array">
+    <string-array name="rules_array_phase10">
         <item>Partie rapide</item>
         <item>Partie Complete</item>
     </string-array>

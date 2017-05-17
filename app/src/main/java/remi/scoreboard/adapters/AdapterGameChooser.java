@@ -1,6 +1,7 @@
 package remi.scoreboard.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,6 @@ public class AdapterGameChooser extends RecyclerView.Adapter<HolderGame> {
     public void onBindViewHolder(final HolderGame holder, final int position) {
         final ItemGameChooser currentItem = items.get(position);
         holder.titleGame.setText(currentItem.getGameTitle());
-
         Glide.with(holder.imageGame.getContext())
                 .load(currentItem.getImageResId())
                 .centerCrop()
@@ -46,6 +46,7 @@ public class AdapterGameChooser extends RecyclerView.Adapter<HolderGame> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("game", currentItem.getGameTitle());
                 activity.swipeRight();
             }
         });
