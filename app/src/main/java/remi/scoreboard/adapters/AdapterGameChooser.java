@@ -46,7 +46,7 @@ public class AdapterGameChooser extends RecyclerView.Adapter<HolderGame> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("game", currentItem.getGameTitle());
+                activity.currentGameName = currentItem.getGameTitle();
                 activity.swipeRight();
             }
         });

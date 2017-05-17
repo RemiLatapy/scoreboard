@@ -18,6 +18,7 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     private Context ctx;
     private FragmentGamePlayer fragmentGamePlayer;
     private FragmentGameChooser fragmentGameChooser;
+    private FragmentGameRules fragmentGameRules;
 
     public SetupGamePagerAdapter(FragmentManager fm, Context ctx) {
         super(fm);
@@ -34,7 +35,9 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
                 fragmentGamePlayer = (FragmentGamePlayer) FragmentGamePlayer.instantiate(ctx, FragmentGamePlayer.class.getName());
                 return fragmentGamePlayer;
             case 2:
-                return FragmentGameRules.instantiate(ctx, FragmentGameRules.class.getName());
+                fragmentGameRules = (FragmentGameRules) FragmentGameRules.instantiate(ctx, FragmentGameRules.class.getName());
+                ;
+                return fragmentGameRules;
         }
         return null;
     }
@@ -49,6 +52,13 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
             Log.d("SetupGamePagerAdapter", "fragmentGamePlayer == null");
         }
         return fragmentGamePlayer.getPlayers();
+    }
+
+    public String getRule() {
+        if (fragmentGameRules == null) {
+            Log.d("SetupGamePagerAdapter", "fragmentGameRules == null");
+        }
+        return fragmentGameRules.getRule();
     }
 
     public void savePlayers() {

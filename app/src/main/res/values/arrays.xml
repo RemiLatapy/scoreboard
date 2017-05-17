@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rules_array_default">
+        <item>Partie classique</item>
+    </string-array>
+
+    <string-array name="rules_array_phase10">
+        <item>Partie rapide</item>
+        <item>Partie Complete</item>
+    </string-array>
+
+    <string-array name="rules_array_squash">
+        <item>Championnat</item>
+        <item>Coupe</item>
+    </string-array>
+</resources>

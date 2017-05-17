@@ -25,11 +25,15 @@ import remi.scoreboard.adapters.SetupGamePagerAdapter;
 public class MainActivity extends AppCompatActivity {
 
     public static final String PLAYERS = "remi.scoreboard.activities.players";
+    public static final String GAME_RULES = "remi.scoreboard.activities.gamerules";
+
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
     private FloatingActionButton fab;
     private ViewPager pager;
+
+    public String currentGameName;
 
     public MainActivity() {
     }
@@ -39,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewsByIds();
+        currentGameName = "";
 
+        findViewsByIds();
         setupPager();
         setupToolbar();
 
@@ -53,8 +58,17 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         break;
                     case 2:
-                        Intent intent = new Intent(MainActivity.this, PhaseDixPlay.class);
+                        Intent intent = new Intent();
+                        if (currentGameName == getString(R.string.game_name_phase_dix)) {
+                            intent.setClass(MainActivity.this, PhaseDixPlay.class);
+                        } else if (currentGameName == getString(R.string.game_name_squash)) {
+                            intent.setClass(MainActivity.this, PhaseDixPlay.class);
+                        } else {
+                            break;
+                        }
+
                         intent.putExtra(PLAYERS, getPlayers());
+                        intent.putExtra(GAME_RULES, getRule());
                         startActivity(intent);
                         break;
                 }
@@ -69,6 +83,13 @@ public class MainActivity extends AppCompatActivity {
             return ((SetupGamePagerAdapter) pager.getAdapter()).getPlayers();
         }
         return null;
+    }
+
+    private String getRule() {
+        if (pager.getAdapter() instanceof SetupGamePagerAdapter) {
+            return ((SetupGamePagerAdapter) pager.getAdapter()).getRule();
+        }
+        return "";
     }
 
     private void setupPager() {

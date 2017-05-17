@@ -10,6 +10,7 @@
     <string name="game_name_phase_dix">Phase 10</string>
     <string name="game_name_uno">Uno</string>
     <string name="game_name_tarot">Tarot</string>
+
     <string name="jacket">jacket</string>
     <string name="action_next">Next</string>
     <string name="action_validate">Validate</string>
@@ -19,10 +20,5 @@
     <string name="choose_game">Choose game</string>
     <string name="choose_rules">Choose Rules</string>
     <string name="game_name_squash">Squash</string>
-
-    <string-array name="rules_array_phase10">
-        <item>Partie rapide</item>
-        <item>Partie Complete</item>
-    </string-array>
 
 </resources>

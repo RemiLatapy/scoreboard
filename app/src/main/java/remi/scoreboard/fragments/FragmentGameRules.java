@@ -3,15 +3,20 @@ package remi.scoreboard.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.AppCompatSpinner;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import remi.scoreboard.R;
+import remi.scoreboard.activities.MainActivity;
 
 public class FragmentGameRules extends Fragment {
+
+    private AppCompatSpinner spinner;
 
     public FragmentGameRules() {
         super();
@@ -24,12 +29,21 @@ public class FragmentGameRules extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        final AppCompatSpinner spinner = (AppCompatSpinner) view.findViewById(R.id.rules_chooser);
+        spinner = (AppCompatSpinner) view.findViewById(R.id.rules_chooser);
         setupRuleChooser(spinner);
     }
 
     private void setupRuleChooser(AppCompatSpinner spinner) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.rules_array_phase10, android.R.layout.simple_spinner_item);
+        String currentGameName = ((MainActivity) getActivity()).currentGameName;
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.rules_array_default, android.R.layout.simple_spinner_item);
+
+        if (currentGameName == getString(R.string.game_name_phase_dix)) {
+            adapter = ArrayAdapter.createFromResource(getActivity(), R.array.rules_array_phase10, android.R.layout.simple_spinner_item);
+        } else if (currentGameName == getString(R.string.game_name_squash)) {
+            adapter = ArrayAdapter.createFromResource(getActivity(), R.array.rules_array_squash, android.R.layout.simple_spinner_item);
+
+        }
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
@@ -39,5 +53,7 @@ public class FragmentGameRules extends Fragment {
         super.onViewStateRestored(savedInstanceState);
     }
 
-
+    public String getRule() {
+        return ((ArrayAdapter<CharSequence>) spinner.getAdapter()).getItem(spinner.getSelectedItemPosition()).toString();
+    }
 }
