@@ -4,44 +4,31 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.model.PhaseDixPlayer;
+import remi.scoreboard.model.Player;
 
-public class PhaseDixPlay extends AppCompatActivity {
+public class PhaseDixPlay extends GameActivity {
 
     TextView playerNum;
     TextView playerName;
     TextView playerPhase;
     TextView playerPoints;
-    private LinearLayout playerContainerView;
-    private ArrayList<String> playersName;
-    private Toolbar toolbar;
-    private ArrayList<PhaseDixPlayer> playerList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phase_dix);
-
-        playerContainerView = (LinearLayout) findViewById(R.id.card_container);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        playersName = getIntent().getStringArrayListExtra(MainActivity.PLAYERS);
 
         createPlayers();
-        setupToolbar();
         addAllPlayersView();
     }
 
@@ -52,28 +39,19 @@ public class PhaseDixPlay extends AppCompatActivity {
         }
     }
 
-    private void setupToolbar() {
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
     private void addAllPlayersView() {
         View view;
         for (int i = 0; i < playersName.size(); i++) {
-            view = getLayoutInflater().inflate(R.layout.item_card_player, playerContainerView, false);
+            view = getLayoutInflater().inflate(R.layout.item_card_player, cardContainerView, false);
             findViews(view);
             fillTextViews(i);
-            final PhaseDixPlayer currentPlayer = playerList.get(i);
+            final Player currentPlayer = playerList.get(i);
             buildAlertDialog(view, currentPlayer);
-            playerContainerView.addView(view);
+            cardContainerView.addView(view);
         }
     }
 
-    private void buildAlertDialog(View view, final PhaseDixPlayer currentPlayer) {
+    private void buildAlertDialog(View view, final Player currentPlayer) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,24 +77,24 @@ public class PhaseDixPlay extends AppCompatActivity {
     }
 
     @NonNull
-    private DialogInterface.OnClickListener getValidateListener(final PhaseDixPlayer currentPlayer) {
+    private DialogInterface.OnClickListener getValidateListener(final Player currentPlayer) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String pointsText = ((EditText) ((AlertDialog) dialog).findViewById(R.id.points)).getText().toString();
                 if (!pointsText.isEmpty()) {
-                    currentPlayer.addPoints(Integer.parseInt(pointsText));
+                    ((PhaseDixPlayer) currentPlayer).addPoints(Integer.parseInt(pointsText));
                 }
                 if (((CheckBox) ((AlertDialog) dialog).findViewById(R.id.phase)).isChecked()) {
-                    currentPlayer.validPhase();
+                    ((PhaseDixPlayer) currentPlayer).validPhase();
                 }
-                updateViews(currentPlayer);
+                updateViews(((PhaseDixPlayer) currentPlayer));
             }
         };
     }
 
     private void updateViews(PhaseDixPlayer player) {
-        findViews(playerContainerView.getChildAt(player.getNum() - 1));
+        findViews(cardContainerView.getChildAt(player.getNum() - 1));
         playerPhase.setText("Phase " + player.getPhase());
         playerPoints.setText(player.getPoints() + " points");
     }
