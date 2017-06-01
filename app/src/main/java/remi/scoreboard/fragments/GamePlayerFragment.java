@@ -18,7 +18,7 @@ import remi.scoreboard.R;
 import remi.scoreboard.activities.MainActivity;
 import remi.scoreboard.adapters.PlayersAdapter;
 
-public class FragmentGamePlayer extends Fragment {
+public class GamePlayerFragment extends Fragment {
 
     private PlayersAdapter adapter;
     private Menu menu;

@@ -16,7 +16,7 @@ import remi.scoreboard.R;
 import remi.scoreboard.model.PhaseDixPlayer;
 import remi.scoreboard.model.Player;
 
-public class PhaseDixPlay extends GameActivity {
+public class PhaseDixPlayActivity extends GameActivity {
 
     TextView playerNum;
     TextView playerName;
@@ -55,7 +55,7 @@ public class PhaseDixPlay extends GameActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (new AlertDialog.Builder(PhaseDixPlay.this))
+                (new AlertDialog.Builder(PhaseDixPlayActivity.this))
                         .setCancelable(true)
                         .setTitle(currentPlayer.getName())
                         .setView(getLayoutInflater().inflate(R.layout.dialog_player_score, (ViewGroup) v.getRootView(), false))

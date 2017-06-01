@@ -1,7 +1,6 @@
 package remi.scoreboard.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,10 @@ import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.activities.MainActivity;
-import remi.scoreboard.holders.HolderGame;
+import remi.scoreboard.holders.GamesHolder;
 import remi.scoreboard.model.ItemGameChooser;
 
-public class AdapterGameChooser extends RecyclerView.Adapter<HolderGame> {
+public class GameChooserAdapter extends RecyclerView.Adapter<GamesHolder> {
 
     public static final String GAME_TITLE_ID = "gameTitleId";
     public static final String GAME_CLASS = "gameClassName";
@@ -23,19 +22,19 @@ public class AdapterGameChooser extends RecyclerView.Adapter<HolderGame> {
     private ArrayList<ItemGameChooser> items;
     private MainActivity activity;
 
-    public AdapterGameChooser(MainActivity activity, ArrayList<ItemGameChooser> items) {
+    public GameChooserAdapter(MainActivity activity, ArrayList<ItemGameChooser> items) {
         this.items = items;
         this.activity = activity;
     }
 
     @Override
-    public HolderGame onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GamesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_game, parent, false);
-        return new HolderGame(view);
+        return new GamesHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final HolderGame holder, final int position) {
+    public void onBindViewHolder(final GamesHolder holder, final int position) {
         final ItemGameChooser currentItem = items.get(position);
         holder.titleGame.setText(currentItem.getGameTitle());
         Glide.with(holder.imageGame.getContext())

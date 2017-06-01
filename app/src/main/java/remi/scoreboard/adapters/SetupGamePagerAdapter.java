@@ -8,17 +8,17 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import remi.scoreboard.fragments.FragmentGameChooser;
-import remi.scoreboard.fragments.FragmentGamePlayer;
-import remi.scoreboard.fragments.FragmentGameRules;
+import remi.scoreboard.fragments.GameChooserFragment;
+import remi.scoreboard.fragments.GamePlayerFragment;
+import remi.scoreboard.fragments.GameRulesFragment;
 
 public class SetupGamePagerAdapter extends FragmentPagerAdapter {
 
     final int NUM_FRAGS = 3;
     private Context ctx;
-    private FragmentGamePlayer fragmentGamePlayer;
-    private FragmentGameChooser fragmentGameChooser;
-    private FragmentGameRules fragmentGameRules;
+    private GamePlayerFragment gamePlayerFragment;
+    private GameChooserFragment gameChooserFragment;
+    private GameRulesFragment gameRulesFragment;
 
     public SetupGamePagerAdapter(FragmentManager fm, Context ctx) {
         super(fm);
@@ -29,15 +29,15 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                fragmentGameChooser = (FragmentGameChooser) FragmentGameChooser.instantiate(ctx, FragmentGameChooser.class.getName());
-                return fragmentGameChooser;
+                gameChooserFragment = (GameChooserFragment) GameChooserFragment.instantiate(ctx, GameChooserFragment.class.getName());
+                return gameChooserFragment;
             case 1:
-                fragmentGamePlayer = (FragmentGamePlayer) FragmentGamePlayer.instantiate(ctx, FragmentGamePlayer.class.getName());
-                return fragmentGamePlayer;
+                gamePlayerFragment = (GamePlayerFragment) GamePlayerFragment.instantiate(ctx, GamePlayerFragment.class.getName());
+                return gamePlayerFragment;
             case 2:
-                fragmentGameRules = (FragmentGameRules) FragmentGameRules.instantiate(ctx, FragmentGameRules.class.getName());
+                gameRulesFragment = (GameRulesFragment) GameRulesFragment.instantiate(ctx, GameRulesFragment.class.getName());
                 ;
-                return fragmentGameRules;
+                return gameRulesFragment;
         }
         return null;
     }
@@ -48,20 +48,20 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     }
 
     public ArrayList<String> getPlayers() {
-        if (fragmentGamePlayer == null) {
-            Log.d("SetupGamePagerAdapter", "fragmentGamePlayer == null");
+        if (gamePlayerFragment == null) {
+            Log.d("SetupGamePagerAdapter", "gamePlayerFragment == null");
         }
-        return fragmentGamePlayer.getPlayers();
+        return gamePlayerFragment.getPlayers();
     }
 
     public String getRule() {
-        if (fragmentGameRules == null) {
-            Log.d("SetupGamePagerAdapter", "fragmentGameRules == null");
+        if (gameRulesFragment == null) {
+            Log.d("SetupGamePagerAdapter", "gameRulesFragment == null");
         }
-        return fragmentGameRules.getRule();
+        return gameRulesFragment.getRule();
     }
 
     public void savePlayers() {
-        fragmentGamePlayer.savePlayers();
+        gamePlayerFragment.savePlayers();
     }
 }

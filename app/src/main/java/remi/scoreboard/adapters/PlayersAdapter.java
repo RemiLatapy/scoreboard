@@ -8,19 +8,19 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import remi.scoreboard.R;
-import remi.scoreboard.fragments.FragmentGamePlayer;
+import remi.scoreboard.fragments.GamePlayerFragment;
 import remi.scoreboard.holders.PlayersHolder;
 import remi.scoreboard.model.ItemPlayerAdd;
 
 public class PlayersAdapter extends RecyclerView.Adapter<PlayersHolder> {
 
-    private final FragmentGamePlayer fragment;
+    private final GamePlayerFragment fragment;
     private ArrayList<ItemPlayerAdd> items;
     private PlayersHolder playerHolder;
 
-    public PlayersAdapter(FragmentGamePlayer fragmentGamePlayer) {
+    public PlayersAdapter(GamePlayerFragment gamePlayerFragment) {
         items = new ArrayList<>();
-        fragment = fragmentGamePlayer;
+        fragment = gamePlayerFragment;
         add();
     }
 
@@ -71,7 +71,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersHolder> {
         }
     }
 
-    public FragmentGamePlayer getFragment() {
+    public GamePlayerFragment getFragment() {
         return fragment;
     }
 

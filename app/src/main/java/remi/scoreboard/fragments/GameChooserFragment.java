@@ -2,7 +2,6 @@ package remi.scoreboard.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,12 +12,12 @@ import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.activities.MainActivity;
-import remi.scoreboard.adapters.AdapterGameChooser;
+import remi.scoreboard.adapters.GameChooserAdapter;
 import remi.scoreboard.model.ItemGameChooser;
 
-public class FragmentGameChooser extends Fragment {
+public class GameChooserFragment extends Fragment {
 
-    public FragmentGameChooser() {
+    public GameChooserFragment() {
         super();
     }
 
@@ -36,7 +35,7 @@ public class FragmentGameChooser extends Fragment {
     private void setupRecycler(View view) {
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.recycler);
         LinearLayoutManager llm = new LinearLayoutManager(rv.getContext());
-        AdapterGameChooser agc = new AdapterGameChooser((MainActivity) getActivity(), mockGameList());
+        GameChooserAdapter agc = new GameChooserAdapter((MainActivity) getActivity(), mockGameList());
 
         rv.setLayoutManager(llm);
         rv.setAdapter(agc);
@@ -44,10 +43,10 @@ public class FragmentGameChooser extends Fragment {
 
     private ArrayList<ItemGameChooser> mockGameList() {
         ArrayList<ItemGameChooser> data = new ArrayList<>();
-        data.add(new ItemGameChooser(R.drawable.thumbnail_squash, getString(R.string.game_name_squash), FragmentGamePlayer.class));
-        data.add(new ItemGameChooser(R.drawable.thumbail_phase_10, getString(R.string.game_name_phase_dix), FragmentGamePlayer.class));
-        data.add(new ItemGameChooser(R.drawable.thumbail_uno, getString(R.string.game_name_uno), FragmentGamePlayer.class));
-        data.add(new ItemGameChooser(R.drawable.thumbail_tarot, getString(R.string.game_name_tarot), FragmentGamePlayer.class));
+        data.add(new ItemGameChooser(R.drawable.thumbnail_squash, getString(R.string.game_name_squash), GamePlayerFragment.class));
+        data.add(new ItemGameChooser(R.drawable.thumbail_phase_10, getString(R.string.game_name_phase_dix), GamePlayerFragment.class));
+        data.add(new ItemGameChooser(R.drawable.thumbail_uno, getString(R.string.game_name_uno), GamePlayerFragment.class));
+        data.add(new ItemGameChooser(R.drawable.thumbail_tarot, getString(R.string.game_name_tarot), GamePlayerFragment.class));
         return data;
     }
 
