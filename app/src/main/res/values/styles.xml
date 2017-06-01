@@ -2,9 +2,10 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/darkblue</item>
-        <item name="colorAccent">@color/blue</item>
+        <item name="colorPrimary">#1e88e5</item>
+        <item name="colorPrimaryDark">#005cb2</item>
         <item name="drawerArrowStyle">@style/DrawerArrowToggle</item>
+        <item name="colorAccent">#ff8f00</item>
     </style>
 
     <style name="ToolBarTheme" parent="AppTheme">
