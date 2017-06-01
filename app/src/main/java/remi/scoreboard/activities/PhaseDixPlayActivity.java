@@ -58,7 +58,7 @@ public class PhaseDixPlayActivity extends GameActivity {
                 (new AlertDialog.Builder(PhaseDixPlayActivity.this))
                         .setCancelable(true)
                         .setTitle(currentPlayer.getName())
-                        .setView(getLayoutInflater().inflate(R.layout.dialog_player_score, (ViewGroup) v.getRootView(), false))
+                        .setView(getLayoutInflater().inflate(R.layout.dialog_player_phase10_score, (ViewGroup) v.getRootView(), false))
                         .setPositiveButton("Valider", getValidateListener(currentPlayer))
                         .setNegativeButton("Annuler", getCancelListener())
                         .show();
