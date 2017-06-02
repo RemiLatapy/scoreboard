@@ -41,7 +41,8 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:visibility="gone"
-        app:backgroundTint="?attr/colorPrimary" />
+        android:src="@drawable/ic_play_arrow_white_48dp"
+        app:backgroundTint="?attr/colorAccent" />
 
 </android.widget.FrameLayout>
 
