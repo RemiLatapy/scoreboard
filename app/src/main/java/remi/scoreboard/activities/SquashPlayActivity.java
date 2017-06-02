@@ -39,6 +39,10 @@ public class SquashPlayActivity extends GameActivity {
         super.onCreate(savedInstanceState);
 
         createPlayers();
+        if(playerList.size() == 0)
+        {
+            return;
+        }
         generateChampionship();
         addAllMatchdayView();
     }

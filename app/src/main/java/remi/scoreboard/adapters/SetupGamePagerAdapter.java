@@ -9,8 +9,8 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import remi.scoreboard.fragments.GameChooserFragment;
+import remi.scoreboard.fragments.GameCustomizeFragment;
 import remi.scoreboard.fragments.GamePlayerFragment;
-import remi.scoreboard.fragments.GameRulesFragment;
 
 public class SetupGamePagerAdapter extends FragmentPagerAdapter {
 
@@ -18,7 +18,7 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     private Context ctx;
     private GamePlayerFragment gamePlayerFragment;
     private GameChooserFragment gameChooserFragment;
-    private GameRulesFragment gameRulesFragment;
+    private GameCustomizeFragment gameCustomizeFragment;
 
     public SetupGamePagerAdapter(FragmentManager fm, Context ctx) {
         super(fm);
@@ -35,9 +35,9 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
                 gamePlayerFragment = (GamePlayerFragment) GamePlayerFragment.instantiate(ctx, GamePlayerFragment.class.getName());
                 return gamePlayerFragment;
             case 2:
-                gameRulesFragment = (GameRulesFragment) GameRulesFragment.instantiate(ctx, GameRulesFragment.class.getName());
+                gameCustomizeFragment = (GameCustomizeFragment) GameCustomizeFragment.instantiate(ctx, GameCustomizeFragment.class.getName());
                 ;
-                return gameRulesFragment;
+                return gameCustomizeFragment;
         }
         return null;
     }
@@ -55,10 +55,10 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     }
 
     public String getRule() {
-        if (gameRulesFragment == null) {
-            Log.d("SetupGamePagerAdapter", "gameRulesFragment == null");
+        if (gameCustomizeFragment == null) {
+            Log.d("SetupGamePagerAdapter", "gameCustomizeFragment == null");
         }
-        return gameRulesFragment.getRule();
+        return gameCustomizeFragment.getRule();
     }
 
     public void savePlayers() {

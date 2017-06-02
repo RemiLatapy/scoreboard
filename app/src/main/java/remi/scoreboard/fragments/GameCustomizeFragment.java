@@ -14,11 +14,11 @@ import android.widget.ArrayAdapter;
 import remi.scoreboard.R;
 import remi.scoreboard.activities.MainActivity;
 
-public class GameRulesFragment extends Fragment {
+public class GameCustomizeFragment extends Fragment {
 
     private AppCompatSpinner spinner;
 
-    public GameRulesFragment() {
+    public GameCustomizeFragment() {
         super();
     }
 
