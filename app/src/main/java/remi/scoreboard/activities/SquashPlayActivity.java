@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -15,22 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import remi.scoreboard.R;
+import remi.scoreboard.model.Match;
 import remi.scoreboard.model.Player;
-
-/**
- * Created by remil on 31/05/2017.
- */
 
 public class SquashPlayActivity extends GameActivity {
 
     // Typedef
-    private class Match extends Pair<Player, Player> { Match(Player pOne, Player pTwo) { super(pOne, pTwo); }}
     private class MatchDay extends ArrayList<Match> {}
     private class Championship extends ArrayList<MatchDay> {}
 
     private TextView textviewMatchdayNum;
+
     private TextView textviewPlayerOneName;
     private TextView textviewPlayerTwoName;
+
+    private TextView textviewPlayerOneScore;
+    private TextView textviewPlayerTwoScore;
 
     private Championship championship;
 
@@ -95,42 +93,50 @@ public class SquashPlayActivity extends GameActivity {
                 view = getLayoutInflater().inflate(R.layout.item_card_matchday, cardContainerView, false);
                 findViews(view);
                 fillTextViews(i, j);
-                buildAlertDialog(view, championship.get(i).get(j),i+1);
+                buildAlertDialog(view, championship.get(i).get(j), championship.get(i));
                 cardContainerView.addView(view);
             }
         }
     }
 
-//    private void updateViews(PhaseDixPlayer player) {
-//        findViews(cardContainerView.getChildAt(player.getNum() - 1));
-//        playerPhase.setText("Phase " + player.getPhase());
-//        playerPoints.setText(player.getPoints() + " points");
-//    }
+    private void updateViews(Match currentMatch, MatchDay currentMatchday) {
+        findViews(cardContainerView.getChildAt(championship.indexOf(currentMatchday) * currentMatchday.size() + currentMatchday.indexOf(currentMatch)));
+        textviewPlayerOneScore.setText(String.valueOf(currentMatch.getScorePlayerOne()));
+        textviewPlayerTwoScore.setText(String.valueOf(currentMatch.getScorePlayerTwo()));
+    }
 
     private void fillTextViews(int matchdayNum, int matchNum) {
         textviewMatchdayNum.setText("Matchday " + (matchdayNum + 1));
-        textviewPlayerOneName.setText(championship.get(matchdayNum).get(matchNum).first.getName());
-        textviewPlayerTwoName.setText(championship.get(matchdayNum).get(matchNum).second.getName());
+        Match match = championship.get(matchdayNum).get(matchNum);
+        textviewPlayerOneName.setText(match.getPlayerOne().getName());
+        textviewPlayerTwoName.setText(match.getPlayerTwo().getName());
+        if(match.isFinished())
+        {
+            textviewPlayerOneScore.setText(match.getScorePlayerOne());
+            textviewPlayerTwoScore.setText(match.getScorePlayerTwo());
+        }
     }
 
     private void findViews(View view) {
         textviewMatchdayNum = (TextView) view.findViewById(R.id.matchday_num);
         textviewPlayerOneName = (TextView) view.findViewById(R.id.player1_name);
         textviewPlayerTwoName = (TextView) view.findViewById(R.id.player2_name);
+        textviewPlayerOneScore = (TextView) view.findViewById(R.id.player1_score);
+        textviewPlayerTwoScore = (TextView) view.findViewById(R.id.player2_score);
     }
 
-    private void buildAlertDialog(View view, final Match currentMatch, final int matchdayNumber) {
+    private void buildAlertDialog(View view, final Match currentMatch, final MatchDay currentMatchday) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View dialogMatchScore = getLayoutInflater().inflate(R.layout.dialog_match_score, (ViewGroup) v.getRootView(), false);
-                ((TextView)dialogMatchScore.findViewById(R.id.player1_name)).setText(currentMatch.first.getName());
-                ((TextView)dialogMatchScore.findViewById(R.id.player2_name)).setText(currentMatch.second.getName());
+                ((TextView)dialogMatchScore.findViewById(R.id.player1_name)).setText(currentMatch.getPlayerOne().getName());
+                ((TextView)dialogMatchScore.findViewById(R.id.player2_name)).setText(currentMatch.getPlayerTwo().getName());
                 (new AlertDialog.Builder(SquashPlayActivity.this))
                         .setCancelable(true)
-                        .setTitle("Matchday " + matchdayNumber)
+                        .setTitle("Matchday " + championship.indexOf(currentMatchday) + 1)
                         .setView(dialogMatchScore)
-                        .setPositiveButton("Valider", getValidateListener(currentMatch))
+                        .setPositiveButton("Valider", getValidateListener(currentMatch, currentMatchday))
                         .setNegativeButton("Annuler", getCancelListener())
                         .show();
             }
@@ -148,19 +154,19 @@ public class SquashPlayActivity extends GameActivity {
     }
 
     @NonNull
-    private DialogInterface.OnClickListener getValidateListener(final Match currentMatch) {
+    private DialogInterface.OnClickListener getValidateListener(final Match currentMatch, final MatchDay currentMatchday) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String scorePlayerOne = ((EditText) ((AlertDialog) dialog).findViewById(R.id.player1_score)).getText().toString();
                 String scorePlayerTwo = ((EditText) ((AlertDialog) dialog).findViewById(R.id.player2_score)).getText().toString();
+
                 if (!scorePlayerOne.isEmpty() && !scorePlayerTwo.isEmpty()) {
-                    Log.d("SCORE", String.valueOf(Integer.parseInt(scorePlayerOne)));
-                    Log.d("SCORE", String.valueOf(Integer.parseInt(scorePlayerTwo)));
-               //     ((PhaseDixPlayer) currentPlayer).addPoints(Integer.parseInt(pointsText));
+                    currentMatch.setScorePlayerOne(Integer.parseInt(scorePlayerOne));
+                    currentMatch.setScorePlayerTwo(Integer.parseInt(scorePlayerTwo));
                 }
 
-           //     updateViews(((PhaseDixPlayer) currentPlayer));
+                updateViews(currentMatch, currentMatchday);
             }
         };
     }
