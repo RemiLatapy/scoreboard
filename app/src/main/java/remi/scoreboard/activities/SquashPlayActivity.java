@@ -106,7 +106,7 @@ public class SquashPlayActivity extends GameActivity {
     }
 
     private void fillTextViews(int matchdayNum, int matchNum) {
-        textviewMatchdayNum.setText("Matchday " + (matchdayNum + 1));
+        textviewMatchdayNum.setText("Matchday " + String.valueOf(matchdayNum + 1));
         Match match = championship.get(matchdayNum).get(matchNum);
         textviewPlayerOneName.setText(match.getPlayerOne().getName());
         textviewPlayerTwoName.setText(match.getPlayerTwo().getName());
@@ -134,7 +134,7 @@ public class SquashPlayActivity extends GameActivity {
                 ((TextView)dialogMatchScore.findViewById(R.id.player2_name)).setText(currentMatch.getPlayerTwo().getName());
                 (new AlertDialog.Builder(SquashPlayActivity.this))
                         .setCancelable(true)
-                        .setTitle("Matchday " + championship.indexOf(currentMatchday) + 1)
+                        .setTitle("Matchday " + String.valueOf(championship.indexOf(currentMatchday) + 1))
                         .setView(dialogMatchScore)
                         .setPositiveButton("Valider", getValidateListener(currentMatch, currentMatchday))
                         .setNegativeButton("Annuler", getCancelListener())
