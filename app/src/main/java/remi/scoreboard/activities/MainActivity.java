@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.adapters.SetupGamePagerAdapter;
+import remi.scoreboard.view.NonSwipeableViewPager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
     private FloatingActionButton fab;
-    private ViewPager pager;
+    private NonSwipeableViewPager pager;
+    private boolean toolBarNavigationListenerIsRegistered = false;
 
     public String currentGameName;
 
@@ -48,35 +49,10 @@ public class MainActivity extends AppCompatActivity {
         findViewsByIds();
         setupPager();
         setupToolbar();
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (pager.getCurrentItem()) {
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        Intent intent = new Intent();
-                        if (currentGameName == getString(R.string.game_name_phase_dix)) {
-                            intent.setClass(MainActivity.this, PhaseDixPlayActivity.class);
-                        } else if (currentGameName == getString(R.string.game_name_squash)) {
-                            intent.setClass(MainActivity.this, SquashPlayActivity.class);
-                        } else {
-                            break;
-                        }
-
-                        intent.putExtra(PLAYERS, getPlayers());
-                        intent.putExtra(GAME_RULES, getRule());
-                        startActivity(intent);
-                        break;
-                }
-            }
-        });
-
         setupDrawer();
+        setupFab();
     }
+
 
     private ArrayList<String> getPlayers() {
         if (pager.getAdapter() instanceof SetupGamePagerAdapter) {
@@ -95,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupPager() {
         SetupGamePagerAdapter adapter = new SetupGamePagerAdapter(getSupportFragmentManager(), this);
         pager.setAdapter(adapter);
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        pager.addOnPageChangeListener(new NonSwipeableViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -105,14 +81,19 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
+                        enableBackbutton(false);
                         hideSoftKeyboard();
                         if (getWindow().getCurrentFocus() != null) {
                             getWindow().getCurrentFocus().clearFocus();
                         }
+                        fab.hide();
+                        break;
                     case 1:
+                        enableBackbutton(true);
                         fab.hide();
                         break;
                     case 2:
+                        enableBackbutton(true);
                         if (getWindow().getCurrentFocus() != null) {
                             getWindow().getCurrentFocus().clearFocus();
                         }
@@ -138,24 +119,75 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findViewsByIds() {
-        pager = (ViewPager) findViewById(R.id.pager);
+        pager = (NonSwipeableViewPager) findViewById(R.id.pager);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-    }
-
-    private void setupDrawer() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
-        drawerLayout.addDrawerListener(drawerToggle);
     }
 
     private void setupToolbar() {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
         }
+    }
+
+    private void enableBackbutton(boolean enable) {
+        if(enable) {
+            drawerToggle.setDrawerIndicatorEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if(!toolBarNavigationListenerIsRegistered) {
+                drawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onBackPressed();
+                    }
+                });
+
+                toolBarNavigationListenerIsRegistered = true;
+            }
+
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            drawerToggle.setDrawerIndicatorEnabled(true);
+            drawerToggle.setToolbarNavigationClickListener(null);
+            toolBarNavigationListenerIsRegistered = false;
+        }
+    }
+
+    private void setupFab() {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (pager.getCurrentItem()) {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        Intent intent = new Intent();
+                        if (currentGameName == getString(R.string.game_name_phase_dix)) {
+                            intent.setClass(MainActivity.this, PhaseDixPlayActivity.class);
+                        } else if (currentGameName == getString(R.string.game_name_squash)) {
+                            intent.setClass(MainActivity.this, SquashPlayActivity.class);
+                        } else {
+                            break;
+                        }
+
+                        intent.putExtra(PLAYERS, getPlayers());
+                        intent.putExtra(GAME_RULES, getRule());
+                        startActivity(intent);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void setupDrawer() {
+        drawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, toolbar,R.string.open_drawer, R.string.close_drawer);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
     }
 
     @Override
