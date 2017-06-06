@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupPager() {
-        SetupGamePagerAdapter adapter = new SetupGamePagerAdapter(getSupportFragmentManager(), this);
+        final SetupGamePagerAdapter adapter = new SetupGamePagerAdapter(getSupportFragmentManager(), this);
         pager.setAdapter(adapter);
         pager.addOnPageChangeListener(new NonSwipeableViewPager.OnPageChangeListener() {
             @Override
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
+                        adapter.notifyChangeInPosition(1);
                         enableBackbutton(false);
                         hideSoftKeyboard();
                         if (getWindow().getCurrentFocus() != null) {

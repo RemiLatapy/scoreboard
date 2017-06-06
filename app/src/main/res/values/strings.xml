@@ -18,6 +18,6 @@
     <string name="points">Points :</string>
     <string name="image_of_game">image of game</string>
     <string name="choose_game">Choose game</string>
-    <string name="choose_rules">Customize game</string>
+    <string name="customize_game">Customize game</string>
     <string name="game_name_squash">Squash</string>
 </resources>

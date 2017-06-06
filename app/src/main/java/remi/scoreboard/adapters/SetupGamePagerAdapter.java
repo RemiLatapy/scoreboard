@@ -8,13 +8,17 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import remi.scoreboard.R;
+import remi.scoreboard.activities.MainActivity;
 import remi.scoreboard.fragments.GameChooserFragment;
 import remi.scoreboard.fragments.GameCustomizeFragment;
 import remi.scoreboard.fragments.GamePlayerFragment;
+import remi.scoreboard.fragments.SquashGameCustomizeFragment;
 
 public class SetupGamePagerAdapter extends FragmentPagerAdapter {
 
-    final int NUM_FRAGS = 3;
+    private final int NUM_FRAGS = 3;
+    private long baseId = 0;
     private Context ctx;
     private GamePlayerFragment gamePlayerFragment;
     private GameChooserFragment gameChooserFragment;
@@ -35,8 +39,19 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
                 gamePlayerFragment = (GamePlayerFragment) GamePlayerFragment.instantiate(ctx, GamePlayerFragment.class.getName());
                 return gamePlayerFragment;
             case 2:
-                gameCustomizeFragment = (GameCustomizeFragment) GameCustomizeFragment.instantiate(ctx, GameCustomizeFragment.class.getName());
-                ;
+                String frag = "";
+                if(((MainActivity) ctx).currentGameName.equals(ctx.getString(R.string.game_name_squash)))
+                {
+                     frag = SquashGameCustomizeFragment.class.getName();
+                }
+                else if(((MainActivity) ctx).currentGameName.equals(ctx.getString(R.string.game_name_phase_dix)))
+                {
+                    frag = GameCustomizeFragment.class.getName();
+                }
+                if(!frag.isEmpty()) {
+                    gameCustomizeFragment = (GameCustomizeFragment) GameCustomizeFragment.instantiate(ctx, frag);
+                }
+                Log.d("FRAG", frag);
                 return gameCustomizeFragment;
         }
         return null;
@@ -45,6 +60,15 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return NUM_FRAGS;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    public long getItemId(int position) {
+        return baseId + position;
     }
 
     public ArrayList<String> getPlayers() {
@@ -63,5 +87,15 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
 
     public void savePlayers() {
         gamePlayerFragment.savePlayers();
+    }
+
+    /**
+     * Notify that the position of a fragment has been changed.
+     * Create a new ID for each position to force recreation of the fragment
+     * @param n number of items which have been changed
+     */
+    public void notifyChangeInPosition(int n) {
+        // shift the ID returned by getItemId outside the range of all previous fragments
+        baseId += getCount() + n;
     }
 }

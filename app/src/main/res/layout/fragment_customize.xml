@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_fragment_customize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -23,18 +24,12 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:layout_marginStart="3dp"
-            android:text="@string/choose_rules" />
+            android:text="@string/customize_game" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
-
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/rules_chooser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
 
 </LinearLayout>
