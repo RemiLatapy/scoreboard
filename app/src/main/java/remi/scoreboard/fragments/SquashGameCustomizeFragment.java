@@ -17,9 +17,7 @@ public class SquashGameCustomizeFragment extends GameCustomizeFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        assert view != null;
-        LinearLayout rootView = (LinearLayout) view.findViewById(R.id.root_fragment_customize);
-        inflater.inflate(R.layout.widgets_squash_customize, rootView, true);
+        inflater.inflate(R.layout.widgets_squash_customize, (LinearLayout)view, true);
         return view;
     }
 
