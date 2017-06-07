@@ -1,12 +1,15 @@
-package remi.scoreboard.activities;
+package remi.scoreboard.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,11 +19,13 @@ import remi.scoreboard.R;
 import remi.scoreboard.model.Match;
 import remi.scoreboard.model.Player;
 
-public class SquashPlayActivity extends GameActivity {
+public class SquashPlayFragment extends android.support.v4.app.Fragment {
 
     // Typedef
     private class MatchDay extends ArrayList<Match> {}
     private class Championship extends ArrayList<MatchDay> {}
+
+    private LinearLayout cardContainerView;
 
     private TextView textviewMatchdayNum;
 
@@ -31,9 +36,20 @@ public class SquashPlayActivity extends GameActivity {
     private TextView textviewPlayerTwoScore;
 
     private Championship championship;
+    private ArrayList<Player> playerList;
+
+    public static SquashPlayFragment newInstance(ArrayList<String> playerNameList)
+    {
+        SquashPlayFragment squashPlayFragment = new SquashPlayFragment();
+
+        Bundle args = new Bundle();
+        args.putStringArrayList("playerNameList", playerNameList);
+        squashPlayFragment.setArguments(args);
+        return squashPlayFragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         createPlayers();
@@ -41,14 +57,29 @@ public class SquashPlayActivity extends GameActivity {
         {
             return;
         }
+
         generateChampionship();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_gameview_cards, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        cardContainerView = (LinearLayout) view.findViewById(R.id.card_container);
         addAllMatchdayView();
     }
 
     private void createPlayers() {
+        ArrayList<String> playerNameList = getArguments().getStringArrayList("playerNameList");
+        assert playerNameList != null;
         playerList = new ArrayList<>();
-        for (int i = 0; i < playersName.size(); i++) {
-            playerList.add(new Player(playersName.get(i), (i + 1)));
+        for (int i = 0; i < playerNameList.size(); i++) {
+            playerList.add(new Player(playerNameList.get(i), (i + 1)));
         }
         if(playerList.size()%2 != 0)
         {
@@ -90,7 +121,7 @@ public class SquashPlayActivity extends GameActivity {
         View view;
         for (int i = 0; i < championship.size(); i++) {
             for (int j = 0; j < championship.get(i).size(); j++) {
-                view = getLayoutInflater().inflate(R.layout.item_card_matchday, cardContainerView, false);
+                view = getActivity().getLayoutInflater().inflate(R.layout.item_card_matchday, cardContainerView, false);
                 findViews(view);
                 fillTextViews(i, j);
                 buildAlertDialog(view, championship.get(i).get(j), championship.get(i));
@@ -129,10 +160,10 @@ public class SquashPlayActivity extends GameActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View dialogMatchScore = getLayoutInflater().inflate(R.layout.dialog_match_score, (ViewGroup) v.getRootView(), false);
+                View dialogMatchScore = getActivity().getLayoutInflater().inflate(R.layout.dialog_match_score, (ViewGroup) v.getRootView(), false);
                 ((TextView)dialogMatchScore.findViewById(R.id.player1_name)).setText(currentMatch.getPlayerOne().getName());
                 ((TextView)dialogMatchScore.findViewById(R.id.player2_name)).setText(currentMatch.getPlayerTwo().getName());
-                (new AlertDialog.Builder(SquashPlayActivity.this))
+                (new AlertDialog.Builder(getActivity()))
                         .setCancelable(true)
                         .setTitle("Matchday " + String.valueOf(championship.indexOf(currentMatchday) + 1))
                         .setView(dialogMatchScore)

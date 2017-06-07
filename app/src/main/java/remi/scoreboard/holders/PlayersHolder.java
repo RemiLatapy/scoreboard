@@ -9,20 +9,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import remi.scoreboard.R;
-import remi.scoreboard.adapters.PlayersAdapter;
+import remi.scoreboard.adapters.PlayersAddAdapter;
 
 public class PlayersHolder extends RecyclerView.ViewHolder {
 
     public final EditText playerName;
     public final ImageButton removeBtn;
-    final private PlayersAdapter playersAdapter;
+    final private PlayersAddAdapter playersAddAdapter;
 
-    public PlayersHolder(View itemView, final PlayersAdapter playersAdapter) {
+    public PlayersHolder(View itemView, final PlayersAddAdapter playersAddAdapter) {
         super(itemView);
 
         playerName = (EditText) itemView.findViewById(R.id.editText_playerName);
         removeBtn = (ImageButton) itemView.findViewById(R.id.remove_player_btn);
-        this.playersAdapter = playersAdapter;
+        this.playersAddAdapter = playersAddAdapter;
 
         setupFocusChangeListener();
         setupAutoAddListener();
@@ -34,13 +34,13 @@ public class PlayersHolder extends RecyclerView.ViewHolder {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus && playerName.length() != 0) {
-                    playersAdapter.setPlayerName(getAdapterPosition(), playerName.getText().toString());
+                    playersAddAdapter.setPlayerName(getAdapterPosition(), playerName.getText().toString());
                 } else if (!hasFocus && !isLast()) {
                     final int playerToRemove = getAdapterPosition();
                     (new Handler()).post(new Runnable() {
                         @Override
                         public void run() {
-                            playersAdapter.remove(playerToRemove);
+                            playersAddAdapter.remove(playerToRemove);
                         }
                     });
                 } else if (!hasFocus && isLast()) {
@@ -48,7 +48,7 @@ public class PlayersHolder extends RecyclerView.ViewHolder {
                     (new Handler()).post(new Runnable() {
                         @Override
                         public void run() {
-                            playersAdapter.setPlayerName(playerNameToWipe, "");
+                            playersAddAdapter.setPlayerName(playerNameToWipe, "");
                         }
                     });
                 }
@@ -73,21 +73,21 @@ public class PlayersHolder extends RecyclerView.ViewHolder {
                     (new Handler()).post(new Runnable() {
                         @Override
                         public void run() {
-                            playersAdapter.add();
+                            playersAddAdapter.add();
                         }
                     });
                     if (isFirst()) {
-                        playersAdapter.getFragment().getMenu().getItem(0).setVisible(true);
+                        playersAddAdapter.getFragment().getMenu().getItem(0).setVisible(true);
                     }
                 } else if (s.length() == 0 && isSecondToLast()) {
                     removeBtn.setVisibility(View.INVISIBLE);
                     (new Handler()).post(new Runnable() {
                         @Override
                         public void run() {
-                            playersAdapter.remove(playersAdapter.getItemCount() - 1);
+                            playersAddAdapter.remove(playersAddAdapter.getItemCount() - 1);
                         }
                     });
-                    playersAdapter.getFragment().getMenu().getItem(0).setVisible(false);
+                    playersAddAdapter.getFragment().getMenu().getItem(0).setVisible(false);
                 }
             }
         });
@@ -98,11 +98,11 @@ public class PlayersHolder extends RecyclerView.ViewHolder {
     }
 
     private boolean isLast() {
-        return playersAdapter.getItemCount() - 1 == getAdapterPosition();
+        return playersAddAdapter.getItemCount() - 1 == getAdapterPosition();
     }
 
     private boolean isSecondToLast() {
-        return playersAdapter.getItemCount() - 2 == getAdapterPosition();
+        return playersAddAdapter.getItemCount() - 2 == getAdapterPosition();
     }
 
     private void setupRemoveBtnListener(final View itemView) {
@@ -110,14 +110,14 @@ public class PlayersHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 if (isFirst() && isSecondToLast()) {
-                    playersAdapter.getFragment().getMenu().getItem(0).setVisible(false);
+                    playersAddAdapter.getFragment().getMenu().getItem(0).setVisible(false);
                 }
-                playersAdapter.remove(getAdapterPosition());
+                playersAddAdapter.remove(getAdapterPosition());
             }
         });
     }
 
     public void savePlayers() {
-        playersAdapter.setPlayerName(getAdapterPosition(), playerName.getText().toString());
+        playersAddAdapter.setPlayerName(getAdapterPosition(), playerName.getText().toString());
     }
 }

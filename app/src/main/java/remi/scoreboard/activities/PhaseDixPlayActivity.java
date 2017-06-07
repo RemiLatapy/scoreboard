@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,12 +17,16 @@ import remi.scoreboard.R;
 import remi.scoreboard.model.PhaseDixPlayer;
 import remi.scoreboard.model.Player;
 
+// TODO fragmentization like Squash
 public class PhaseDixPlayActivity extends GameActivity {
 
     TextView playerNum;
     TextView playerName;
     TextView playerPhase;
     TextView playerPoints;
+
+    ArrayList<Player> playerList;
+    protected LinearLayout cardContainerView;
 
 
     @Override

@@ -16,11 +16,11 @@ import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.activities.MainActivity;
-import remi.scoreboard.adapters.PlayersAdapter;
+import remi.scoreboard.adapters.PlayersAddAdapter;
 
 public class GamePlayerFragment extends Fragment {
 
-    private PlayersAdapter adapter;
+    private PlayersAddAdapter adapter;
     private Menu menu;
 
     @Override
@@ -39,7 +39,7 @@ public class GamePlayerFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        adapter = new PlayersAdapter(this);
+        adapter = new PlayersAddAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setHasFixedSize(true);

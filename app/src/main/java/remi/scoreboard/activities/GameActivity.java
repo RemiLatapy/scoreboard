@@ -1,5 +1,8 @@
 package remi.scoreboard.activities;
 
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,14 +12,17 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import remi.scoreboard.R;
+import remi.scoreboard.adapters.GamePlayTabAdapter;
+import remi.scoreboard.fragments.GamePlayerFragment;
 import remi.scoreboard.model.Player;
 
 public class GameActivity extends AppCompatActivity {
 
     protected ArrayList<String> playersName;
-    protected LinearLayout cardContainerView;
     protected Toolbar toolbar;
-    protected ArrayList<Player> playerList;
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +30,16 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         playersName = getIntent().getStringArrayListExtra(MainActivity.PLAYERS);
-        cardContainerView = (LinearLayout) findViewById(R.id.card_container);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        findViews();
         setupToolbar();
+        setupPager();
+    }
 
+    private void findViews() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tabLayout = (TabLayout) findViewById(R.id.game_view_tablayout);
+        viewPager = (ViewPager) findViewById(R.id.game_viewpager);
     }
 
     private void setupToolbar() {
@@ -40,4 +51,8 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void setupPager() {
+        GamePlayTabAdapter adapter = new GamePlayTabAdapter(getSupportFragmentManager(), playersName);
+        viewPager.setAdapter(adapter);
+    }
 }

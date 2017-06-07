@@ -20,6 +20,10 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     private final int NUM_FRAGS = 3;
     private long baseId = 0;
     private Context ctx;
+
+    // TODO fragments should probably be invoked using Fragment.NewInstance
+    // https://guides.codepath.com/android/ViewPager-with-FragmentPagerAdapter
+
     private GamePlayerFragment gamePlayerFragment;
     private GameChooserFragment gameChooserFragment;
     private GameCustomizeFragment gameCustomizeFragment;

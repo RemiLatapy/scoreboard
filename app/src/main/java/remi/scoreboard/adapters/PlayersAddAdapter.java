@@ -12,13 +12,13 @@ import remi.scoreboard.fragments.GamePlayerFragment;
 import remi.scoreboard.holders.PlayersHolder;
 import remi.scoreboard.model.ItemPlayerAdd;
 
-public class PlayersAdapter extends RecyclerView.Adapter<PlayersHolder> {
+public class PlayersAddAdapter extends RecyclerView.Adapter<PlayersHolder> {
 
     private final GamePlayerFragment fragment;
     private ArrayList<ItemPlayerAdd> items;
     private PlayersHolder playerHolder;
 
-    public PlayersAdapter(GamePlayerFragment gamePlayerFragment) {
+    public PlayersAddAdapter(GamePlayerFragment gamePlayerFragment) {
         items = new ArrayList<>();
         fragment = gamePlayerFragment;
         add();
