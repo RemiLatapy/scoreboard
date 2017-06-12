@@ -1,6 +1,9 @@
 package remi.scoreboard.model;
 
-public class Player {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Player implements Parcelable {
 
     private String name;
     private int num;
@@ -26,7 +29,6 @@ public class Player {
         this.num = num;
     }
 
-    /*
     ////// Parcelable implementation below
     private Player(Parcel in) {
         this.name = in.readString();
@@ -57,5 +59,4 @@ public class Player {
         dest.writeString(this.name);
         dest.writeInt(this.num);
     }
-    */
 }

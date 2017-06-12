@@ -1,12 +1,14 @@
 package remi.scoreboard.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.util.Pair;
 
 /**
  * Created by rlatapy on 05/06/2017.
  */
 
-public class Match {
+public class Match implements Parcelable {
 
     private Player playerOne;
     private int scorePlayerOne;
@@ -21,6 +23,25 @@ public class Match {
         this.scorePlayerOne = -1;
         this.scorePlayerTwo = -1;
     }
+
+    private Match(Parcel in) {
+        playerOne = in.readParcelable(Player.class.getClassLoader());
+        scorePlayerOne = in.readInt();
+        playerTwo = in.readParcelable(Player.class.getClassLoader());
+        scorePlayerTwo = in.readInt();
+    }
+
+    public static final Creator<Match> CREATOR = new Creator<Match>() {
+        @Override
+        public Match createFromParcel(Parcel in) {
+            return new Match(in);
+        }
+
+        @Override
+        public Match[] newArray(int size) {
+            return new Match[size];
+        }
+    };
 
     public Player getPlayerOne() {
         return playerOne;
@@ -49,5 +70,18 @@ public class Match {
     public boolean isFinished()
     {
         return scorePlayerOne >= 0 && scorePlayerTwo >= 0;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(playerOne, 0);
+        dest.writeInt(scorePlayerOne);
+        dest.writeParcelable(playerTwo, 0);
+        dest.writeInt(scorePlayerTwo);
     }
 }

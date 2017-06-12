@@ -17,13 +17,10 @@ import java.util.List;
 
 import remi.scoreboard.R;
 import remi.scoreboard.model.Match;
+import remi.scoreboard.model.MatchDay;
 import remi.scoreboard.model.Player;
 
 public class SquashPlayFragment extends android.support.v4.app.Fragment {
-
-    // Typedef
-    private class MatchDay extends ArrayList<Match> {}
-    private class Championship extends ArrayList<MatchDay> {}
 
     private LinearLayout cardContainerView;
 
@@ -35,7 +32,7 @@ public class SquashPlayFragment extends android.support.v4.app.Fragment {
     private TextView textviewPlayerOneScore;
     private TextView textviewPlayerTwoScore;
 
-    private Championship championship;
+    private ArrayList<MatchDay> championship;
     private ArrayList<Player> playerList;
 
     public static SquashPlayFragment newInstance(ArrayList<String> playerNameList)
@@ -52,13 +49,19 @@ public class SquashPlayFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        createPlayers();
-        if(playerList.size() == 0)
-        {
-            return;
-        }
+        if(savedInstanceState == null) {
+            createPlayers();
+            if (playerList.size() == 0) {
+                return;
+            }
 
-        generateChampionship();
+            generateChampionship();
+        }
+        else
+        {
+            championship = savedInstanceState.getParcelableArrayList("championship");
+            playerList = savedInstanceState.getParcelableArrayList("playerList");
+        }
     }
 
     @Nullable
@@ -72,6 +75,13 @@ public class SquashPlayFragment extends android.support.v4.app.Fragment {
         super.onViewCreated(view, savedInstanceState);
         cardContainerView = (LinearLayout) view.findViewById(R.id.card_container);
         addAllMatchdayView();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("championship", championship);
+        outState.putParcelableArrayList("playerList", playerList);
     }
 
     private void createPlayers() {
@@ -88,7 +98,7 @@ public class SquashPlayFragment extends android.support.v4.app.Fragment {
     }
 
     private void generateChampionship() {
-        championship = new Championship();
+        championship = new ArrayList<>();
 
         int numDays = (playerList.size() - 1); // Days needed to complete championship
 
@@ -143,8 +153,8 @@ public class SquashPlayFragment extends android.support.v4.app.Fragment {
         textviewPlayerTwoName.setText(match.getPlayerTwo().getName());
         if(match.isFinished())
         {
-            textviewPlayerOneScore.setText(match.getScorePlayerOne());
-            textviewPlayerTwoScore.setText(match.getScorePlayerTwo());
+            textviewPlayerOneScore.setText(String.valueOf(match.getScorePlayerOne()));
+            textviewPlayerTwoScore.setText(String.valueOf(match.getScorePlayerTwo()));
         }
     }
 
