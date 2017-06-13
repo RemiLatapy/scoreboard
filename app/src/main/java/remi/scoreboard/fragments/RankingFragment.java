@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import remi.scoreboard.R;
+import remi.scoreboard.activities.GameChampionshipActivity;
 import remi.scoreboard.model.Player;
 
 public class RankingFragment extends Fragment{
@@ -35,11 +38,13 @@ public class RankingFragment extends Fragment{
 
         playerRowsMap = new ArrayMap<>();
 
-        View row = getActivity().getLayoutInflater().inflate(R.layout.item_row_ranking, rowContainerView, false);
-        playerRowsMap.put(new Player("Rémi", 1), row);
+        ArrayList<Player> playerList = ((GameChampionshipActivity)getActivity()).playerList;
 
-        View row2 = getActivity().getLayoutInflater().inflate(R.layout.item_row_ranking, rowContainerView, false);
-        playerRowsMap.put(new Player("Renan", 2), row2);
+        for (Player player : playerList) {
+            View row = getActivity().getLayoutInflater().inflate(R.layout.item_row_ranking, rowContainerView, false);
+            playerRowsMap.put(player, row);
+            rowContainerView.addView(row);
+        }
 
         for (ArrayMap.Entry<Player, View> entry : playerRowsMap.entrySet())
         {
@@ -49,8 +54,6 @@ public class RankingFragment extends Fragment{
             ((TextView)entry.getValue().findViewById(R.id.rank_points)).setText("3");
             ((TextView)entry.getValue().findViewById(R.id.rank_position)).setText("4");
             ((TextView)entry.getValue().findViewById(R.id.rank_win)).setText("5");
-
-            rowContainerView.addView(entry.getValue());
         }
     }
 }

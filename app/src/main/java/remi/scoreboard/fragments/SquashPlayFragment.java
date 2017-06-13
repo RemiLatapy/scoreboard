@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import remi.scoreboard.R;
+import remi.scoreboard.activities.GameChampionshipActivity;
 import remi.scoreboard.model.Match;
 import remi.scoreboard.model.MatchDay;
 import remi.scoreboard.model.Player;
@@ -62,6 +63,7 @@ public class SquashPlayFragment extends android.support.v4.app.Fragment {
             championship = savedInstanceState.getParcelableArrayList("championship");
             playerList = savedInstanceState.getParcelableArrayList("playerList");
         }
+        ((GameChampionshipActivity)getActivity()).playerList = playerList;
     }
 
     @Nullable
