@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
+import remi.scoreboard.fragments.RankingFragment;
 import remi.scoreboard.fragments.SquashPlayFragment;
 
 public class GamePlayTabAdapter extends FragmentPagerAdapter {
@@ -26,7 +27,7 @@ public class GamePlayTabAdapter extends FragmentPagerAdapter {
             case 0:
                 return SquashPlayFragment.newInstance(playerNameList);
             case 1:
-                return SquashPlayFragment.newInstance(playerNameList);
+                return RankingFragment.newInstance();
             default:
                 return null;
         }
