@@ -37,13 +37,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/rank_points"
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            android:gravity="center"
-            tools:text="4" />
-
-        <TextView
             android:id="@+id/rank_played_game"
             android:layout_width="30dp"
             android:layout_height="50dp"
@@ -63,6 +56,13 @@
             android:layout_height="50dp"
             android:gravity="center"
             tools:text="3" />
+
+        <TextView
+            android:id="@+id/rank_points"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            tools:text="4" />
 
     </LinearLayout>
 

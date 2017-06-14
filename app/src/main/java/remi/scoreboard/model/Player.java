@@ -8,6 +8,12 @@ public class Player implements Parcelable {
     private String name;
     private int num;
 
+    // TODO temp variables
+    public int victories = 0;
+    public int defeats = 0;
+    public int goalAverage = 0;
+    public int gamesPlayed = 0;
+
     public Player(String name, int num) {
         this.name = name;
         this.num = num;

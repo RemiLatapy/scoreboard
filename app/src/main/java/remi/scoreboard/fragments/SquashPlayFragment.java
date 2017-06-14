@@ -40,6 +40,7 @@ public class SquashPlayFragment extends Fragment {
     private ArrayList<MatchDay> championship;
     private ArrayList<Player> playerList;
 
+    OnDataChange activityCallback;
 
     public static SquashPlayFragment newInstance(Context ctx)
     {
@@ -69,7 +70,10 @@ public class SquashPlayFragment extends Fragment {
             championship = savedInstanceState.getParcelableArrayList("championship");
             playerList = savedInstanceState.getParcelableArrayList("playerList");
         }
-        ((GameChampionshipActivity)getActivity()).playerList = playerList;
+    }
+
+    private void updateActivityData() {
+        activityCallback.onPlayerListChange(playerList);
     }
 
     @Nullable
@@ -215,8 +219,42 @@ public class SquashPlayFragment extends Fragment {
                     currentMatch.setScorePlayerTwo(Integer.parseInt(scorePlayerTwo));
                 }
 
+                currentMatch.getPlayerOne().goalAverage += currentMatch.getScorePlayerOne() - currentMatch.getScorePlayerTwo();
+                currentMatch.getPlayerTwo().goalAverage += currentMatch.getScorePlayerTwo() - currentMatch.getScorePlayerOne();
+
+                if(currentMatch.getScorePlayerOne() > currentMatch.getScorePlayerTwo())
+                {
+                    currentMatch.getPlayerOne().victories++;
+                    currentMatch.getPlayerTwo().defeats++;
+                }
+                else
+                {
+                    currentMatch.getPlayerTwo().victories++;
+                    currentMatch.getPlayerOne().defeats++;
+                }
+
+                currentMatch.getPlayerOne().gamesPlayed++;
+                currentMatch.getPlayerTwo().gamesPlayed++;
+
+                updateActivityData();
                 updateViews(currentMatch, currentMatchday);
             }
         };
+    }
+
+    public interface OnDataChange {
+        public void onPlayerListChange(ArrayList<Player> playerList);
+        public void onChampionshipUpdated(ArrayList<MatchDay> championship);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            activityCallback = (OnDataChange) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
     }
 }
