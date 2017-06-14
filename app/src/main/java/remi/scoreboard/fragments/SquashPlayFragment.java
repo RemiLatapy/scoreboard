@@ -119,23 +119,23 @@ public class SquashPlayFragment extends Fragment {
 
         int playersSize = players.size();
 
-        for (int day = 0; day < numDays; day++)
-        {
-            MatchDay matchDay = new MatchDay();
+        for(int r = 0 ; r < ((GameActivity)getActivity()).rotationsNumber ; r++) {
+            for (int day = 0; day < numDays; day++) {
+                MatchDay matchDay = new MatchDay();
 
-            int playerIdx = day % playersSize;
+                int playerIdx = day % playersSize;
 
-            matchDay.add(new Match(players.get(playerIdx), playerList.get(0)));
+                matchDay.add(new Match(players.get(playerIdx), playerList.get(0)));
 
-            for (int idx = 1; idx < playerList.size() / 2; idx++)
-            {
-                int firstPlayer = (day + idx) % playersSize;
-                int secondPlayer = (day  + playersSize - idx) % playersSize;
+                for (int idx = 1; idx < playerList.size() / 2; idx++) {
+                    int firstPlayer = (day + idx) % playersSize;
+                    int secondPlayer = (day + playersSize - idx) % playersSize;
 
-                matchDay.add(new Match(players.get(firstPlayer), players.get(secondPlayer)));
+                    matchDay.add(new Match(players.get(firstPlayer), players.get(secondPlayer)));
+                }
+
+                championship.add(matchDay);
             }
-
-            championship.add(matchDay);
         }
     }
 

@@ -62,4 +62,8 @@ public class GameCustomizeFragment extends Fragment {
         return "";
    //     return ((ArrayAdapter<CharSequence>) spinner.getAdapter()).getItem(spinner.getSelectedItemPosition()).toString();
     }
+
+    public int getRotationNumber() {
+        return 1;
+    }
 }
