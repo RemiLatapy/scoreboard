@@ -16,7 +16,7 @@ import remi.scoreboard.adapters.GamePlayTabAdapter;
 import remi.scoreboard.fragments.GamePlayerFragment;
 import remi.scoreboard.model.Player;
 
-public class GameActivity extends AppCompatActivity {
+public abstract class GameActivity extends AppCompatActivity {
 
     protected ArrayList<String> playersName;
     protected Toolbar toolbar;
@@ -52,7 +52,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setupPager() {
-        GamePlayTabAdapter adapter = new GamePlayTabAdapter(getSupportFragmentManager(), playersName);
+        GamePlayTabAdapter adapter = new GamePlayTabAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(adapter);
+    }
+
+    public ArrayList<String> getPlayersName() {
+        return playersName;
     }
 }

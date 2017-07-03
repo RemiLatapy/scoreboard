@@ -30,7 +30,7 @@ public class Player implements Parcelable {
     }
 
     ////// Parcelable implementation below
-    private Player(Parcel in) {
+    protected Player(Parcel in) {
         this.name = in.readString();
         this.num = in.readInt();
     }

@@ -173,8 +173,10 @@ public class MainActivity extends AppCompatActivity {
                             intent.setClass(MainActivity.this, PhaseDixPlayActivity.class);
                         } else if (currentGameName == getString(R.string.game_name_squash)) {
                             intent.setClass(MainActivity.this, GameChampionshipActivity.class);
+                        } else if (currentGameName == getString(R.string.game_name_scopa)) {
+                            intent.setClass(MainActivity.this, GameScopaActivity.class);
                         } else {
-                            break;
+                            throw new Error("Unknow game : " + currentGameName);
                         }
 
                         intent.putExtra(PLAYERS, getPlayers());

@@ -4,38 +4,27 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.ArrayList;
-
-import remi.scoreboard.fragments.RankingFragment;
-import remi.scoreboard.fragments.SquashPlayFragment;
+import remi.scoreboard.GameFragmentsManager;
+import remi.scoreboard.activities.GameActivity;
 
 public class GamePlayTabAdapter extends FragmentPagerAdapter {
 
-    private static int NUM_ITEMS = 2;
+    private GameActivity ctx;
 
-    private ArrayList<String> playerNameList;
-
-    public GamePlayTabAdapter(FragmentManager fm, ArrayList<String> playerNameList) {
+    public GamePlayTabAdapter(FragmentManager fm, GameActivity ctx) {
         super(fm);
-        this.playerNameList = playerNameList;
+        this.ctx = ctx;
     }
 
     // TODO one static class containing fragment configuration for each game
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
-            case 0:
-                return SquashPlayFragment.newInstance(playerNameList);
-            case 1:
-                return RankingFragment.newInstance();
-            default:
-                return null;
-        }
+        return GameFragmentsManager.getFragmentAtPosition(ctx, position);
     }
 
     @Override
     public int getCount() {
-        return NUM_ITEMS;
+        return GameFragmentsManager.getFragmentsCount(ctx);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class PhaseDixPlayActivity extends GameActivity {
     private void addAllPlayersView() {
         View view;
         for (int i = 0; i < playersName.size(); i++) {
-            view = getLayoutInflater().inflate(R.layout.item_card_player, cardContainerView, false);
+            view = getLayoutInflater().inflate(R.layout.item_card_player_phase10, cardContainerView, false);
             findViews(view);
             fillTextViews(i);
             final Player currentPlayer = playerList.get(i);
