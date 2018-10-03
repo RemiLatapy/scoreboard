@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 
 import remi.scoreboard.activities.GameActivity;
 import remi.scoreboard.activities.GameChampionshipActivity;
-import remi.scoreboard.activities.GameScopaActivity;
+import remi.scoreboard.activities.GameSimpleScoreActivity;
 import remi.scoreboard.fragments.RankingFragment;
 import remi.scoreboard.fragments.SimpleScorePlayFragment;
 import remi.scoreboard.fragments.SquashPlayFragment;
@@ -23,7 +23,7 @@ public final class GameFragmentsManager {
             else if(pos == 1)
                 return RankingFragment.newInstance();
         }
-        else if(ctx instanceof GameScopaActivity)
+        else if(ctx instanceof GameSimpleScoreActivity)
         {
             if (pos == 0)
                 return SimpleScorePlayFragment.newInstance(ctx);
@@ -38,7 +38,7 @@ public final class GameFragmentsManager {
         {
             return 2;
         }
-        else if(ctx instanceof GameScopaActivity)
+        else if(ctx instanceof GameSimpleScoreActivity)
         {
             return 1;
         }
