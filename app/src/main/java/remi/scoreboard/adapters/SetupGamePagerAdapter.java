@@ -48,13 +48,15 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
                 {
                      frag = SquashGameCustomizeFragment.class.getName();
                 }
-                else if(((MainActivity) ctx).currentGameName.equals(ctx.getString(R.string.game_name_phase_dix)))
+                else
                 {
                     frag = GameCustomizeFragment.class.getName();
                 }
+
                 if(!frag.isEmpty()) {
                     gameCustomizeFragment = (GameCustomizeFragment) GameCustomizeFragment.instantiate(ctx, frag);
                 }
+
                 Log.d("FRAG", frag);
                 return gameCustomizeFragment;
         }

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.adapters.SetupGamePagerAdapter;
-import remi.scoreboard.fragments.SquashPlayFragment;
 import remi.scoreboard.view.NonSwipeableViewPager;
 
 public class MainActivity extends AppCompatActivity {
@@ -169,12 +168,15 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 2:
                         Intent intent = new Intent();
-                        if (currentGameName == getString(R.string.game_name_phase_dix)) {
+                        if (currentGameName.equals(getString(R.string.game_name_phase_dix))) {
                             intent.setClass(MainActivity.this, PhaseDixPlayActivity.class);
-                        } else if (currentGameName == getString(R.string.game_name_squash)) {
+                        } else if (currentGameName.equals(getString(R.string.game_name_squash))) {
                             intent.setClass(MainActivity.this, GameChampionshipActivity.class);
+                        } else if (currentGameName.equals(getString(R.string.game_name_scopa)) ||
+                                currentGameName.equals(getString(R.string.game_name_uno))) {
+                            intent.setClass(MainActivity.this, GameSimpleScoreActivity.class);
                         } else {
-                            break;
+                            throw new Error("Unknow game : " + currentGameName);
                         }
 
                         intent.putExtra(PLAYERS, getPlayers());

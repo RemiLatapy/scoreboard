@@ -22,8 +22,7 @@
             android:name=".activities.PhaseDixPlayActivity"
             android:label="Phase 10"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.GameActivity" />
-        <activity android:name=".fragments.SquashPlayFragment" />
+        <activity android:name=".activities.GameSimpleScoreActivity" />
     </application>
 
 </manifest>

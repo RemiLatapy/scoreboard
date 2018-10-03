@@ -20,4 +20,5 @@
     <string name="choose_game">Choose game</string>
     <string name="customize_game">Customize game</string>
     <string name="game_name_squash">Squash</string>
+    <string name="game_name_scopa">Scopa</string>
 </resources>

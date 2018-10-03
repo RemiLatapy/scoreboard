@@ -1,10 +1,12 @@
 package remi.scoreboard.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import remi.scoreboard.R;
+import remi.scoreboard.activities.GameActivity;
 import remi.scoreboard.activities.GameChampionshipActivity;
 import remi.scoreboard.model.Match;
 import remi.scoreboard.model.MatchDay;
 import remi.scoreboard.model.Player;
 
-public class SquashPlayFragment extends android.support.v4.app.Fragment {
+// TODO change class name to "ChampionshipPlayFragment"
+public class SquashPlayFragment extends Fragment {
 
     private LinearLayout cardContainerView;
 
@@ -36,11 +40,13 @@ public class SquashPlayFragment extends android.support.v4.app.Fragment {
     private ArrayList<MatchDay> championship;
     private ArrayList<Player> playerList;
 
-    public static SquashPlayFragment newInstance(ArrayList<String> playerNameList)
+
+    public static SquashPlayFragment newInstance(Context ctx)
     {
         SquashPlayFragment squashPlayFragment = new SquashPlayFragment();
 
         Bundle args = new Bundle();
+        ArrayList<String> playerNameList = ((GameActivity) ctx).getPlayersName();
         args.putStringArrayList("playerNameList", playerNameList);
         squashPlayFragment.setArguments(args);
         return squashPlayFragment;
