@@ -18,7 +18,7 @@ import remi.scoreboard.model.Player;
 
 import static remi.scoreboard.activities.MainActivity.ROTATION_NUMBER;
 
-public class GameActivity extends AppCompatActivity {
+public abstract class GameActivity extends AppCompatActivity {
 
     public int rotationsNumber = 1;
     protected ArrayList<String> playersName;

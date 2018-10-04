@@ -19,13 +19,11 @@ import java.util.List;
 
 import remi.scoreboard.R;
 import remi.scoreboard.activities.GameActivity;
-import remi.scoreboard.activities.GameChampionshipActivity;
+import remi.scoreboard.model.ChampionshipPlayer;
 import remi.scoreboard.model.Match;
 import remi.scoreboard.model.MatchDay;
-import remi.scoreboard.model.Player;
 
-// TODO change class name to "ChampionshipPlayFragment"
-public class SquashPlayFragment extends Fragment {
+public class ChampionshipPlayFragment extends Fragment {
 
     private LinearLayout cardContainerView;
 
@@ -38,35 +36,32 @@ public class SquashPlayFragment extends Fragment {
     private TextView textviewPlayerTwoScore;
 
     private ArrayList<MatchDay> championship;
-    private ArrayList<Player> playerList;
+    private ArrayList<ChampionshipPlayer> playerList;
 
     OnDataChange activityCallback;
 
-    public static SquashPlayFragment newInstance(Context ctx)
-    {
-        SquashPlayFragment squashPlayFragment = new SquashPlayFragment();
+    public static ChampionshipPlayFragment newInstance(Context ctx) {
+        ChampionshipPlayFragment championshipPlayFragment = new ChampionshipPlayFragment();
 
         Bundle args = new Bundle();
         ArrayList<String> playerNameList = ((GameActivity) ctx).getPlayersName();
         args.putStringArrayList("playerNameList", playerNameList);
-        squashPlayFragment.setArguments(args);
-        return squashPlayFragment;
+        championshipPlayFragment.setArguments(args);
+        return championshipPlayFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             createPlayers();
             if (playerList.size() == 0) {
                 return;
             }
 
             generateChampionship();
-        }
-        else
-        {
+        } else {
             championship = savedInstanceState.getParcelableArrayList("championship");
             playerList = savedInstanceState.getParcelableArrayList("playerList");
         }
@@ -85,7 +80,7 @@ public class SquashPlayFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        cardContainerView = (LinearLayout) view.findViewById(R.id.card_container);
+        cardContainerView = view.findViewById(R.id.card_container);
         addAllMatchdayView();
     }
 
@@ -101,11 +96,10 @@ public class SquashPlayFragment extends Fragment {
         assert playerNameList != null;
         playerList = new ArrayList<>();
         for (int i = 0; i < playerNameList.size(); i++) {
-            playerList.add(new Player(playerNameList.get(i), (i + 1)));
+            playerList.add(new ChampionshipPlayer(playerNameList.get(i), (i + 1)));
         }
-        if(playerList.size()%2 != 0)
-        {
-            playerList.add(new Player("Bye", playerList.size()+1));
+        if (playerList.size() % 2 != 0) {
+            playerList.add(new ChampionshipPlayer("Bye", playerList.size() + 1));
         }
     }
 
@@ -114,12 +108,12 @@ public class SquashPlayFragment extends Fragment {
 
         int numDays = (playerList.size() - 1); // Days needed to complete championship
 
-        List<Player> players = new ArrayList<>(playerList); // Copy list
+        List<ChampionshipPlayer> players = new ArrayList<>(playerList); // Copy list
         players.remove(0);  // Remove first player, to fix it
 
         int playersSize = players.size();
 
-        for(int r = 0 ; r < ((GameActivity)getActivity()).rotationsNumber ; r++) {
+        for (int r = 0; r < ((GameActivity) getActivity()).rotationsNumber; r++) {
             for (int day = 0; day < numDays; day++) {
                 MatchDay matchDay = new MatchDay();
 
@@ -163,8 +157,7 @@ public class SquashPlayFragment extends Fragment {
         Match match = championship.get(matchdayNum).get(matchNum);
         textviewPlayerOneName.setText(match.getPlayerOne().getName());
         textviewPlayerTwoName.setText(match.getPlayerTwo().getName());
-        if(match.isFinished())
-        {
+        if (match.isFinished()) {
             textviewPlayerOneScore.setText(String.valueOf(match.getScorePlayerOne()));
             textviewPlayerTwoScore.setText(String.valueOf(match.getScorePlayerTwo()));
         }
@@ -183,8 +176,8 @@ public class SquashPlayFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 View dialogMatchScore = getActivity().getLayoutInflater().inflate(R.layout.dialog_match_score, (ViewGroup) v.getRootView(), false);
-                ((TextView)dialogMatchScore.findViewById(R.id.player1_name)).setText(currentMatch.getPlayerOne().getName());
-                ((TextView)dialogMatchScore.findViewById(R.id.player2_name)).setText(currentMatch.getPlayerTwo().getName());
+                ((TextView) dialogMatchScore.findViewById(R.id.player1_name)).setText(currentMatch.getPlayerOne().getName());
+                ((TextView) dialogMatchScore.findViewById(R.id.player2_name)).setText(currentMatch.getPlayerTwo().getName());
                 (new AlertDialog.Builder(getActivity()))
                         .setCancelable(true)
                         .setTitle("Matchday " + String.valueOf(championship.indexOf(currentMatchday) + 1))
@@ -219,22 +212,19 @@ public class SquashPlayFragment extends Fragment {
                     currentMatch.setScorePlayerTwo(Integer.parseInt(scorePlayerTwo));
                 }
 
-                currentMatch.getPlayerOne().goalAverage += currentMatch.getScorePlayerOne() - currentMatch.getScorePlayerTwo();
-                currentMatch.getPlayerTwo().goalAverage += currentMatch.getScorePlayerTwo() - currentMatch.getScorePlayerOne();
+                ((ChampionshipPlayer) currentMatch.getPlayerOne()).addGoalAverage(currentMatch.getScorePlayerOne() - currentMatch.getScorePlayerTwo());
+                ((ChampionshipPlayer) currentMatch.getPlayerTwo()).addGoalAverage(currentMatch.getScorePlayerTwo() - currentMatch.getScorePlayerOne());
 
-                if(currentMatch.getScorePlayerOne() > currentMatch.getScorePlayerTwo())
-                {
-                    currentMatch.getPlayerOne().victories++;
-                    currentMatch.getPlayerTwo().defeats++;
-                }
-                else
-                {
-                    currentMatch.getPlayerTwo().victories++;
-                    currentMatch.getPlayerOne().defeats++;
+                if (currentMatch.getScorePlayerOne() > currentMatch.getScorePlayerTwo()) {
+                    ((ChampionshipPlayer) currentMatch.getPlayerOne()).addVictories();
+                    ((ChampionshipPlayer) currentMatch.getPlayerTwo()).addDefeats();
+                } else {
+                    ((ChampionshipPlayer) currentMatch.getPlayerTwo()).addVictories();
+                    ((ChampionshipPlayer) currentMatch.getPlayerOne()).addDefeats();
                 }
 
-                currentMatch.getPlayerOne().gamesPlayed++;
-                currentMatch.getPlayerTwo().gamesPlayed++;
+                ((ChampionshipPlayer) currentMatch.getPlayerOne()).addGamesPlayed();
+                ((ChampionshipPlayer) currentMatch.getPlayerTwo()).addGamesPlayed();
 
                 updateActivityData();
                 updateViews(currentMatch, currentMatchday);
@@ -243,7 +233,8 @@ public class SquashPlayFragment extends Fragment {
     }
 
     public interface OnDataChange {
-        public void onPlayerListChange(ArrayList<Player> playerList);
+        public void onPlayerListChange(ArrayList<ChampionshipPlayer> playerList);
+
         public void onChampionshipUpdated(ArrayList<MatchDay> championship);
     }
 
