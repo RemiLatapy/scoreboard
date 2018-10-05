@@ -1,10 +1,8 @@
 package remi.scoreboard.model;
 
-
 import android.os.Parcel;
-import android.os.Parcelable;
 
-public class SimpleScorePlayer extends Player implements Parcelable {
+public class SimpleScorePlayer extends Player {
 
     private int score;
 
@@ -21,8 +19,12 @@ public class SimpleScorePlayer extends Player implements Parcelable {
         score += points;
     }
 
+    public void removePoints(int points) {
+        score -= points;
+    }
+
     ////// Parcelable implementation below
-    private SimpleScorePlayer(Parcel in) {
+    protected SimpleScorePlayer(Parcel in) {
         super(in);
         score = in.readInt();
     }

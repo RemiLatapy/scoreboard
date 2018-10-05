@@ -1,16 +1,14 @@
 package remi.scoreboard.model;
 
-// TODO parcelable like Player or SimpleScorePlayer
-// TODO extends SimpleScorePlayer ????
-public class PhaseDixPlayer extends Player {
+import android.os.Parcel;
+
+public final class PhaseDixPlayer extends SimpleScorePlayer {
 
     private int phase;
-    private int points;
 
     public PhaseDixPlayer(String name, int num) {
         super(name, num);
         this.phase = 1;
-        this.points = 0;
     }
 
     public int getPhase() {
@@ -25,15 +23,32 @@ public class PhaseDixPlayer extends Player {
         this.phase++;
     }
 
-    public int getPoints() {
-        return points;
+    ////// Parcelable implementation below
+    private PhaseDixPlayer(Parcel in) {
+        super(in);
+        phase = in.readInt();
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(phase);
     }
 
-    public void addPoints(int points) {
-        this.points += points;
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    public static final Creator<PhaseDixPlayer> CREATOR = new Creator<PhaseDixPlayer>() {
+        @Override
+        public PhaseDixPlayer createFromParcel(Parcel in) {
+            return new PhaseDixPlayer(in);
+        }
+
+        @Override
+        public PhaseDixPlayer[] newArray(int size) {
+            return new PhaseDixPlayer[size];
+        }
+    };
 }

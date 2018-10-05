@@ -21,17 +21,17 @@ import remi.scoreboard.model.Player;
 import remi.scoreboard.model.SimpleScorePlayer;
 
 
-public class SimpleScorePlayFragment extends Fragment{
+public class SimpleScorePlayFragment extends Fragment {
 
-    private LinearLayout cardContainerView;
+    protected LinearLayout cardContainerView;
 
-    private TextView playerPoints;
+    protected TextView playerPoints;
+    protected ArrayList<SimpleScorePlayer> playerList;
+
     private TextView playerName;
     private TextView playerNum;
-    private ArrayList<SimpleScorePlayer> playerList;
 
-    public static SimpleScorePlayFragment newInstance(GameActivity activity)
-    {
+    public static SimpleScorePlayFragment newInstance(GameActivity activity) {
         SimpleScorePlayFragment simpleScorePlayFragment = new SimpleScorePlayFragment();
 
         Bundle args = new Bundle();
@@ -45,11 +45,9 @@ public class SimpleScorePlayFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             createPlayers();
-        }
-        else
-        {
+        } else {
             playerList = savedInstanceState.getParcelableArrayList("playerList");
         }
     }
@@ -73,7 +71,7 @@ public class SimpleScorePlayFragment extends Fragment{
         outState.putParcelableArrayList("playerList", playerList);
     }
 
-    private void createPlayers() {
+    protected void createPlayers() {
         ArrayList<String> playerNameList = getArguments().getStringArrayList("playerNameList");
         assert playerNameList != null;
         playerList = new ArrayList<>();
@@ -82,25 +80,25 @@ public class SimpleScorePlayFragment extends Fragment{
         }
     }
 
-    private void addAllPlayersView() {
+    protected void addAllPlayersView() {
         View view;
         for (int i = 0; i < playerList.size(); i++) {
-            view = getActivity().getLayoutInflater().inflate(R.layout.item_card_player_simple_score, cardContainerView, false);
+            view = getActivity().getLayoutInflater().inflate(getCardRes(), cardContainerView, false);
             findViews(view);
-            fillTextViews(i);
+            fillTextViews(playerList.get(i));
             buildAlertDialog(view, playerList.get(i));
             cardContainerView.addView(view);
         }
     }
 
-    private void buildAlertDialog(View view, final Player currentPlayer) {
+    protected void buildAlertDialog(View view, final Player currentPlayer) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 (new AlertDialog.Builder(getActivity()))
                         .setCancelable(true)
                         .setTitle(currentPlayer.getName())
-                        .setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_player_simple_score_score, (ViewGroup) v.getRootView(), false))
+                        .setView(getActivity().getLayoutInflater().inflate(getPlayerScoreDialogRes(), (ViewGroup) v.getRootView(), false))
                         .setPositiveButton("Valider", getValidateListener(currentPlayer))
                         .setNegativeButton("Annuler", getCancelListener())
                         .show();
@@ -109,7 +107,7 @@ public class SimpleScorePlayFragment extends Fragment{
     }
 
     @NonNull
-    private DialogInterface.OnClickListener getCancelListener() {
+    protected DialogInterface.OnClickListener getCancelListener() {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -119,7 +117,7 @@ public class SimpleScorePlayFragment extends Fragment{
     }
 
     @NonNull
-    private DialogInterface.OnClickListener getValidateListener(final Player currentPlayer) {
+    protected DialogInterface.OnClickListener getValidateListener(final Player currentPlayer) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -132,21 +130,28 @@ public class SimpleScorePlayFragment extends Fragment{
         };
     }
 
-    private void updateViews(SimpleScorePlayer player) {
+    protected void updateViews(Player player) {
         findViews(cardContainerView.getChildAt(player.getNum() - 1));
-        playerPoints.setText(String.valueOf(player.getScore()) + " points");
+        playerPoints.setText(String.format("%d points", ((SimpleScorePlayer) player).getScore()));
     }
 
-    private void fillTextViews(int i) {
-        playerNum.setText("Joueur " + String.valueOf(playerList.get(i).getNum()));
-        playerName.setText(playerList.get(i).getName());
-        playerPoints.setText(String.valueOf(playerList.get(i).getScore()) + " points");
+    protected void fillTextViews(Player player) {
+        playerNum.setText(String.format("Joueur %d", player.getNum()));
+        playerName.setText(player.getName());
+        playerPoints.setText(String.format("%d points", ((SimpleScorePlayer) player).getScore()));
     }
 
-    private void findViews(View view) {
+    protected void findViews(View view) {
         playerNum = view.findViewById(R.id.player_num);
         playerName = view.findViewById(R.id.player_name);
         playerPoints = view.findViewById(R.id.player_points);
     }
 
+    protected int getCardRes() {
+        return R.layout.item_card_player_simple_score;
+    }
+
+    protected int getPlayerScoreDialogRes() {
+        return R.layout.dialog_player_simple_score_score;
+    }
 }
