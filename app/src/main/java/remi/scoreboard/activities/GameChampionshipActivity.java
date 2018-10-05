@@ -2,10 +2,23 @@ package remi.scoreboard.activities;
 
 import java.util.ArrayList;
 
-import remi.scoreboard.model.Player;
+import remi.scoreboard.fragments.RankingFragment;
+import remi.scoreboard.fragments.ChampionshipPlayFragment;
+import remi.scoreboard.model.ChampionshipPlayer;
+import remi.scoreboard.model.MatchDay;
 
-public class GameChampionshipActivity extends GameActivity {
+public class GameChampionshipActivity extends GameActivity implements ChampionshipPlayFragment.OnDataChange {
 
-    public ArrayList<Player> playerList;
+    public RankingFragment rankingFragment;
 
+    @Override
+    public void onPlayerListChange(ArrayList<ChampionshipPlayer> playerList) {
+        rankingFragment.setPlayers(playerList);
+        rankingFragment.setScore();
+    }
+
+    @Override
+    public void onChampionshipUpdated(ArrayList<MatchDay> championship) {
+
+    }
 }

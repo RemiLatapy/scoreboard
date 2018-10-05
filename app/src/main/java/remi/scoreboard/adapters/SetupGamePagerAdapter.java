@@ -91,6 +91,13 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
         return gameCustomizeFragment.getRule();
     }
 
+    public int getRotationNumber() {
+        if (gameCustomizeFragment == null) {
+            Log.d("SetupGamePagerAdapter", "gameCustomizeFragment == null");
+        }
+        return gameCustomizeFragment.getRotationNumber();
+    }
+
     public void savePlayers() {
         gamePlayerFragment.savePlayers();
     }

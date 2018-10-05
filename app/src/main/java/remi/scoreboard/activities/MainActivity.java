@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String PLAYERS = "remi.scoreboard.activities.players";
     public static final String GAME_RULES = "remi.scoreboard.activities.gamerules";
+    public static final String ROTATION_NUMBER = "remi.scoreboard.activities.rotationnumber";
 
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
@@ -67,6 +68,13 @@ public class MainActivity extends AppCompatActivity {
             return ((SetupGamePagerAdapter) pager.getAdapter()).getRule();
         }
         return "";
+    }
+
+    private int getRotationNumber() {
+        if (pager.getAdapter() instanceof SetupGamePagerAdapter) {
+            return ((SetupGamePagerAdapter) pager.getAdapter()).getRotationNumber();
+        }
+        return 1;
     }
 
     private void setupPager() {
@@ -182,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
                         intent.putExtra(PLAYERS, getPlayers());
                         intent.putExtra(GAME_RULES, getRule());
+                        intent.putExtra(ROTATION_NUMBER, getRotationNumber());
                         startActivity(intent);
                         break;
                 }

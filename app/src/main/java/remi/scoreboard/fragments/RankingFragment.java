@@ -1,5 +1,6 @@
 package remi.scoreboard.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,11 +15,12 @@ import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.activities.GameChampionshipActivity;
-import remi.scoreboard.model.Player;
+import remi.scoreboard.model.ChampionshipPlayer;
 
 public class RankingFragment extends Fragment{
 
-    private ArrayMap<Player, View> playerRowsMap;
+    private ArrayMap<ChampionshipPlayer, View> playerRowsMap;
+    private LinearLayout rowContainerView;
 
     public static RankingFragment newInstance()
     {
@@ -34,26 +36,42 @@ public class RankingFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LinearLayout rowContainerView = (LinearLayout) view.findViewById(R.id.row_container);
+        rowContainerView = view.findViewById(R.id.row_container);
+    }
+
+    public void setPlayers(ArrayList<ChampionshipPlayer> playerList) {
+        if(playerRowsMap != null)
+            return;
 
         playerRowsMap = new ArrayMap<>();
 
-        ArrayList<Player> playerList = ((GameChampionshipActivity)getActivity()).playerList;
-
-        for (Player player : playerList) {
+        for (ChampionshipPlayer player : playerList) {
             View row = getActivity().getLayoutInflater().inflate(R.layout.item_row_ranking, rowContainerView, false);
             playerRowsMap.put(player, row);
             rowContainerView.addView(row);
         }
 
-        for (ArrayMap.Entry<Player, View> entry : playerRowsMap.entrySet())
+        for (ArrayMap.Entry<ChampionshipPlayer, View> entry : playerRowsMap.entrySet())
         {
             ((TextView)entry.getValue().findViewById(R.id.rank_player_name)).setText(entry.getKey().getName());
-            ((TextView)entry.getValue().findViewById(R.id.rank_lost)).setText("1");
-            ((TextView)entry.getValue().findViewById(R.id.rank_played_game)).setText("2");
-            ((TextView)entry.getValue().findViewById(R.id.rank_points)).setText("3");
-            ((TextView)entry.getValue().findViewById(R.id.rank_position)).setText("4");
-            ((TextView)entry.getValue().findViewById(R.id.rank_win)).setText("5");
         }
+    }
+
+    public void setScore()
+    {
+        assert playerRowsMap != null;
+        for (ArrayMap.Entry<ChampionshipPlayer, View> entry : playerRowsMap.entrySet())
+        {
+            ((TextView)entry.getValue().findViewById(R.id.rank_win)).setText(String.valueOf(entry.getKey().getVictories()));
+            ((TextView)entry.getValue().findViewById(R.id.rank_lost)).setText(String.valueOf(entry.getKey().getDefeats()));
+            ((TextView)entry.getValue().findViewById(R.id.rank_points)).setText(String.valueOf(entry.getKey().getGoalAverage()));
+            ((TextView)entry.getValue().findViewById(R.id.rank_played_game)).setText(String.valueOf(entry.getKey().getGamesPlayed()));
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((GameChampionshipActivity)context).rankingFragment = this;
     }
 }

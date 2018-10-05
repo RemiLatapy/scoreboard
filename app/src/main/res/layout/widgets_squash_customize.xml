@@ -10,4 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
+    <android.widget.NumberPicker
+        android:id="@+id/rotation_number"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
+
 </LinearLayout>

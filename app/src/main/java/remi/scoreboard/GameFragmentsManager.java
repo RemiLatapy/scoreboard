@@ -10,7 +10,7 @@ import remi.scoreboard.activities.GameSimpleScoreActivity;
 import remi.scoreboard.fragments.PhaseDixPlayFragment;
 import remi.scoreboard.fragments.RankingFragment;
 import remi.scoreboard.fragments.SimpleScorePlayFragment;
-import remi.scoreboard.fragments.SquashPlayFragment;
+import remi.scoreboard.fragments.ChampionshipPlayFragment;
 
 public final class GameFragmentsManager {
 
@@ -21,7 +21,7 @@ public final class GameFragmentsManager {
         if(ctx instanceof GameChampionshipActivity)
         {
             if(pos == 0)
-                return SquashPlayFragment.newInstance(ctx);
+                return ChampionshipPlayFragment.newInstance(ctx);
             else if(pos == 1)
                 return RankingFragment.newInstance();
         }
