@@ -1,9 +1,12 @@
-package remi.scoreboard.activities;
+package remi.scoreboard.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -14,11 +17,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import remi.scoreboard.R;
+import remi.scoreboard.activities.GameActivity;
 import remi.scoreboard.model.PhaseDixPlayer;
 import remi.scoreboard.model.Player;
 
-// TODO fragmentization like Squash
-public class PhaseDixPlayActivity extends GameActivity {
+public class PhaseDixPlayFragment extends Fragment {
 
     TextView playerNum;
     TextView playerName;
@@ -28,30 +31,66 @@ public class PhaseDixPlayActivity extends GameActivity {
     ArrayList<Player> playerList;
     protected LinearLayout cardContainerView;
 
+    public static PhaseDixPlayFragment newInstance(GameActivity activity)
+    {
+        PhaseDixPlayFragment phaseDixPlayFragment = new PhaseDixPlayFragment();
+
+        Bundle args = new Bundle();
+        ArrayList<String> playerNameList = activity.getPlayersName();
+        args.putStringArrayList("playerNameList", playerNameList);
+        phaseDixPlayFragment.setArguments(args);
+
+        return phaseDixPlayFragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        createPlayers();
+        if(savedInstanceState == null) {
+            createPlayers();
+        }
+        else
+        {
+            playerList = savedInstanceState.getParcelableArrayList("playerList");
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_gameview_cards, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        cardContainerView = view.findViewById(R.id.card_container);
         addAllPlayersView();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("playerList", playerList);
+    }
+
     private void createPlayers() {
+        ArrayList<String> playerNameList = getArguments().getStringArrayList("playerNameList");
+        assert playerNameList != null;
         playerList = new ArrayList<>();
-        for (int i = 0; i < playersName.size(); i++) {
-            playerList.add(new PhaseDixPlayer(playersName.get(i), (i + 1)));
+        for (int i = 0; i < playerNameList.size(); i++) {
+            playerList.add(new PhaseDixPlayer(playerNameList.get(i), (i + 1)));
         }
     }
 
     private void addAllPlayersView() {
         View view;
-        for (int i = 0; i < playersName.size(); i++) {
-            view = getLayoutInflater().inflate(R.layout.item_card_player_phase10, cardContainerView, false);
+        for (int i = 0; i < playerList.size(); i++) {
+            view = getActivity().getLayoutInflater().inflate(R.layout.item_card_player_phase10, cardContainerView, false);
             findViews(view);
             fillTextViews(i);
-            final Player currentPlayer = playerList.get(i);
-            buildAlertDialog(view, currentPlayer);
+            buildAlertDialog(view, playerList.get(i));
             cardContainerView.addView(view);
         }
     }
@@ -60,10 +99,10 @@ public class PhaseDixPlayActivity extends GameActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (new AlertDialog.Builder(PhaseDixPlayActivity.this))
+                (new AlertDialog.Builder(getActivity()))
                         .setCancelable(true)
                         .setTitle(currentPlayer.getName())
-                        .setView(getLayoutInflater().inflate(R.layout.dialog_player_phase10_score, (ViewGroup) v.getRootView(), false))
+                        .setView(getActivity().getLayoutInflater().inflate(R.layout.dialog_player_phase10_score, (ViewGroup) v.getRootView(), false))
                         .setPositiveButton("Valider", getValidateListener(currentPlayer))
                         .setNegativeButton("Annuler", getCancelListener())
                         .show();
@@ -106,15 +145,15 @@ public class PhaseDixPlayActivity extends GameActivity {
 
     private void fillTextViews(int i) {
         playerNum.setText("Joueur " + (i + 1));
-        playerName.setText(playersName.get(i));
+        playerName.setText(playerList.get(i).getName());
         playerPhase.setText("Phase 1");
         playerPoints.setText("0 points");
     }
 
     private void findViews(View view) {
-        playerNum = (TextView) view.findViewById(R.id.player_num);
-        playerName = (TextView) view.findViewById(R.id.player_name);
-        playerPhase = (TextView) view.findViewById(R.id.player_phase);
-        playerPoints = (TextView) view.findViewById(R.id.player_points);
+        playerNum = view.findViewById(R.id.player_num);
+        playerName = view.findViewById(R.id.player_name);
+        playerPhase = view.findViewById(R.id.player_phase);
+        playerPoints = view.findViewById(R.id.player_points);
     }
 }

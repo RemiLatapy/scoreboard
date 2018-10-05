@@ -63,7 +63,7 @@ public class SimpleScorePlayFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        cardContainerView = (LinearLayout) view.findViewById(R.id.card_container);
+        cardContainerView = view.findViewById(R.id.card_container);
         addAllPlayersView();
     }
 
@@ -144,9 +144,9 @@ public class SimpleScorePlayFragment extends Fragment{
     }
 
     private void findViews(View view) {
-        playerNum = (TextView) view.findViewById(R.id.player_num);
-        playerName = (TextView) view.findViewById(R.id.player_name);
-        playerPoints = (TextView) view.findViewById(R.id.player_points);
+        playerNum = view.findViewById(R.id.player_num);
+        playerName = view.findViewById(R.id.player_name);
+        playerPoints = view.findViewById(R.id.player_points);
     }
 
 }
