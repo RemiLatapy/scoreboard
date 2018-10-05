@@ -23,6 +23,8 @@ import remi.scoreboard.model.ChampionshipPlayer;
 import remi.scoreboard.model.Match;
 import remi.scoreboard.model.MatchDay;
 
+import static remi.scoreboard.activities.MainActivity.ROTATION_NUMBER;
+
 public class ChampionshipPlayFragment extends Fragment {
 
     private LinearLayout cardContainerView;
@@ -37,6 +39,8 @@ public class ChampionshipPlayFragment extends Fragment {
 
     private ArrayList<MatchDay> championship;
     private ArrayList<ChampionshipPlayer> playerList;
+
+    public int rotationsNumber = 1;
 
     OnDataChange activityCallback;
 
@@ -53,6 +57,8 @@ public class ChampionshipPlayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        rotationsNumber = savedInstanceState.getInt(ROTATION_NUMBER, 1);
 
         if (savedInstanceState == null) {
             createPlayers();
@@ -113,7 +119,7 @@ public class ChampionshipPlayFragment extends Fragment {
 
         int playersSize = players.size();
 
-        for (int r = 0; r < ((GameActivity) getActivity()).rotationsNumber; r++) {
+        for (int r = 0; r < rotationsNumber; r++) {
             for (int day = 0; day < numDays; day++) {
                 MatchDay matchDay = new MatchDay();
 
