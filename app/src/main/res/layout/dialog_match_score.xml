@@ -26,7 +26,7 @@
             android:id="@+id/player1_score"
             android:inputType="number"
             android:maxLength="3"
-            android:maxLines="1"
+            android:singleLine="true"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -40,14 +40,14 @@
             android:id="@+id/player2_score"
             android:inputType="number"
             android:maxLength="3"
-            android:maxLines="1"
             android:ellipsize="start"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="18sp"
             android:text=""
-            tools:text="0"/>
+            tools:text="0"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/player2_name"
