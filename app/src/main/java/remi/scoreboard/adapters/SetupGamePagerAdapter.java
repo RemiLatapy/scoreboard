@@ -45,16 +45,13 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
                 return gamePlayerFragment;
             case 2:
                 String frag;
-                if(((MainActivity) ctx).currentGameName.equals(ctx.getString(R.string.game_name_squash)))
-                {
-                     frag = SquashGameCustomizeFragment.class.getName();
-                }
-                else
-                {
+                if (((MainActivity) ctx).currentGameName.equals(ctx.getString(R.string.game_name_squash))) {
+                    frag = SquashGameCustomizeFragment.class.getName();
+                } else {
                     frag = GameCustomizeFragment.class.getName();
                 }
 
-                if(!frag.isEmpty()) {
+                if (!frag.isEmpty()) {
                     gameCustomizeFragment = (GameCustomizeFragment) GameCustomizeFragment.instantiate(ctx, frag);
                 }
 
@@ -99,6 +96,7 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     /**
      * Notify that the position of a fragment has been changed.
      * Create a new ID for each position to force recreation of the fragment
+     *
      * @param n number of items which have been changed
      */
     public void notifyChangeInPosition(int n) {
