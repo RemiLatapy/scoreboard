@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    private String getRule() {
+    private String getRules() {
         if (pager.getAdapter() instanceof SetupGamePagerAdapter) {
             return ((SetupGamePagerAdapter) pager.getAdapter()).getRule();
         }
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         intent.putExtra(PLAYERS, getPlayers());
-                        intent.putExtra(GAME_RULES, getRule());
+                        intent.putExtra(GAME_RULES, getRules());
                         startActivity(intent);
                         break;
                 }

@@ -1,5 +1,7 @@
 package remi.scoreboard.model;
 
+// TODO parcelable like Player or SimpleScorePlayer
+// TODO extends SimpleScorePlayer ????
 public class PhaseDixPlayer extends Player {
 
     private int phase;

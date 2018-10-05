@@ -26,7 +26,7 @@ public class SquashGameCustomizeFragment extends GameCustomizeFragment {
     @Override
     protected void findViews(View view)
     {
-        spinner = (AppCompatSpinner) view.findViewById(R.id.rules_chooser);
+        spinner = view.findViewById(R.id.rules_chooser);
         numberPicker = (NumberPicker) view.findViewById(R.id.rotation_number);
     }
 
