@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.adapters.SetupGamePagerAdapter;
-import remi.scoreboard.fragments.PhaseDixPlayFragment;
 import remi.scoreboard.view.NonSwipeableViewPager;
 
 public class MainActivity extends AppCompatActivity {
@@ -178,13 +177,20 @@ public class MainActivity extends AppCompatActivity {
                     case 2:
                         Intent intent = new Intent();
                         if (currentGameName.equals(getString(R.string.game_name_phase_dix))) {
-                            intent.setClass(MainActivity.this, GamePhaseDixActivity.class);
+                            intent.setClass(MainActivity.this, GameSimpleScoreActivity.class);
+                            intent.putExtra("gameName", getString(R.string.game_name_phase_dix));
                         } else if (currentGameName.equals(getString(R.string.game_name_squash))) {
                             intent.setClass(MainActivity.this, GameChampionshipActivity.class);
-                        } else if (currentGameName.equals(getString(R.string.game_name_scopa)) ||
-                                currentGameName.equals(getString(R.string.game_name_uno))) {
+                            intent.putExtra("gameName", getString(R.string.game_name_squash));
+                            intent.putExtra(ROTATION_NUMBER, getRotationNumber());
+                        } else if (currentGameName.equals(getString(R.string.game_name_scopa))) {
                             intent.setClass(MainActivity.this, GameSimpleScoreActivity.class);
-                        } else {
+                            intent.putExtra("gameName", getString(R.string.game_name_scopa));
+                        } else if (currentGameName.equals(getString(R.string.game_name_uno))) {
+                            intent.setClass(MainActivity.this, GameSimpleScoreActivity.class);
+                            intent.putExtra("gameName", getString(R.string.game_name_uno));
+                        }
+                        else {
                             throw new Error("Unknow game : " + currentGameName);
                         }
 

@@ -20,6 +20,8 @@ import static remi.scoreboard.activities.MainActivity.ROTATION_NUMBER;
 
 public abstract class GameActivity extends AppCompatActivity {
 
+    private String gameName;
+
     protected ArrayList<String> playersName;
     protected Toolbar toolbar;
 
@@ -32,6 +34,7 @@ public abstract class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         playersName = getIntent().getStringArrayListExtra(MainActivity.PLAYERS);
+        gameName = getIntent().getStringExtra("gameName");
 
         findViews();
         setupToolbar();
@@ -60,5 +63,9 @@ public abstract class GameActivity extends AppCompatActivity {
 
     public ArrayList<String> getPlayersName() {
         return playersName;
+    }
+
+    public String getGameName() {
+        return gameName;
     }
 }

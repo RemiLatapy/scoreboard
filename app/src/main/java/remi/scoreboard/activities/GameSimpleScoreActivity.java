@@ -1,4 +1,4 @@
 package remi.scoreboard.activities;
 
-public class GameSimpleScoreActivity extends GameActivity {
+public final class GameSimpleScoreActivity extends GameActivity {
 }

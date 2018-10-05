@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.GameSimpleScoreActivity" />
-        <activity android:name=".activities.GamePhaseDixActivity" />
         <activity android:name=".activities.GameChampionshipActivity" />
     </application>
 
