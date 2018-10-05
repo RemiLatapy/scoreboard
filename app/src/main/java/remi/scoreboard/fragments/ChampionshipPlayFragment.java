@@ -18,13 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import remi.scoreboard.R;
-import remi.scoreboard.activities.GameActivity;
 import remi.scoreboard.activities.GameChampionshipActivity;
 import remi.scoreboard.model.ChampionshipPlayer;
 import remi.scoreboard.model.Match;
 import remi.scoreboard.model.MatchDay;
 
-import static remi.scoreboard.activities.MainActivity.ROTATION_NUMBER;
+import static remi.scoreboard.activities.GameChampionshipActivity.ROTATION_NUMBER;
 
 public class ChampionshipPlayFragment extends Fragment {
 

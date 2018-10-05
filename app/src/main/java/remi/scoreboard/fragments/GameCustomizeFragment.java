@@ -1,5 +1,6 @@
 package remi.scoreboard.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -63,7 +64,7 @@ public class GameCustomizeFragment extends Fragment {
    //     return ((ArrayAdapter<CharSequence>) spinner.getAdapter()).getItem(spinner.getSelectedItemPosition()).toString();
     }
 
-    public int getRotationNumber() {
-        return 1;
+    public Intent putCustomExtras(Intent intent) {
+        return intent; // do nothing
     }
 }

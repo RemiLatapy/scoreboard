@@ -1,22 +1,16 @@
 package remi.scoreboard.activities;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
 import remi.scoreboard.R;
 import remi.scoreboard.adapters.GamePlayTabAdapter;
-import remi.scoreboard.fragments.GamePlayerFragment;
-import remi.scoreboard.model.Player;
-
-import static remi.scoreboard.activities.MainActivity.ROTATION_NUMBER;
 
 public abstract class GameActivity extends AppCompatActivity {
 

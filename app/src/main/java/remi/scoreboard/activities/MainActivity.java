@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String PLAYERS = "remi.scoreboard.activities.players";
     public static final String GAME_RULES = "remi.scoreboard.activities.gamerules";
-    public static final String ROTATION_NUMBER = "remi.scoreboard.activities.rotationnumber";
 
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
@@ -69,11 +68,12 @@ public class MainActivity extends AppCompatActivity {
         return "";
     }
 
-    private int getRotationNumber() {
+    private Intent putCustomExtras(Intent intent)
+    {
         if (pager.getAdapter() instanceof SetupGamePagerAdapter) {
-            return ((SetupGamePagerAdapter) pager.getAdapter()).getRotationNumber();
+            return ((SetupGamePagerAdapter) pager.getAdapter()).putCustomExtras(intent);
         }
-        return 1;
+        return intent; // nop
     }
 
     private void setupPager() {
@@ -128,10 +128,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findViewsByIds() {
-        pager = (NonSwipeableViewPager) findViewById(R.id.pager);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        pager = findViewById(R.id.pager);
+        toolbar = findViewById(R.id.toolbar);
+        fab = findViewById(R.id.fab);
+        drawerLayout = findViewById(R.id.drawerLayout);
     }
 
     private void setupToolbar() {
@@ -182,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
                         } else if (currentGameName.equals(getString(R.string.game_name_squash))) {
                             intent.setClass(MainActivity.this, GameChampionshipActivity.class);
                             intent.putExtra("gameName", getString(R.string.game_name_squash));
-                            intent.putExtra(ROTATION_NUMBER, getRotationNumber());
                         } else if (currentGameName.equals(getString(R.string.game_name_scopa))) {
                             intent.setClass(MainActivity.this, GameSimpleScoreActivity.class);
                             intent.putExtra("gameName", getString(R.string.game_name_scopa));
@@ -196,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
 
                         intent.putExtra(PLAYERS, getPlayers());
                         intent.putExtra(GAME_RULES, getRules());
+                        intent = putCustomExtras(intent);
+
                         startActivity(intent);
                         break;
                 }

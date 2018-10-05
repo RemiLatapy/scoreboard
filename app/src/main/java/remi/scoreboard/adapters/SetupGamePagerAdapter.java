@@ -1,6 +1,7 @@
 package remi.scoreboard.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -43,7 +44,7 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
                 gamePlayerFragment = (GamePlayerFragment) GamePlayerFragment.instantiate(ctx, GamePlayerFragment.class.getName());
                 return gamePlayerFragment;
             case 2:
-                String frag = "";
+                String frag;
                 if(((MainActivity) ctx).currentGameName.equals(ctx.getString(R.string.game_name_squash)))
                 {
                      frag = SquashGameCustomizeFragment.class.getName();
@@ -91,13 +92,6 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
         return gameCustomizeFragment.getRule();
     }
 
-    public int getRotationNumber() {
-        if (gameCustomizeFragment == null) {
-            Log.d("SetupGamePagerAdapter", "gameCustomizeFragment == null");
-        }
-        return gameCustomizeFragment.getRotationNumber();
-    }
-
     public void savePlayers() {
         gamePlayerFragment.savePlayers();
     }
@@ -110,5 +104,9 @@ public class SetupGamePagerAdapter extends FragmentPagerAdapter {
     public void notifyChangeInPosition(int n) {
         // shift the ID returned by getItemId outside the range of all previous fragments
         baseId += getCount() + n;
+    }
+
+    public Intent putCustomExtras(Intent intent) {
+        return gameCustomizeFragment.putCustomExtras(intent);
     }
 }

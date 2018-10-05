@@ -1,5 +1,6 @@
 package remi.scoreboard.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
 import remi.scoreboard.R;
+
+import static remi.scoreboard.activities.GameChampionshipActivity.ROTATION_NUMBER;
 
 public class SquashGameCustomizeFragment extends GameCustomizeFragment {
 
@@ -27,7 +30,7 @@ public class SquashGameCustomizeFragment extends GameCustomizeFragment {
     protected void findViews(View view)
     {
         spinner = view.findViewById(R.id.rules_chooser);
-        numberPicker = (NumberPicker) view.findViewById(R.id.rotation_number);
+        numberPicker = view.findViewById(R.id.rotation_number);
     }
 
     @Override
@@ -40,13 +43,14 @@ public class SquashGameCustomizeFragment extends GameCustomizeFragment {
         numberPicker.setMaxValue(100);
     }
 
+    // TODO resolve cast warning
     @Override
     public String getRule() {
         return ((ArrayAdapter<CharSequence>) spinner.getAdapter()).getItem(spinner.getSelectedItemPosition()).toString();
     }
 
     @Override
-    public int getRotationNumber() {
-        return numberPicker.getValue();
+    public Intent putCustomExtras(Intent intent) {
+        return intent.putExtra(ROTATION_NUMBER, numberPicker.getValue());
     }
 }

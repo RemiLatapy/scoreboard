@@ -9,6 +9,8 @@ import remi.scoreboard.model.MatchDay;
 
 public class GameChampionshipActivity extends GameActivity implements ChampionshipPlayFragment.OnDataChange {
 
+    public static final String ROTATION_NUMBER = "remi.scoreboard.activities.rotationnumber";
+
     public RankingFragment rankingFragment;
 
     @Override
