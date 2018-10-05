@@ -19,6 +19,7 @@ import java.util.List;
 
 import remi.scoreboard.R;
 import remi.scoreboard.activities.GameActivity;
+import remi.scoreboard.activities.GameChampionshipActivity;
 import remi.scoreboard.model.ChampionshipPlayer;
 import remi.scoreboard.model.Match;
 import remi.scoreboard.model.MatchDay;
@@ -40,16 +41,15 @@ public class ChampionshipPlayFragment extends Fragment {
     private ArrayList<MatchDay> championship;
     private ArrayList<ChampionshipPlayer> playerList;
 
-    public int rotationsNumber = 1;
-
     OnDataChange activityCallback;
 
-    public static ChampionshipPlayFragment newInstance(Context ctx) {
+    public static ChampionshipPlayFragment newInstance(GameChampionshipActivity ctx) {
         ChampionshipPlayFragment championshipPlayFragment = new ChampionshipPlayFragment();
 
         Bundle args = new Bundle();
-        ArrayList<String> playerNameList = ((GameActivity) ctx).getPlayersName();
+        ArrayList<String> playerNameList = ctx.getPlayersName();
         args.putStringArrayList("playerNameList", playerNameList);
+        args.putInt(ROTATION_NUMBER, ctx.getIntent().getIntExtra(ROTATION_NUMBER, 1));
         championshipPlayFragment.setArguments(args);
         return championshipPlayFragment;
     }
@@ -57,8 +57,6 @@ public class ChampionshipPlayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        rotationsNumber = savedInstanceState.getInt(ROTATION_NUMBER, 1);
 
         if (savedInstanceState == null) {
             createPlayers();
@@ -119,7 +117,7 @@ public class ChampionshipPlayFragment extends Fragment {
 
         int playersSize = players.size();
 
-        for (int r = 0; r < rotationsNumber; r++) {
+        for (int r = 0; r < getArguments().getInt(ROTATION_NUMBER, 1); r++) {
             for (int day = 0; day < numDays; day++) {
                 MatchDay matchDay = new MatchDay();
 

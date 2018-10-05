@@ -196,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
 
                         intent.putExtra(PLAYERS, getPlayers());
                         intent.putExtra(GAME_RULES, getRule());
-                        intent.putExtra(ROTATION_NUMBER, getRotationNumber());
                         startActivity(intent);
                         break;
                 }
