@@ -1,13 +1,12 @@
 package remi.scoreboard.fragments;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,37 +40,46 @@ public class PhaseDixPlayFragment extends SimpleScorePlayFragment {
         }
     }
 
-    @NonNull
     @Override
-    protected DialogInterface.OnClickListener getValidateListener(final Player currentPlayer, final View playerView) {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String pointsText = ((EditText) ((AlertDialog) dialog).findViewById(R.id.points)).getText().toString();
-                if (!pointsText.isEmpty()) {
-                    ((PhaseDixPlayer) currentPlayer).addPoints(Integer.parseInt(pointsText));
-                }
-                if (((CheckBox) ((AlertDialog) dialog).findViewById(R.id.phase)).isChecked()) {
-                    ((PhaseDixPlayer) currentPlayer).validPhase();
-                }
-                if (sortMode == SortMode.rank)
-                    refreshAllPlayersView(); // ensure rank order
-                else if (sortMode == SortMode.num)
-                    updateViews(playerView, currentPlayer); // only update concerned player's view
-            }
-        };
+    protected void updatePlayerModel(Player currentPlayer, AlertDialog scoreDialog) {
+        super.updatePlayerModel(currentPlayer, scoreDialog); // parent updates score
+        if (((CheckBox) scoreDialog.findViewById(R.id.phase)).isChecked()) {
+            ((PhaseDixPlayer) currentPlayer).validPhase();
+        }
+    }
+
+    @Override
+    protected boolean checkScoreValues(AlertDialog dialog) {
+        String error;
+        int points = 0;
+
+        String pointsText = ((EditText) dialog.findViewById(R.id.points)).getText().toString();
+        if (!pointsText.isEmpty())
+            points = Integer.parseInt(pointsText);
+
+        boolean phase = ((CheckBox) dialog.findViewById(R.id.phase)).isChecked();
+        if (!phase && points < 50)
+            error = "Too few points";
+        else if (points % 5 != 0)
+            error = "Score must be a multiple of 5";
+        else {
+            return true;
+        }
+
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+        return false;
     }
 
     @Override
     protected void updateViews(View playerView, Player player) {
         super.updateViews(playerView, player);
-        playerPhase.setText(String.format("Phase %d", ((PhaseDixPlayer)player).getPhase()));
+        playerPhase.setText(String.format("Phase %d", ((PhaseDixPlayer) player).getPhase()));
     }
 
     @Override
     protected void fillTextViews(Player player) {
         super.fillTextViews(player);
-        playerPhase.setText(String.format("Phase %d", ((PhaseDixPlayer)player).getPhase()));
+        playerPhase.setText(String.format("Phase %d", ((PhaseDixPlayer) player).getPhase()));
     }
 
     @Override

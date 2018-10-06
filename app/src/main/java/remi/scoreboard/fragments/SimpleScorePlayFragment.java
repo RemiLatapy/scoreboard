@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,17 +27,10 @@ import remi.scoreboard.model.SimpleScorePlayer;
 
 public class SimpleScorePlayFragment extends Fragment {
 
-    protected enum SortMode {
-        num, rank
-    }
-
     protected LinearLayout cardContainerView;
-
     protected TextView playerPoints;
     protected ArrayList<SimpleScorePlayer> playerList;
-
     protected SortMode sortMode = SortMode.num;
-
     private TextView playerName;
     private TextView playerNum;
 
@@ -120,44 +114,52 @@ public class SimpleScorePlayFragment extends Fragment {
     }
 
     protected void buildAlertDialog(View view, final Player currentPlayer) {
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                (new AlertDialog.Builder(getActivity()))
-                        .setCancelable(true)
-                        .setTitle(currentPlayer.getName())
-                        .setView(getActivity().getLayoutInflater().inflate(getPlayerScoreDialogRes(), (ViewGroup) v.getRootView(), false))
-                        .setPositiveButton("Valider", getValidateListener(currentPlayer, v))
-                        .setNegativeButton("Annuler", getCancelListener())
-                        .show();
-            }
+        view.setOnClickListener(v -> {
+            AlertDialog scoreDialog = new AlertDialog.Builder(getActivity())
+                    .setCancelable(true)
+                    .setTitle(currentPlayer.getName())
+                    .setView(getActivity().getLayoutInflater().inflate(getPlayerScoreDialogRes(), (ViewGroup) v.getRootView(), false))
+                    .setPositiveButton("Valider", null)
+                    .setNegativeButton("Annuler", (d, which) -> d.dismiss())
+                    .create();
+
+            // Define positive action here to be able to not dismiss dialog
+            // https://stackoverflow.com/a/7636468/9994620
+            scoreDialog.setOnShowListener(dialog -> {
+                Button button = scoreDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(view1 -> {
+                    if (checkScoreValues(scoreDialog)) {
+                        updatePlayerModel(currentPlayer, scoreDialog);
+                        if (sortMode == SortMode.rank)
+                            refreshAllPlayersView(); // ensure rank order
+                        else if (sortMode == SortMode.num)
+                            updateViews(v, currentPlayer); // only update concerned player's view
+                        scoreDialog.dismiss();
+                    }
+                });
+            });
+
+            scoreDialog.show();
         });
     }
 
-    @NonNull
-    protected DialogInterface.OnClickListener getCancelListener() {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        };
+    protected void updatePlayerModel(Player currentPlayer, AlertDialog scoreDialog) {
+        String pointsText = ((EditText) scoreDialog.findViewById(R.id.points)).getText().toString();
+
+        if (!pointsText.isEmpty()) {
+            ((SimpleScorePlayer) currentPlayer).addPoints(Integer.parseInt(pointsText));
+        }
+    }
+
+    protected boolean checkScoreValues(AlertDialog scoreDialog) {
+        return true;
     }
 
     @NonNull
     protected DialogInterface.OnClickListener getValidateListener(final Player currentPlayer, final View playerView) {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String pointsText = ((EditText) ((AlertDialog) dialog).findViewById(R.id.points)).getText().toString();
-                if (!pointsText.isEmpty()) {
-                    ((SimpleScorePlayer) currentPlayer).addPoints(Integer.parseInt(pointsText));
-                }
-                if (sortMode == SortMode.rank)
-                    refreshAllPlayersView(); // ensure rank order
-                else if (sortMode == SortMode.num)
-                    updateViews(playerView, currentPlayer); // only update concerned player's view
-            }
+        return (dialog, which) -> {
+
+
         };
     }
 
@@ -197,5 +199,9 @@ public class SimpleScorePlayFragment extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected enum SortMode {
+        num, rank
     }
 }
