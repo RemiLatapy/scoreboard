@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -190,6 +191,9 @@ public class SimpleScorePlayFragment extends Fragment {
         if (item.getItemId() == R.id.action_sort) {
             sortMode = sortMode == SortMode.num ? SortMode.rank : SortMode.num;
             refreshAllPlayersView();
+            Toast.makeText(getContext(),
+                    String.format("Sort by %s", sortMode == SortMode.rank ? "score" : "player"),
+                    Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
