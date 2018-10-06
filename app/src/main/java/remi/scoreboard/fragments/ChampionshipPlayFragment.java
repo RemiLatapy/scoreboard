@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -56,6 +57,7 @@ public class ChampionshipPlayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         if (savedInstanceState == null) {
             createPlayers();
@@ -68,6 +70,12 @@ public class ChampionshipPlayFragment extends Fragment {
             championship = savedInstanceState.getParcelableArrayList("championship");
             playerList = savedInstanceState.getParcelableArrayList("playerList");
         }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_sort).setVisible(false);
     }
 
     private void updateActivityData() {

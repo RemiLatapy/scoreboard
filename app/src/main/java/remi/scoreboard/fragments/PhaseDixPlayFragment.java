@@ -43,7 +43,7 @@ public class PhaseDixPlayFragment extends SimpleScorePlayFragment {
 
     @NonNull
     @Override
-    protected DialogInterface.OnClickListener getValidateListener(final Player currentPlayer) {
+    protected DialogInterface.OnClickListener getValidateListener(final Player currentPlayer, final View playerView) {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -54,14 +54,17 @@ public class PhaseDixPlayFragment extends SimpleScorePlayFragment {
                 if (((CheckBox) ((AlertDialog) dialog).findViewById(R.id.phase)).isChecked()) {
                     ((PhaseDixPlayer) currentPlayer).validPhase();
                 }
-                updateViews(currentPlayer);
+                if (sortMode == SortMode.rank)
+                    refreshAllPlayersView(); // ensure rank order
+                else if (sortMode == SortMode.num)
+                    updateViews(playerView, currentPlayer); // only update concerned player's view
             }
         };
     }
 
     @Override
-    protected void updateViews(Player player) {
-        super.updateViews(player);
+    protected void updateViews(View playerView, Player player) {
+        super.updateViews(playerView, player);
         playerPhase.setText(String.format("Phase %d", ((PhaseDixPlayer)player).getPhase()));
     }
 

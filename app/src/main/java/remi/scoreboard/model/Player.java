@@ -3,6 +3,8 @@ package remi.scoreboard.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Comparator;
+
 public class Player implements Parcelable {
 
     private String name;
@@ -59,4 +61,10 @@ public class Player implements Parcelable {
         dest.writeString(this.name);
         dest.writeInt(this.num);
     }
+
+    public static Comparator<Player> PlayerNumComparator = new Comparator<Player>() {
+        public int compare(Player p1, Player p2) {
+            return p1.getNum() - p2.getNum();
+        }
+    };
 }

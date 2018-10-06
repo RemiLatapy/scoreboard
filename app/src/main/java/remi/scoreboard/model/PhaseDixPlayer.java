@@ -51,4 +51,13 @@ public final class PhaseDixPlayer extends SimpleScorePlayer {
             return new PhaseDixPlayer[size];
         }
     };
+
+    @Override
+    public int compareTo(Player o) {
+        int phaseRank = ((PhaseDixPlayer) o).getPhase() - phase;
+        if (phaseRank != 0)
+            return phaseRank;
+        else
+            return super.compareTo(o);
+    }
 }

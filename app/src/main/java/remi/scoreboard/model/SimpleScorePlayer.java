@@ -2,7 +2,7 @@ package remi.scoreboard.model;
 
 import android.os.Parcel;
 
-public class SimpleScorePlayer extends Player {
+public class SimpleScorePlayer extends Player implements Comparable<Player> {
 
     private int score;
 
@@ -51,4 +51,9 @@ public class SimpleScorePlayer extends Player {
             return new SimpleScorePlayer[size];
         }
     };
+
+    @Override
+    public int compareTo(Player o) {
+        return score - ((SimpleScorePlayer)o).getScore();
+    }
 }
