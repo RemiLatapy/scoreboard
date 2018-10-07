@@ -1,9 +1,7 @@
 package remi.scoreboard.fragments;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,9 +26,11 @@ import remi.scoreboard.model.SimpleScorePlayer;
 public class SimpleScorePlayFragment extends Fragment {
 
     protected LinearLayout cardContainerView;
-    protected TextView playerPoints;
     protected ArrayList<SimpleScorePlayer> playerList;
     protected SortMode sortMode = SortMode.num;
+
+    // TODO remove these var
+    protected TextView playerPoints;
     private TextView playerName;
     private TextView playerNum;
 
@@ -117,50 +117,66 @@ public class SimpleScorePlayFragment extends Fragment {
         view.setOnClickListener(v -> {
             AlertDialog scoreDialog = new AlertDialog.Builder(getActivity())
                     .setCancelable(true)
-                    .setTitle(currentPlayer.getName())
+                    .setTitle("Add score to " + currentPlayer.getName())
                     .setView(getActivity().getLayoutInflater().inflate(getPlayerScoreDialogRes(), (ViewGroup) v.getRootView(), false))
                     .setPositiveButton("Valider", null)
-                    .setNegativeButton("Annuler", (d, which) -> d.dismiss())
+                    .setNegativeButton("Annuler", null)
                     .create();
 
             // Define positive action here to be able to not dismiss dialog
             // https://stackoverflow.com/a/7636468/9994620
             scoreDialog.setOnShowListener(dialog -> {
-                Button button = scoreDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(view1 -> {
                     if (checkScoreValues(scoreDialog)) {
-                        updatePlayerModel(currentPlayer, scoreDialog);
+                        updatePlayerModel(currentPlayer, (AlertDialog) dialog);
                         if (sortMode == SortMode.rank)
                             refreshAllPlayersView(); // ensure rank order
                         else if (sortMode == SortMode.num)
                             updateViews(v, currentPlayer); // only update concerned player's view
-                        scoreDialog.dismiss();
+                        dialog.dismiss();
                     }
                 });
             });
 
             scoreDialog.show();
         });
+
+        view.setOnLongClickListener(v -> {
+            AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setCancelable(true)
+                    .setTitle("Fix score of " + currentPlayer.getName())
+                    .setView(getActivity().getLayoutInflater().inflate(getPlayerScoreFixingDialogRes(), (ViewGroup) v.getRootView(), false))
+                    .setPositiveButton("Valider", (d, w) -> {
+                        fixPlayerModel(currentPlayer, (AlertDialog) d);
+                        if (sortMode == SortMode.rank)
+                            refreshAllPlayersView(); // ensure rank order
+                        else if (sortMode == SortMode.num)
+                            updateViews(v, currentPlayer); // only update concerned player's view
+                    })
+                    .setNegativeButton("Annuler", null)
+                    .show();
+            fillFixScoreDialogViews(currentPlayer, dialog);
+            return true;
+        });
     }
 
     protected void updatePlayerModel(Player currentPlayer, AlertDialog scoreDialog) {
         String pointsText = ((EditText) scoreDialog.findViewById(R.id.points)).getText().toString();
-
         if (!pointsText.isEmpty()) {
             ((SimpleScorePlayer) currentPlayer).addPoints(Integer.parseInt(pointsText));
         }
     }
 
-    protected boolean checkScoreValues(AlertDialog scoreDialog) {
-        return true;
+    protected void fixPlayerModel(Player currentPlayer, AlertDialog scoreDialog) {
+        String pointsText = ((EditText) scoreDialog.findViewById(R.id.points)).getText().toString();
+        if (!pointsText.isEmpty()) {
+            ((SimpleScorePlayer) currentPlayer).setPoints(Integer.parseInt(pointsText));
+        }
     }
 
-    @NonNull
-    protected DialogInterface.OnClickListener getValidateListener(final Player currentPlayer, final View playerView) {
-        return (dialog, which) -> {
-
-
-        };
+    protected boolean checkScoreValues(AlertDialog scoreDialog) {
+        return true;
     }
 
     protected void updateViews(View playerView, Player player) {
@@ -180,11 +196,20 @@ public class SimpleScorePlayFragment extends Fragment {
         playerPoints = view.findViewById(R.id.player_points);
     }
 
+    protected void fillFixScoreDialogViews(Player player, AlertDialog dialog) {
+        ((EditText) dialog.findViewById(R.id.points))
+                .setText(String.valueOf(((SimpleScorePlayer) player).getScore()));
+    }
+
     protected int getCardRes() {
         return R.layout.item_card_player_simple_score;
     }
 
     protected int getPlayerScoreDialogRes() {
+        return R.layout.dialog_player_simple_score_score;
+    }
+
+    protected int getPlayerScoreFixingDialogRes() {
         return R.layout.dialog_player_simple_score_score;
     }
 

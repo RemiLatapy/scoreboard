@@ -19,6 +19,10 @@ public class SimpleScorePlayer extends Player implements Comparable<Player> {
         score += points;
     }
 
+    public void setPoints(int points) {
+        score = points;
+    }
+
     public void removePoints(int points) {
         score -= points;
     }

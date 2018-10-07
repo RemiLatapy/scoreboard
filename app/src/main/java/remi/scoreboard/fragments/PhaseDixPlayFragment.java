@@ -43,8 +43,17 @@ public class PhaseDixPlayFragment extends SimpleScorePlayFragment {
     @Override
     protected void updatePlayerModel(Player currentPlayer, AlertDialog scoreDialog) {
         super.updatePlayerModel(currentPlayer, scoreDialog); // parent updates score
-        if (((CheckBox) scoreDialog.findViewById(R.id.phase)).isChecked()) {
+        if (((CheckBox) scoreDialog.findViewById(R.id.chk_phase)).isChecked()) {
             ((PhaseDixPlayer) currentPlayer).validPhase();
+        }
+    }
+
+    @Override
+    protected void fixPlayerModel(Player currentPlayer, AlertDialog scoreDialog) {
+        super.fixPlayerModel(currentPlayer, scoreDialog);
+        String phaseText = ((EditText) scoreDialog.findViewById(R.id.phases)).getText().toString();
+        if (!phaseText.isEmpty()) {
+            ((PhaseDixPlayer) currentPlayer).setPhase(Integer.parseInt(phaseText));
         }
     }
 
@@ -57,7 +66,7 @@ public class PhaseDixPlayFragment extends SimpleScorePlayFragment {
         if (!pointsText.isEmpty())
             points = Integer.parseInt(pointsText);
 
-        boolean phase = ((CheckBox) dialog.findViewById(R.id.phase)).isChecked();
+        boolean phase = ((CheckBox) dialog.findViewById(R.id.chk_phase)).isChecked();
         if (!phase && points < 50)
             error = "Too few points";
         else if (points % 5 != 0)
@@ -89,6 +98,13 @@ public class PhaseDixPlayFragment extends SimpleScorePlayFragment {
     }
 
     @Override
+    protected void fillFixScoreDialogViews(Player player, AlertDialog dialog) {
+        super.fillFixScoreDialogViews(player, dialog);
+        ((EditText) dialog.findViewById(R.id.phases))
+                .setText(String.valueOf(((PhaseDixPlayer) player).getPhase()));
+    }
+
+    @Override
     protected int getCardRes() {
         return R.layout.item_card_player_phase10;
     }
@@ -96,5 +112,10 @@ public class PhaseDixPlayFragment extends SimpleScorePlayFragment {
     @Override
     protected int getPlayerScoreDialogRes() {
         return R.layout.dialog_player_phase10_score;
+    }
+
+    @Override
+    protected int getPlayerScoreFixingDialogRes() {
+        return R.layout.dialog_player_phase10_score_fixing;
     }
 }
