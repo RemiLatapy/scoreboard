@@ -18,8 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.GameSimpleScoreActivity" />
-        <activity android:name=".activities.GameChampionshipActivity" />
+        <activity
+            android:name=".activities.GameSimpleScoreActivity"
+            android:label="Game" />
+        <activity
+            android:name=".activities.GameChampionshipActivity"
+            android:label="Championship" />
     </application>
 
 </manifest>
