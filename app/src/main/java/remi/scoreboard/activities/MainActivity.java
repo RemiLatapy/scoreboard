@@ -1,9 +1,12 @@
 package remi.scoreboard.activities;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,15 +14,19 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import remi.scoreboard.R;
 import remi.scoreboard.adapters.SetupGamePagerAdapter;
+import remi.scoreboard.jetpack.model.User;
+import remi.scoreboard.jetpack.viewmodel.UserViewModel;
 import remi.scoreboard.view.NonSwipeableViewPager;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     public String currentGameName;
 
+    private UserViewModel userViewModel = null;
+
     public MainActivity() {
     }
 
@@ -51,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
         setupToolbar();
         setupDrawer();
         setupFab();
+
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        userViewModel.getAllUsers().observe(this, new Observer<List<User>>() {
+            @Override
+            public void onChanged(@Nullable List<User> users) {
+                Log.d("USER", "user list changed : " + users);
+            }
+        });
     }
 
 
