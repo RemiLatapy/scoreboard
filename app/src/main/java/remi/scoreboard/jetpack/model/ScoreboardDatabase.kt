@@ -43,6 +43,7 @@ public abstract class ScoreboardDatabase : RoomDatabase() {
 
         private fun populateDatabase(userDao: UserDao) {
             userDao.deleteAll()
+            userDao.resetId()
 
             userDao.insert(User("User A"))
             userDao.insert(User("User B"))

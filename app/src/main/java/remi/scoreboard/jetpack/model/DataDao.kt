@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
+import android.arch.persistence.room.SkipQueryVerification
 
 @Dao
 interface GameDao {
@@ -54,4 +55,7 @@ interface UserDao {
 
     @Query("DELETE FROM users")
     fun deleteAll()
+
+    @Query("UPDATE sqlite_sequence SET seq = (SELECT MAX(user_id) FROM users) WHERE name=\"users\"")
+    fun resetId()
 }
