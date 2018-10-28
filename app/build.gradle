@@ -6,12 +6,16 @@ apply plugin: "androidx.navigation.safeargs"
 
 android {
     compileSdkVersion 28
+    dataBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "remi.scoreboard"
         minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary true
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -57,7 +61,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:' + rootProject.supportVersion
     implementation 'androidx.recyclerview:recyclerview:' + rootProject.supportVersion
     implementation 'androidx.constraintlayout:constraintlayout:' + rootProject.constraintLayoutVersion
-    implementation 'androidx.vectordrawable:vectordrawable-animated:' + rootProject.supportVersion
+//    implementation 'androidx.vectordrawable:vectordrawable-animated:' + rootProject.supportVersion
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
