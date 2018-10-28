@@ -1,15 +1,15 @@
 package remi.scoreboard.jetpack.model
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import com.google.gson.Gson
 
-object Converters {
+class Converters {
 
     @TypeConverter
-    fun playerScoreListToJson(list: List<Pair<Int, Int>>): String = Gson().toJson(list)
+    fun playerScoreListToJson(list: PlayerScoreList): String = Gson().toJson(list)
 
     @TypeConverter
-    fun jsonToPlayerScoreList(json: String): List<Pair<Int, Int>> = Gson().fromJson(json, ArrayList<Pair<Int, Int>>().javaClass)
+    fun jsonToPlayerScoreList(json: String): PlayerScoreList = Gson().fromJson(json, ArrayList<Pair<Int, Score>>().javaClass)
 
     @TypeConverter
     fun stringListToJson(list: List<String>): String = Gson().toJson(list)

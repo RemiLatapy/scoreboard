@@ -1,7 +1,7 @@
 package remi.scoreboard.jetpack.repository
 
-import android.arch.lifecycle.LiveData
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
 import remi.scoreboard.jetpack.model.*
 
 class UserRepository(private val userDao: UserDao) {
@@ -12,17 +12,11 @@ class UserRepository(private val userDao: UserDao) {
     suspend fun insert(user: User) = userDao.insert(user)
 }
 
-class ScoreRepository(private val scoreDao: ScoreDao) {
-
-//    val allScores: LiveData<List<Score>> = scoreDao.loadAllScore()
-
-    @WorkerThread
-    suspend fun insert(score: Score) = scoreDao.insert(score)
-}
-
 class MatchRepository(private val matchDao: MatchDao) {
 
     val allMatches: LiveData<List<Match>> = matchDao.loadAllMatches()
+
+    fun idMatch(mid: Int): LiveData<Match> = matchDao.loadMatchById(mid)
 
     @WorkerThread
     suspend fun insert(match: Match) = matchDao.insert(match)
@@ -34,4 +28,6 @@ class GameRepository(private val gameDao: GameDao) {
 
     @WorkerThread
     suspend fun insert(game: Game) = gameDao.insert(game)
+
+    fun gameById(gid: Int) = gameDao.loadGameById(gid)
 }

@@ -1,10 +1,9 @@
 package remi.scoreboard.jetpack.model
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.SkipQueryVerification
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
 
 @Dao
 interface GameDao {
@@ -16,6 +15,9 @@ interface GameDao {
 
     @Query("DELETE FROM games")
     fun deleteAll()
+
+    @Query("SELECT * FROM games WHERE game_id = :id")
+    fun loadGameById(id: Int): LiveData<Game>
 }
 
 @Dao
@@ -28,18 +30,9 @@ interface MatchDao {
 
     @Query("DELETE FROM matches")
     fun deleteAll()
-}
 
-@Dao
-interface ScoreDao {
-    @Insert
-    fun insert(score: Score)
-
-    @Query("SELECT * FROM scores WHERE score_id = :id")
-    fun loadScoreById(id: Int): LiveData<Score>
-
-    @Query("DELETE FROM scores")
-    fun deleteAll()
+    @Query("SELECT * FROM matches WHERE match_id = :id")
+    fun loadMatchById(id: Int): LiveData<Match>
 }
 
 @Dao

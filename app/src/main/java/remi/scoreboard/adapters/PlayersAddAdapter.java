@@ -1,33 +1,32 @@
 package remi.scoreboard.adapters;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.recyclerview.widget.RecyclerView;
+import remi.scoreboard.R;
+import remi.scoreboard.holders.PlayersHolder;
+import remi.scoreboard.jetpack.fragment.UserListFragment;
+import remi.scoreboard.model.ItemPlayerAdd;
 
 import java.util.ArrayList;
 
-import remi.scoreboard.R;
-import remi.scoreboard.fragments.GamePlayerFragment;
-import remi.scoreboard.holders.PlayersHolder;
-import remi.scoreboard.model.ItemPlayerAdd;
-
 public class PlayersAddAdapter extends RecyclerView.Adapter<PlayersHolder> {
 
-    private final GamePlayerFragment fragment;
+    private final UserListFragment fragment;
     private ArrayList<ItemPlayerAdd> items;
     private PlayersHolder playerHolder;
 
-    public PlayersAddAdapter(GamePlayerFragment gamePlayerFragment) {
+    public PlayersAddAdapter(UserListFragment userListFragment) {
         items = new ArrayList<>();
-        fragment = gamePlayerFragment;
+        fragment = userListFragment;
         add();
     }
 
     @Override
     public PlayersHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.player_item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_user, parent, false);
         playerHolder = new PlayersHolder(itemView, this);
         return playerHolder;
     }
@@ -36,11 +35,6 @@ public class PlayersAddAdapter extends RecyclerView.Adapter<PlayersHolder> {
     public void onBindViewHolder(PlayersHolder holder, int position) {
         ItemPlayerAdd item = items.get(position);
         holder.playerName.setText(item.getName());
-        if (position == getItemCount() - 1) {
-            holder.removeBtn.setVisibility(View.INVISIBLE);
-        } else {
-            holder.removeBtn.setVisibility(View.VISIBLE);
-        }
         holder.itemView.setTag(item);
     }
 
@@ -71,7 +65,7 @@ public class PlayersAddAdapter extends RecyclerView.Adapter<PlayersHolder> {
         }
     }
 
-    public GamePlayerFragment getFragment() {
+    public UserListFragment getFragment() {
         return fragment;
     }
 

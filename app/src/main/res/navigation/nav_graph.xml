@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/game_list_dest">
+
+    <fragment
+            android:id="@+id/game_list_dest"
+            android:name="remi.scoreboard.jetpack.fragment.GameListFragment"
+            android:label="Games"
+            tools:layout="@layout/fragment_game_list">
+        <action
+                android:id="@+id/action_game_list_dest_to_gamePlayerFragment"
+                app:destination="@id/player_list_dest" app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+    <fragment
+            android:id="@+id/player_list_dest"
+            android:name="remi.scoreboard.jetpack.fragment.UserListFragment"
+            android:label="Players"
+            tools:layout="@layout/fragment_player_list">
+        <argument
+            android:name="match"
+            app:argType="remi.scoreboard.jetpack.model.Match" />
+    </fragment>
+</navigation>

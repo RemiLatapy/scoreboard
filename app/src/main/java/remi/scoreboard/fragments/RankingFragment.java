@@ -1,10 +1,6 @@
 package remi.scoreboard.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -14,17 +10,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
+import androidx.fragment.app.Fragment;
 import remi.scoreboard.R;
-import remi.scoreboard.activities.GameChampionshipActivity;
 import remi.scoreboard.model.ChampionshipPlayer;
 
-public class RankingFragment extends Fragment{
+public class RankingFragment extends Fragment {
 
     private ArrayMap<ChampionshipPlayer, View> playerRowsMap;
     private LinearLayout rowContainerView;
 
-    public static RankingFragment newInstance()
-    {
+    public static RankingFragment newInstance() {
         return new RankingFragment();
     }
 
@@ -43,7 +40,7 @@ public class RankingFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_ranking_tab, container, false);
+        return inflater.inflate(R.layout.fragment_ranking, container, false);
     }
 
     @Override
@@ -53,7 +50,7 @@ public class RankingFragment extends Fragment{
     }
 
     public void setPlayers(ArrayList<ChampionshipPlayer> playerList) {
-        if(playerRowsMap != null)
+        if (playerRowsMap != null)
             return;
 
         playerRowsMap = new ArrayMap<>();
@@ -64,27 +61,19 @@ public class RankingFragment extends Fragment{
             rowContainerView.addView(row);
         }
 
-        for (ArrayMap.Entry<ChampionshipPlayer, View> entry : playerRowsMap.entrySet())
-        {
-            ((TextView)entry.getValue().findViewById(R.id.rank_player_name)).setText(entry.getKey().getName());
+        for (ArrayMap.Entry<ChampionshipPlayer, View> entry : playerRowsMap.entrySet()) {
+            ((TextView) entry.getValue().findViewById(R.id.rank_player_name)).setText(entry.getKey().getName());
         }
     }
 
-    public void setScore()
-    {
+    public void setScore() {
         assert playerRowsMap != null;
-        for (ArrayMap.Entry<ChampionshipPlayer, View> entry : playerRowsMap.entrySet())
-        {
-            ((TextView)entry.getValue().findViewById(R.id.rank_win)).setText(String.valueOf(entry.getKey().getVictories()));
-            ((TextView)entry.getValue().findViewById(R.id.rank_lost)).setText(String.valueOf(entry.getKey().getDefeats()));
-            ((TextView)entry.getValue().findViewById(R.id.rank_points)).setText(String.valueOf(entry.getKey().getGoalAverage()));
-            ((TextView)entry.getValue().findViewById(R.id.rank_played_game)).setText(String.valueOf(entry.getKey().getGamesPlayed()));
+        for (ArrayMap.Entry<ChampionshipPlayer, View> entry : playerRowsMap.entrySet()) {
+            ((TextView) entry.getValue().findViewById(R.id.rank_win)).setText(String.valueOf(entry.getKey().getVictories()));
+            ((TextView) entry.getValue().findViewById(R.id.rank_lost)).setText(String.valueOf(entry.getKey().getDefeats()));
+            ((TextView) entry.getValue().findViewById(R.id.rank_points)).setText(String.valueOf(entry.getKey().getGoalAverage()));
+            ((TextView) entry.getValue().findViewById(R.id.rank_played_game)).setText(String.valueOf(entry.getKey().getGamesPlayed()));
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        ((GameChampionshipActivity)context).rankingFragment = this;
-    }
 }

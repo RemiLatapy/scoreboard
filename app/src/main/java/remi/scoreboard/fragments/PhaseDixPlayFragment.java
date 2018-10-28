@@ -1,7 +1,6 @@
 package remi.scoreboard.fragments;
 
 import android.app.AlertDialog;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -11,24 +10,23 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import remi.scoreboard.R;
-import remi.scoreboard.activities.GameActivity;
 import remi.scoreboard.model.PhaseDixPlayer;
 import remi.scoreboard.model.Player;
 
-public class PhaseDixPlayFragment extends SimpleScorePlayFragment {
+public class PhaseDixPlayFragment extends GameFragment {
 
     TextView playerPhase;
 
-    public static PhaseDixPlayFragment newInstance(GameActivity activity) {
-        PhaseDixPlayFragment phaseDixPlayFragment = new PhaseDixPlayFragment();
-
-        Bundle args = new Bundle();
-        ArrayList<String> playerNameList = activity.getPlayersName();
-        args.putStringArrayList("playerNameList", playerNameList);
-        phaseDixPlayFragment.setArguments(args);
-
-        return phaseDixPlayFragment;
-    }
+//    public static PhaseDixPlayFragment newInstance(GameActivity activity) {
+//        PhaseDixPlayFragment phaseDixPlayFragment = new PhaseDixPlayFragment();
+//
+//        Bundle args = new Bundle();
+//        ArrayList<String> playerNameList = activity.getPlayersName();
+//        args.putStringArrayList("playerNameList", playerNameList);
+//        phaseDixPlayFragment.setArguments(args);
+//
+//        return phaseDixPlayFragment;
+//    }
 
     @Override
     protected void createPlayers() {

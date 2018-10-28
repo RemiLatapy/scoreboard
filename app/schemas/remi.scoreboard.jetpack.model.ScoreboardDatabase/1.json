@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "18ae5ed0173d6241dd669319a1c7f22f",
+    "identityHash": "64a8cfb0e369aa4e6faecaf4d7675faf",
     "entities": [
       {
         "tableName": "games",
@@ -105,32 +105,6 @@
         ]
       },
       {
-        "tableName": "scores",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`score` INTEGER NOT NULL, `score_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "score",
-            "columnName": "score",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "sid",
-            "columnName": "score_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "score_id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "users",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `user_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
@@ -159,7 +133,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"18ae5ed0173d6241dd669319a1c7f22f\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"64a8cfb0e369aa4e6faecaf4d7675faf\")"
     ]
   }
 }

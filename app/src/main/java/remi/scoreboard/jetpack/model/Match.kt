@@ -1,11 +1,22 @@
 package remi.scoreboard.jetpack.model
 
-import android.arch.persistence.room.*
+import android.os.Parcelable
+import androidx.room.*
+import kotlinx.android.parcel.Parcelize
 
-@Entity(tableName = "matches", foreignKeys = [ForeignKey(entity = Game::class, parentColumns = ["game_id"], childColumns = ["game_id"])], indices = [Index("game_id")])
+typealias Score = Map<String, Int>
+typealias PlayerScoreList = List<Pair<Int, Score>>
+typealias MutablePlayerScoreList = MutableList<Pair<Int, Score>>
+
+@Entity(
+    tableName = "matches",
+    foreignKeys = [ForeignKey(entity = Game::class, parentColumns = ["game_id"], childColumns = ["game_id"])],
+    indices = [Index("game_id")]
+)
 @TypeConverters(Converters::class)
+@Parcelize
 data class Match(
-        @ColumnInfo(name = "game_id") val gameId: Int,
-        @ColumnInfo(name = "player_scores") val scorePlayers: List<Pair<Int, Int>>,
-        @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "match_id") val mid: Int = 0) {
-}
+    @ColumnInfo(name = "game_id") val gameId: Int,
+    @ColumnInfo(name = "player_scores") val scorePlayers: PlayerScoreList,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "match_id") val mid: Int = 0
+) : Parcelable

@@ -2,7 +2,6 @@ package remi.scoreboard.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.util.Pair;
 
 /**
  * Created by rlatapy on 05/06/2017.
@@ -10,14 +9,23 @@ import android.support.v4.util.Pair;
 
 public class Match implements Parcelable {
 
+    public static final Creator<Match> CREATOR = new Creator<Match>() {
+        @Override
+        public Match createFromParcel(Parcel in) {
+            return new Match(in);
+        }
+
+        @Override
+        public Match[] newArray(int size) {
+            return new Match[size];
+        }
+    };
     private Player playerOne;
     private int scorePlayerOne;
-
     private Player playerTwo;
     private int scorePlayerTwo;
 
-    public Match(Player playerOne, Player playerTwo)
-    {
+    public Match(Player playerOne, Player playerTwo) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.scorePlayerOne = -1;
@@ -31,24 +39,16 @@ public class Match implements Parcelable {
         scorePlayerTwo = in.readInt();
     }
 
-    public static final Creator<Match> CREATOR = new Creator<Match>() {
-        @Override
-        public Match createFromParcel(Parcel in) {
-            return new Match(in);
-        }
-
-        @Override
-        public Match[] newArray(int size) {
-            return new Match[size];
-        }
-    };
-
     public Player getPlayerOne() {
         return playerOne;
     }
 
     public int getScorePlayerOne() {
         return scorePlayerOne;
+    }
+
+    public void setScorePlayerOne(int scorePlayerOne) {
+        this.scorePlayerOne = scorePlayerOne;
     }
 
     public Player getPlayerTwo() {
@@ -59,16 +59,11 @@ public class Match implements Parcelable {
         return scorePlayerTwo;
     }
 
-    public void setScorePlayerOne(int scorePlayerOne) {
-        this.scorePlayerOne = scorePlayerOne;
-    }
-
     public void setScorePlayerTwo(int scorePlayerTwo) {
         this.scorePlayerTwo = scorePlayerTwo;
     }
 
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return scorePlayerOne >= 0 && scorePlayerTwo >= 0;
     }
 

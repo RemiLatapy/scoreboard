@@ -7,14 +7,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import remi.scoreboard.jetpack.model.Match
 import remi.scoreboard.jetpack.model.ScoreboardDatabase
-import remi.scoreboard.jetpack.model.User
-import remi.scoreboard.jetpack.repository.UserRepository
+import remi.scoreboard.jetpack.repository.MatchRepository
 import kotlin.coroutines.CoroutineContext
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: UserRepository
-    val allUsers: LiveData<List<User>>
+class MatchViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository: MatchRepository
+    val allMatchs: LiveData<List<Match>>
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -23,9 +23,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val scope = CoroutineScope(coroutineContext)
 
     init {
-        val userDao = ScoreboardDatabase.getDatabase(application, scope).userDao()
-        repository = UserRepository(userDao)
-        allUsers = repository.allUsers
+        val matchDao = ScoreboardDatabase.getDatabase(application, scope).matchDao()
+        repository = MatchRepository(matchDao)
+        allMatchs = repository.allMatches
     }
 
     override fun onCleared() {
@@ -33,5 +33,5 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         parentJob.cancel()
     }
 
-    fun insert(user: User) = scope.launch(Dispatchers.IO) { repository.insert(user) }
+    fun insert(match: Match) = scope.launch(Dispatchers.IO) { repository.insert(match) }
 }

@@ -7,14 +7,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import remi.scoreboard.jetpack.model.Game
 import remi.scoreboard.jetpack.model.ScoreboardDatabase
-import remi.scoreboard.jetpack.model.User
-import remi.scoreboard.jetpack.repository.UserRepository
+import remi.scoreboard.jetpack.repository.GameRepository
 import kotlin.coroutines.CoroutineContext
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: UserRepository
-    val allUsers: LiveData<List<User>>
+class GameViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository: GameRepository
+    val allGames: LiveData<List<Game>>
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -23,15 +23,17 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val scope = CoroutineScope(coroutineContext)
 
     init {
-        val userDao = ScoreboardDatabase.getDatabase(application, scope).userDao()
-        repository = UserRepository(userDao)
-        allUsers = repository.allUsers
+        val gameDao = ScoreboardDatabase.getDatabase(application, scope).gameDao()
+        repository = GameRepository(gameDao)
+        allGames = repository.allGames
     }
+
+    fun gameById(gid: Int) = repository.gameById(gid)
 
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()
     }
 
-    fun insert(user: User) = scope.launch(Dispatchers.IO) { repository.insert(user) }
+    fun insert(game: Game) = scope.launch(Dispatchers.IO) { repository.insert(game) }
 }
