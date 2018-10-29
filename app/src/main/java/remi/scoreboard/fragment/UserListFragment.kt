@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import remi.scoreboard.R
 import remi.scoreboard.adapter.UserAdapter
+import remi.scoreboard.data.User
 import remi.scoreboard.databinding.FragmentUserListBinding
 import remi.scoreboard.viewmodel.UserViewModel
 
@@ -33,6 +34,9 @@ class UserListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.show()
+
+        activity?.findViewById<FloatingActionButton>(R.id.fab)
+            ?.setOnClickListener { userViewModel.insert(User("User " + (0..100).random())) }
     }
 }
 

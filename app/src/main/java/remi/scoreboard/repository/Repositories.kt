@@ -3,7 +3,6 @@ package remi.scoreboard.repository
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import remi.scoreboard.data.*
-import remi.scoreboard.data.Match
 
 class UserRepository(private val userDao: UserDao) {
 
@@ -29,6 +28,9 @@ class GameRepository(private val gameDao: GameDao) {
 
     @WorkerThread
     suspend fun insert(game: Game) = gameDao.insert(game)
+
+    @WorkerThread
+    suspend fun insert(gameList: List<Game>) = gameDao.insert(gameList)
 
     fun gameById(gid: Int) = gameDao.loadGameById(gid)
 }

@@ -3,12 +3,16 @@ package remi.scoreboard.data
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
 interface GameDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(game: Game)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(games: List<Game>)
 
     @Query("SELECT * FROM games")
     fun loadAllGames(): LiveData<List<Game>>
@@ -37,7 +41,7 @@ interface MatchDao {
 
 @Dao
 interface UserDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(user: User)
 
     @Query("SELECT * FROM users")
