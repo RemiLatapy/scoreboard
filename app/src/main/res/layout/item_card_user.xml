@@ -8,12 +8,18 @@
         <variable
             name="user"
             type="remi.scoreboard.data.User" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_marginTop="@dimen/small_padding"
+        android:onClick="@{clickListener}"
+        card_view:cardBackgroundColor="@color/cardview_background"
         card_view:cardCornerRadius="4dp">
 
         <TextView

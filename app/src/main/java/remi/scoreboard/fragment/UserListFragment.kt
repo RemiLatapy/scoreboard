@@ -33,7 +33,10 @@ class UserListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.show()
+
+        val fab = activity?.findViewById<FloatingActionButton>(R.id.fab)
+        fab?.hide()
+        fab?.setImageResource(R.drawable.ic_play_arrow_black_24dp)
 
         activity?.findViewById<FloatingActionButton>(R.id.fab)
             ?.setOnClickListener { userViewModel.insert(User("User " + (0..100).random())) }

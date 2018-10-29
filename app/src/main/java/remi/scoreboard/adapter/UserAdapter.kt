@@ -1,6 +1,7 @@
 package remi.scoreboard.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,10 @@ class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = getItem(position)
         holder.apply {
-            bind(user)
+            bind(user, View.OnClickListener {
+                it.isSelected = !it.isSelected
+                user.isSelected = it.isSelected
+            })
         }
     }
 
@@ -23,8 +27,9 @@ class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()
     }
 
     inner class ViewHolder(private val binding: ItemCardUserBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: User) {
+        fun bind(item: User, listener: View.OnClickListener) {
             binding.apply {
+                clickListener = listener
                 user = item
                 executePendingBindings()
             }
