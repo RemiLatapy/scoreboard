@@ -16,13 +16,13 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_in_right" />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
             android:id="@+id/player_list_dest"
             android:name="remi.scoreboard.fragment.UserListFragment"
             android:label="Players"
-            tools:layout="@layout/fragment_player_list">
+            tools:layout="@layout/fragment_user_list">
         <argument
             android:name="match"
             app:argType="remi.scoreboard.data.Match" />

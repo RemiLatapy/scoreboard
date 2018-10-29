@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import remi.scoreboard.R
 import remi.scoreboard.adapter.GameAdapter
 import remi.scoreboard.databinding.FragmentGameListBinding
 import remi.scoreboard.viewmodel.GameViewModel
@@ -26,5 +28,10 @@ class GameListFragment : Fragment() {
             Observer { gameList -> gameList?.let { gameListAdapter.submitList(it) } })
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.hide()
     }
 }

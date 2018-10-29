@@ -7,8 +7,8 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/big_padding"
-        android:paddingRight="@dimen/big_padding"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context=".activity.ActivityMain"
         tools:listitem="@layout/item_card_game" />
