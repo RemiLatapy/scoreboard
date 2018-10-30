@@ -8,14 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import remi.scoreboard.data.User
 import remi.scoreboard.databinding.ItemCardUserBinding
 
-class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()) {
+class UserAdapter(val userSelectedCallback: UserSelectedCallback) : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()) {
+
+    interface UserSelectedCallback {
+        fun onUserSelected(selected: Boolean)
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = getItem(position)
         holder.apply {
             bind(user, View.OnClickListener {
                 it.isSelected = !it.isSelected
-                user.isSelected = it.isSelected
+                userSelectedCallback.onUserSelected(it.isSelected)
             })
         }
     }

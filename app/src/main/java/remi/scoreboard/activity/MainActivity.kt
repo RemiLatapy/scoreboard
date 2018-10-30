@@ -1,6 +1,7 @@
 package remi.scoreboard.activity
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
@@ -42,5 +43,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.overflow_menu, menu)
+        return true
     }
 }
