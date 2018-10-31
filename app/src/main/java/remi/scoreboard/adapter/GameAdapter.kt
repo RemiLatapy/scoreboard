@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import remi.scoreboard.data.Game
 import remi.scoreboard.data.Match
+import remi.scoreboard.data.PlayerScoreList
 import remi.scoreboard.databinding.ItemCardGameBinding
 import remi.scoreboard.fragment.GameListFragmentDirections
+import java.util.*
 
 class GameAdapter : ListAdapter<Game, GameAdapter.ViewHolder>(GameDiffCallback()) {
 
@@ -28,8 +30,8 @@ class GameAdapter : ListAdapter<Game, GameAdapter.ViewHolder>(GameDiffCallback()
 
     private fun createOnClickListener(game: Game): View.OnClickListener {
         return View.OnClickListener {
-            val match = Match(game, "")
-            val action = GameListFragmentDirections.ActionGameListDestToGamePlayerFragment(match)
+            val match = Match(game, PlayerScoreList(), Date())
+            val action = GameListFragmentDirections.ActionGameListDestToGamePlayerFragment(Match())
             it.findNavController().navigate(action)
         }
     }
