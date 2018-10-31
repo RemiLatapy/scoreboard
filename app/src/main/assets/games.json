@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Uno",
+    "thumbnail": "file:///android_asset/thumbnail/uno.png",
+    "rules": [
+      "Rules 1",
+      "Rules 2"
+    ]
+  },
+  {
+    "name": "Scopa",
+    "thumbnail": "file:///android_asset/thumbnail/scopa.png",
+    "rules": [
+      "Rules 1",
+      "Rules 2"
+    ]
+  },
+  {
+    "name": "Phase 10",
+    "thumbnail": "file:///android_asset/thumbnail/phase_10.png",
+    "rules": [
+      "Rules 1",
+      "Rules 2"
+    ]
+  },
+  {
+    "name": "Tarot",
+    "thumbnail": "file:///android_asset/thumbnail/tarot.png",
+    "rules": [
+      "Rules 1",
+      "Rules 2"
+    ]
+  },
+  {
+    "name": "Squash",
+    "thumbnail": "file:///android_asset/thumbnail/squash.png",
+    "rules": [
+      "Rules 1",
+      "Rules 2"
+    ]
+  }
+]

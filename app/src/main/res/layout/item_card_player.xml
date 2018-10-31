@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CardView.Light"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="@dimen/big_padding"
+            android:src="@drawable/ic_mood_black_24dp"
+            android:tint="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/player_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@+id/avatar"
+            android:textSize="18sp"
+            tools:text="Player 1" />
+
+        <TextView
+            android:id="@+id/player_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/player_num"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@+id/avatar"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="24sp"
+            tools:text="John" />
+
+        <TextView
+            android:id="@+id/player_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/player_phase"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            tools:text="115 points" />
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
