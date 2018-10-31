@@ -32,8 +32,10 @@ class UserListFragment : Fragment(), UserAdapter.UserSelectedCallback {
 
         val userListAdapter = UserAdapter(this)
         binding.recycler.adapter = userListAdapter
+        // https://stackoverflow.com/questions/49726385/listadapter-not-updating-item-in-reyclerview
+        userListAdapter.submitList(userViewModel.allUsers.value)
         userViewModel.allUsers.observe(this,
-            Observer { userList -> userList?.let { userListAdapter.submitList(it) } })
+            Observer { userListAdapter.notifyDataSetChanged() })
 
         return binding.root
     }
@@ -57,13 +59,24 @@ class UserListFragment : Fragment(), UserAdapter.UserSelectedCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_add) {
-            userViewModel.insert(User("User " + (0..100).random()))
-            return true
-        } else
-            return super.onContextItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_add -> {
+                userViewModel.insert(
+                    User(
+                        firstName = "User ",
+                        lastName = (0..100).random().toString(),
+                        email = (0..100).random().toString() + "@" + (0..100).random().toString() + ".com"
+                    )
+                )
+                true
+            }
+            R.id.action_delete -> {
+                userViewModel.deleteAll()
+                selectedNum = 0
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
     }
-
-
 }
 

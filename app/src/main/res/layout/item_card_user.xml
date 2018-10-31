@@ -31,7 +31,7 @@
             android:drawablePadding="@dimen/big_padding"
             android:drawableTint="@color/colorPrimary"
             android:gravity="center_vertical"
-            android:text="@{user.name}"
+            android:text="@{user.displayName}"
             tools:text="John" />
 
     </androidx.cardview.widget.CardView>

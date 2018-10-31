@@ -18,8 +18,9 @@ class UserAdapter(val userSelectedCallback: UserSelectedCallback) : ListAdapter<
         val user = getItem(position)
         holder.apply {
             bind(user, View.OnClickListener {
-                it.isSelected = !it.isSelected
-                userSelectedCallback.onUserSelected(it.isSelected)
+                // TODO
+                user.isSelected = !user.isSelected
+                userSelectedCallback.onUserSelected(user.isSelected)
             })
         }
     }
@@ -29,6 +30,8 @@ class UserAdapter(val userSelectedCallback: UserSelectedCallback) : ListAdapter<
         val binding = ItemCardUserBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
+
+
 
     inner class ViewHolder(private val binding: ItemCardUserBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: User, listener: View.OnClickListener) {

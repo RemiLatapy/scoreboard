@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package remi.scoreboard.realmdata;
+package remi.scoreboard.data;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;

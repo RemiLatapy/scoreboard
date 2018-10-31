@@ -8,13 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import remi.scoreboard.data.Game
-import remi.scoreboard.data.ScoreboardDatabase
 import remi.scoreboard.repository.GameRepository
 import kotlin.coroutines.CoroutineContext
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: GameRepository
-    val allGames: LiveData<List<Game>>
+    private val repository: GameRepository = GameRepository()
+    val allGames: LiveData<List<Game>> = repository.allGames
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -22,13 +21,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val scope = CoroutineScope(coroutineContext)
 
-    init {
-        val gameDao = ScoreboardDatabase.getDatabase(application, scope).gameDao()
-        repository = GameRepository(gameDao)
-        allGames = repository.allGames
-    }
-
-    fun gameById(gid: Int) = repository.gameById(gid)
+//    fun gameById(gid: Int) = repository.gameById(gid)
 
     override fun onCleared() {
         super.onCleared()
@@ -38,4 +31,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun insert(game: Game) = scope.launch(Dispatchers.IO) { repository.insert(game) }
 
     fun insert(gameList: List<Game>) = scope.launch(Dispatchers.IO) { repository.insert(gameList) }
+
+    fun deleteAll() = scope.launch(Dispatchers.IO) { repository.deleteAll() }
 }

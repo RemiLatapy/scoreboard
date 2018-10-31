@@ -11,8 +11,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import remi.scoreboard.R
-import remi.scoreboard.realmdata.GameRealm
-import remi.scoreboard.viewmodel.GameRealmViewModel
+import remi.scoreboard.data.Game
+import remi.scoreboard.viewmodel.GameViewModel
 import java.io.InputStreamReader
 
 
@@ -32,16 +32,14 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController)
 
         // TODO is it the right place to prepopulate DB
-//        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
-//        val reader = InputStreamReader(assets.open("games.json"))
-//        var gameList: List<Game> = Gson().fromJson(reader, object : TypeToken<List<Game>>() {}.type)
-//        gameViewModel.insert(gameList)
-
-        val gameViewModel = ViewModelProviders.of(this).get(GameRealmViewModel::class.java)
-//        gameViewModel.insert(GameRealm("Game" + (0..1000).random()))
+        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
         val reader = InputStreamReader(assets.open("games.json"))
-        var gameList: List<GameRealm> = Gson().fromJson(reader, object : TypeToken<List<GameRealm>>() {}.type)
+        var gameList: List<Game> = Gson().fromJson(reader, object : TypeToken<List<Game>>() {}.type)
         gameViewModel.insert(gameList)
+
+//        val userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+//        userViewModel.deleteAll()
+
 
 //        var userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 //        userViewModel.allUsers.observe(this, { users -> Log.d("USER", "user list changed : $users") })

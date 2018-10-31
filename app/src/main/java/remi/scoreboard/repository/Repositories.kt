@@ -4,33 +4,35 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import remi.scoreboard.data.*
 
-class UserRepository(private val userDao: UserDao) {
+class UserRepository {
 
-    val allUsers: LiveData<List<User>> = userDao.loadAllUsers()
+    val allUsers: LiveData<List<User>> = UserDao.loadAll()
 
     @WorkerThread
-    suspend fun insert(user: User) = userDao.insert(user)
+    suspend fun insert(user: User) = UserDao.insert(user)
+
+    @WorkerThread
+    suspend fun deleteAll() = UserDao.deleteAll()
 }
 
-class MatchRepository(private val matchDao: MatchDao) {
+class MatchRepository {
 
-    val allMatches: LiveData<List<Match>> = matchDao.loadAllMatches()
-
-    fun idMatch(mid: Int): LiveData<Match> = matchDao.loadMatchById(mid)
+    val allMatches: LiveData<List<Match>> = MatchDao.loadAll()
 
     @WorkerThread
-    suspend fun insert(match: Match) = matchDao.insert(match)
+    suspend fun insert(match: Match) = MatchDao.insert(match)
 }
 
-class GameRepository(private val gameDao: GameDao) {
+class GameRepository {
 
-    val allGames: LiveData<List<Game>> = gameDao.loadAllGames()
-
-    @WorkerThread
-    suspend fun insert(game: Game) = gameDao.insert(game)
+    val allGames: LiveData<List<Game>> = GameDao.loadAll()
 
     @WorkerThread
-    suspend fun insert(gameList: List<Game>) = gameDao.insert(gameList)
+    suspend fun insert(game: Game) = GameDao.insert(game)
 
-    fun gameById(gid: Int) = gameDao.loadGameById(gid)
+    @WorkerThread
+    suspend fun insert(games: List<Game>) = GameDao.insert(games)
+
+    @WorkerThread
+    suspend fun deleteAll() = GameDao.deleteAll()
 }
