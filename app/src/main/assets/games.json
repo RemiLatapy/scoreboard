@@ -38,13 +38,5 @@
       "Rules 1",
       "Rules 2"
     ]
-  },
-  {
-    "name": "Uno",
-    "thumbnail": "file:///android_asset/thumbnail/uno.png",
-    "rules": [
-      "Rules 1",
-      "Rules 2"
-    ]
   }
 ]

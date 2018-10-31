@@ -1,58 +1,51 @@
 package remi.scoreboard.data
 
-import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import io.realm.Realm
+import io.realm.RealmModel
+import io.realm.RealmResults
 
-@Dao
-interface GameDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(game: Game)
+//fun <T : RealmModel> RealmResults<T>.asLiveData() = RealmLiveData(this)
+fun <T : RealmModel> RealmResults<T>.asLiveData() = LiveRealmResults(this)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(games: List<Game>)
+class UserDao {
+    companion object {
+        fun loadAll(): LiveRealmResults<User> =
+            Realm.getDefaultInstance().run { where(User::class.java).findAll().asLiveData() }
 
-    @Query("SELECT * FROM games")
-    fun loadAllGames(): LiveData<List<Game>>
+        fun insert(user: User) =
+            Realm.getDefaultInstance().executeTransaction { it.copyToRealmOrUpdate(user) }
 
-    @Query("DELETE FROM games")
-    fun deleteAll()
-
-    @Query("SELECT * FROM games WHERE game_id = :id")
-    fun loadGameById(id: Int): LiveData<List<Game>>
+        fun deleteAll() =
+            Realm.getDefaultInstance().executeTransaction { it.delete(User::class.java) }
+    }
 }
 
-@Dao
-interface MatchDao {
-    @Insert
-    fun insert(match: Match)
+class GameDao {
+    companion object {
+        fun loadAll(): LiveRealmResults<Game> =
+            Realm.getDefaultInstance().run { where(Game::class.java).findAll().asLiveData() }
 
-    @Query("SELECT * FROM matches")
-    fun loadAllMatches(): LiveData<List<Match>>
+        fun insert(game: Game) =
+            Realm.getDefaultInstance().executeTransaction { it.copyToRealmOrUpdate(game) }
 
-    @Query("DELETE FROM matches")
-    fun deleteAll()
+        fun insert(games: List<Game>) =
+            Realm.getDefaultInstance().executeTransaction { it.copyToRealmOrUpdate(games) }
 
-    @Query("SELECT * FROM matches WHERE match_id = :id")
-    fun loadMatchById(id: Int): LiveData<Match>
+        fun deleteAll() =
+            Realm.getDefaultInstance().executeTransaction { it.delete(Game::class.java) }
+    }
 }
 
-@Dao
-interface UserDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(user: User)
+class MatchDao {
+    companion object {
+        fun loadAll(): LiveRealmResults<Match> =
+            Realm.getDefaultInstance().run { where(Match::class.java).findAll().asLiveData() }
 
-    @Query("SELECT * FROM users")
-    fun loadAllUsers(): LiveData<List<User>>
+        fun insert(match: Match) =
+            Realm.getDefaultInstance().executeTransaction { it.copyToRealmOrUpdate(match) }
 
-    @Query("SELECT * FROM users WHERE user_id = :id")
-    fun loadUserById(id: Int): LiveData<User>
-
-    @Query("DELETE FROM users")
-    fun deleteAll()
-
-    @Query("UPDATE sqlite_sequence SET seq = (SELECT MAX(user_id) FROM users) WHERE name=\"users\"")
-    fun resetId()
+        fun deleteAll() =
+            Realm.getDefaultInstance().executeTransaction { it.delete(Match::class.java) }
+    }
 }
+

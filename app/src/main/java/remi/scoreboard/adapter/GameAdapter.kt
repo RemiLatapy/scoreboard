@@ -16,7 +16,7 @@ class GameAdapter : ListAdapter<Game, GameAdapter.ViewHolder>(GameDiffCallback()
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val game = getItem(position)
         holder.apply {
-            bind(createOnClickListener(game.gid), game)
+            bind(createOnClickListener(game), game)
         }
     }
 
@@ -26,9 +26,9 @@ class GameAdapter : ListAdapter<Game, GameAdapter.ViewHolder>(GameDiffCallback()
         return ViewHolder(binding)
     }
 
-    private fun createOnClickListener(gameId: Int): View.OnClickListener {
+    private fun createOnClickListener(game: Game): View.OnClickListener {
         return View.OnClickListener {
-            val match = Match(gameId, emptyList())
+            val match = Match(game, "")
             val action = GameListFragmentDirections.ActionGameListDestToGamePlayerFragment(match)
             it.findNavController().navigate(action)
         }

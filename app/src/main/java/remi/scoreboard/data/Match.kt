@@ -1,22 +1,18 @@
 package remi.scoreboard.data
 
 import android.os.Parcelable
-import androidx.room.*
+import io.realm.RealmObject
+import io.realm.annotations.RealmClass
+import io.realm.annotations.RealmNamingPolicy
 import kotlinx.android.parcel.Parcelize
 
-typealias Score = Map<String, Int>
-typealias PlayerScoreList = List<Pair<Int, Score>>
-typealias MutablePlayerScoreList = MutableList<Pair<Int, Score>>
+//typealias PlayerScoreList = @RawValue RealmList<Pair<User, Int>>
 
-@Entity(
-    tableName = "matches",
-    foreignKeys = [ForeignKey(entity = Game::class, parentColumns = ["game_id"], childColumns = ["game_id"])],
-    indices = [Index("game_id")]
-)
-@TypeConverters(Converters::class)
+// TODO deal with scorePlayerList
+
+@RealmClass(name = "matches", fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 @Parcelize
-data class Match(
-    @ColumnInfo(name = "game_id") val gameId: Int,
-    @ColumnInfo(name = "player_scores") val scorePlayers: PlayerScoreList,
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "match_id") val mid: Int = 0
-) : Parcelable
+open class Match(
+    var game: Game? = null,
+    var scorePlayerList: String = ""
+) : Parcelable, RealmObject()

@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         var gameList: List<Game> = Gson().fromJson(reader, object : TypeToken<List<Game>>() {}.type)
         gameViewModel.insert(gameList)
 
+//        val userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+//        userViewModel.deleteAll()
+
+
 //        var userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 //        userViewModel.allUsers.observe(this, { users -> Log.d("USER", "user list changed : $users") })
     }

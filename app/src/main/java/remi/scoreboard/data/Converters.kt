@@ -6,11 +6,11 @@ import com.google.gson.reflect.TypeToken
 
 class Converters {
 
-    @TypeConverter
-    fun playerScoreListToJson(list: PlayerScoreList): String = Gson().toJson(list)
-
-    @TypeConverter
-    fun jsonToPlayerScoreList(json: String): PlayerScoreList = Gson().fromJson(json, object : TypeToken<PlayerScoreList>() {}.type)
+//    @TypeConverter
+//    fun playerScoreListToJson(list: PlayerScoreList): String = Gson().toJson(list)
+//
+//    @TypeConverter
+//    fun jsonToPlayerScoreList(json: String): PlayerScoreList = Gson().fromJson(json, object : TypeToken<PlayerScoreList>() {}.type)
 
     @TypeConverter
     fun stringListToJson(list: List<String>): String = Gson().toJson(list)
