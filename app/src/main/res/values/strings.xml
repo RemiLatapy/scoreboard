@@ -30,4 +30,6 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="create_user">Create user</string>
+    <string name="games">Games</string>
+    <string name="stats">Stats</string>
 </resources>

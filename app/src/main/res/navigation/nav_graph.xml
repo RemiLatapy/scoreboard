@@ -31,4 +31,9 @@
         android:id="@+id/gameplay_dest"
         android:name="remi.scoreboard.fragment.GamePlayFragment"
         android:label="Game Play" />
+    <fragment
+        android:id="@+id/stats_dest"
+        android:name="remi.scoreboard.fragment.StatsFragment"
+        android:label="Stats"
+        tools:layout="@layout/fragment_stats" />
 </navigation>

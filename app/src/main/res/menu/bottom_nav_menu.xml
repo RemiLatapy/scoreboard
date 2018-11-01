@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/game_list_dest"
+        android:icon="@drawable/ic_games_black_24dp"
+        android:title="@string/games" />
+    <item
+        android:id="@+id/stats_dest"
+        android:icon="@drawable/ic_poll_black_24dp"
+        android:title="@string/stats" />
+</menu>
