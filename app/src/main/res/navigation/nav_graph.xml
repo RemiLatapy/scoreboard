@@ -11,7 +11,7 @@
             android:label="Games"
             tools:layout="@layout/fragment_game_list">
         <action
-            android:id="@+id/action_game_list_dest_to_gamePlayerFragment"
+            android:id="@+id/next_action"
             app:destination="@id/player_list_dest"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -24,7 +24,7 @@
             android:label="Players"
             tools:layout="@layout/fragment_user_list">
         <action
-            android:id="@+id/action_player_list_dest_to_gamePlayFragment"
+            android:id="@+id/next_action"
             app:destination="@id/gameplay_dest" />
     </fragment>
     <fragment

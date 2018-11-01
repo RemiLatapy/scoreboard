@@ -13,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import remi.scoreboard.R
 import remi.scoreboard.adapter.GameAdapter
-import remi.scoreboard.data.Game // TODO data here
+import remi.scoreboard.data.Game
 import remi.scoreboard.databinding.FragmentGameListBinding
 import remi.scoreboard.viewmodel.GameViewModel
 import remi.scoreboard.viewmodel.SharedViewModel
@@ -49,7 +49,8 @@ class GameListFragment : Fragment(), GameAdapter.GameSelectedCallback {
         activity?.let {
             ViewModelProviders.of(it).get(SharedViewModel::class.java).createMatch(game)
         }
-        findNavController().navigate(R.id.player_list_dest)
+        val action = GameListFragmentDirections.nextAction()
+        findNavController().navigate(action)
     }
 }
 
