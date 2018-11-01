@@ -19,7 +19,7 @@ import remi.scoreboard.viewmodel.GameViewModel
 import java.io.InputStreamReader
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,4 +54,13 @@ class MainActivity : AppCompatActivity() {
         return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment))
                 || super.onOptionsItemSelected(item)
     }
+
+    // https://stackoverflow.com/questions/50599238/dynamic-actionbar-title-from-a-fragment-using-androidx-navigation
+    override fun updateTitle(title: String) {
+        findViewById<Toolbar>(R.id.toolbar).title = title
+    }
+}
+
+interface TempToolbarTitleListener {
+    fun updateTitle(title: String)
 }

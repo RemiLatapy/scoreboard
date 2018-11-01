@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import remi.scoreboard.R
+import remi.scoreboard.activity.TempToolbarTitleListener
 import remi.scoreboard.adapter.PlayerAdapter
 import remi.scoreboard.databinding.FragmentGamePlayBinding
 import remi.scoreboard.viewmodel.SharedViewModel
@@ -26,6 +27,7 @@ class GamePlayFragment : Fragment() {
                 //                Toast.makeText(context, match.game?.name, Toast.LENGTH_SHORT).show()
 //                Toast.makeText(context, match.scorePlayerList[0]?.user?.displayName, Toast.LENGTH_SHORT).show()
             })
+            (it as? TempToolbarTitleListener)?.updateTitle(sharedViewModel.currentMatch.value?.game?.name!!)
         }
     }
 
