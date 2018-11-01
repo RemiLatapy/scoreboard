@@ -3,17 +3,16 @@ package remi.scoreboard.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import remi.scoreboard.data.Game
-import remi.scoreboard.data.Match
-import remi.scoreboard.data.PlayerScoreList
 import remi.scoreboard.databinding.ItemCardGameBinding
-import remi.scoreboard.fragment.GameListFragmentDirections
-import java.util.*
 
-class GameAdapter : ListAdapter<Game, GameAdapter.ViewHolder>(GameDiffCallback()) {
+class GameAdapter(val gameSelectedCallback: GameSelectedCallback) : ListAdapter<Game, GameAdapter.ViewHolder>(GameDiffCallback()) {
+
+    interface GameSelectedCallback {
+        fun onGameSelected(game: Game)
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val game = getItem(position)
@@ -30,9 +29,7 @@ class GameAdapter : ListAdapter<Game, GameAdapter.ViewHolder>(GameDiffCallback()
 
     private fun createOnClickListener(game: Game): View.OnClickListener {
         return View.OnClickListener {
-            val match = Match(game, PlayerScoreList(), Date())
-            val action = GameListFragmentDirections.ActionGameListDestToGamePlayerFragment(Match())
-            it.findNavController().navigate(action)
+            gameSelectedCallback.onGameSelected(game)
         }
     }
 

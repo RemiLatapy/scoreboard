@@ -26,4 +26,8 @@
     <string name="action_add">Add player</string>
     <string name="action_search">Search player</string>
     <string name="action_delete">Delete all</string>
+    <string name="avatar_desc">avatar</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="create_user">Create user</string>
 </resources>

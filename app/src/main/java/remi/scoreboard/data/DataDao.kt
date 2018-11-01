@@ -1,5 +1,6 @@
 package remi.scoreboard.data
 
+import androidx.lifecycle.LiveData
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
@@ -14,11 +15,7 @@ class UserDao {
             Realm.getDefaultInstance().run { where(User::class.java).findAll().asLiveData() }
 
         fun insert(user: User) =
-            Realm.getDefaultInstance().executeTransaction {
-                val currentIdNum = it.where(User::class.java).max("id")
-                user.id = if (currentIdNum != null) currentIdNum.toLong() + 1 else 1
-                it.insert(user)
-            }
+            Realm.getDefaultInstance().executeTransaction { it.insert(user) }
 
         fun update(user: User) =
             Realm.getDefaultInstance().executeTransaction { it.insertOrUpdate(user) }
@@ -50,14 +47,27 @@ class MatchDao {
             Realm.getDefaultInstance().run { where(Match::class.java).findAll().asLiveData() }
 
         fun insert(match: Match) =
-            Realm.getDefaultInstance().executeTransaction {
-                val currentIdNum = it.where(Match::class.java).max("id")
-                match.id = if (currentIdNum != null) currentIdNum.toLong() + 1 else 1
-                it.insert(match)
+            Realm.getDefaultInstance().executeTransaction { it.insert(match) }
+
+        fun create(match: Match): LiveRealmObject<Match> {
+            Realm.getDefaultInstance().let {
+                it.beginTransaction()
+                val realMatch: Match = it.copyToRealm(match)
+                it.commitTransaction()
+                return LiveRealmObject(realMatch)
             }
+        }
 
         fun deleteAll() =
             Realm.getDefaultInstance().executeTransaction { it.delete(Match::class.java) }
+
+        fun addPlayer(currentMatch: LiveData<Match>, playerScore: PlayerScore) {
+            Realm.getDefaultInstance().executeTransaction { currentMatch.value?.scorePlayerList?.add(playerScore) }
+        }
+
+        fun removePlayer(currentMatch: LiveData<Match>, playerScore: PlayerScore) {
+            Realm.getDefaultInstance().executeTransaction { currentMatch.value?.scorePlayerList?.remove(playerScore) }
+        }
     }
 }
 

@@ -23,8 +23,12 @@
             android:name="remi.scoreboard.fragment.UserListFragment"
             android:label="Players"
             tools:layout="@layout/fragment_user_list">
-        <argument
-            android:name="match"
-            app:argType="remi.scoreboard.data.Match" />
+        <action
+            android:id="@+id/action_player_list_dest_to_gamePlayFragment"
+            app:destination="@id/gameplay_dest" />
     </fragment>
+    <fragment
+        android:id="@+id/gameplay_dest"
+        android:name="remi.scoreboard.fragment.GamePlayFragment"
+        android:label="Game Play" />
 </navigation>

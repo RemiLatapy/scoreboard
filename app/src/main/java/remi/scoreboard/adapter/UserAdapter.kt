@@ -8,19 +8,21 @@ import androidx.recyclerview.widget.RecyclerView
 import remi.scoreboard.data.User
 import remi.scoreboard.databinding.ItemCardUserBinding
 
-class UserAdapter(val userSelectedCallback: UserSelectedCallback) : ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()) {
+class UserAdapter(private val userSelectedCallback: UserSelectedCallback) :
+    ListAdapter<User, UserAdapter.ViewHolder>(UserDiffCallback()) {
 
     interface UserSelectedCallback {
-        fun onUserSelected(selected: Boolean)
+        fun onUserSelected(user: User)
+        fun isUserSelected(user: User): Boolean
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user = getItem(position)
+        val user: User = getItem(position)
         holder.apply {
+            itemView.isSelected = userSelectedCallback.isUserSelected(user)
             bind(user, View.OnClickListener {
-                // TODO
-                user.isSelected = !user.isSelected
-                userSelectedCallback.onUserSelected(user.isSelected)
+                userSelectedCallback.onUserSelected(user)
+                it.isSelected = userSelectedCallback.isUserSelected(user)
             })
         }
     }
@@ -30,8 +32,6 @@ class UserAdapter(val userSelectedCallback: UserSelectedCallback) : ListAdapter<
         val binding = ItemCardUserBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
-
-
 
     inner class ViewHolder(private val binding: ItemCardUserBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: User, listener: View.OnClickListener) {

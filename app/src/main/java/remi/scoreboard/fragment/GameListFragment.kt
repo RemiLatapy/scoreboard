@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import remi.scoreboard.R
 import remi.scoreboard.adapter.GameAdapter
+import remi.scoreboard.data.Game // TODO data here
 import remi.scoreboard.databinding.FragmentGameListBinding
 import remi.scoreboard.viewmodel.GameViewModel
+import remi.scoreboard.viewmodel.SharedViewModel
 
-class GameListFragment : Fragment() {
+class GameListFragment : Fragment(), GameAdapter.GameSelectedCallback {
 
     private lateinit var gameViewModel: GameViewModel
 
@@ -22,7 +25,7 @@ class GameListFragment : Fragment() {
 
         gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
 
-        val gameListAdapter = GameAdapter()
+        val gameListAdapter = GameAdapter(this)
         binding.recycler.adapter = gameListAdapter
         gameViewModel.allGames.observe(this,
             Observer { gameList -> gameList?.let { gameListAdapter.submitList(it) } })
@@ -34,4 +37,13 @@ class GameListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.hide()
     }
+
+    // TODO delete match if not started
+    override fun onGameSelected(game: Game) {
+        activity?.let {
+            ViewModelProviders.of(it).get(SharedViewModel::class.java).createMatch(game)
+        }
+        findNavController().navigate(R.id.player_list_dest)
+    }
 }
+

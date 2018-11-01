@@ -21,6 +21,14 @@ class MatchRepository {
 
     @WorkerThread
     suspend fun insert(match: Match) = MatchDao.insert(match)
+
+    fun create(match: Match): LiveData<Match> = MatchDao.create(match)
+
+    fun addPlayer(currentMatch: LiveData<Match>, playerScore: PlayerScore) =
+        MatchDao.addPlayer(currentMatch, playerScore)
+
+    fun removePlayer(currentMatch: LiveData<Match>, playerScore: PlayerScore) =
+        MatchDao.removePlayer(currentMatch, playerScore)
 }
 
 class GameRepository {
