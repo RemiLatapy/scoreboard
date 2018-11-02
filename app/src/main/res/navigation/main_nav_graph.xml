@@ -29,7 +29,7 @@
         android:name="remi.scoreboard.activity.PlayerActivity"
         android:label="Players">
         <argument
-            android:name="match_id"
+            android:name="game_id"
             app:argType="long" />
     </activity>
     <fragment

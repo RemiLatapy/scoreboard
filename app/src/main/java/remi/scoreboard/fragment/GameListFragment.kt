@@ -30,9 +30,8 @@ class GameListFragment : Fragment(), GameAdapter.GameSelectedCallback {
         return binding.root
     }
 
-    // TODO pass match id here
     override fun onGameSelected(game: Game) {
-        val action = GameListFragmentDirections.nextAction(0)
+        val action = GameListFragmentDirections.nextAction(game.id)
         findNavController().navigate(action)
     }
 }
