@@ -43,4 +43,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="game_name">Game name</string>
+    <string name="match_date">Match date</string>
+    <string name="number_of_players">Number of players</string>
 </resources>

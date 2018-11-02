@@ -28,4 +28,8 @@ class SharedViewModel : ViewModel() {
         currentMatch = matchRepository.create(Match(game, PlayerScoreList(), Date()))
         return currentMatch
     }
+
+    fun addPoints(playerScore: PlayerScore, points: Int) {
+        matchRepository.addPoints(playerScore, points)
+    }
 }

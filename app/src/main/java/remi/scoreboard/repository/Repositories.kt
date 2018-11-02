@@ -29,6 +29,10 @@ class MatchRepository {
 
     fun removePlayer(currentMatch: LiveData<Match>, playerScore: PlayerScore) =
         MatchDao.removePlayer(currentMatch, playerScore)
+
+    fun addPoints(playerScore: PlayerScore, points: Int) {
+        MatchDao.addPoints(playerScore, points)
+    }
 }
 
 class GameRepository {

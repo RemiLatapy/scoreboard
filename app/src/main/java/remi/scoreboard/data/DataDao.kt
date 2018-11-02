@@ -68,6 +68,10 @@ class MatchDao {
         fun removePlayer(currentMatch: LiveData<Match>, playerScore: PlayerScore) {
             Realm.getDefaultInstance().executeTransaction { currentMatch.value?.scorePlayerList?.remove(playerScore) }
         }
+
+        fun addPoints(playerScore: PlayerScore, points: Int) {
+            Realm.getDefaultInstance().executeTransaction { playerScore.score += points }
+        }
     }
 }
 

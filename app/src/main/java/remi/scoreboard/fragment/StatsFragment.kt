@@ -5,10 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import remi.scoreboard.R
+import remi.scoreboard.adapter.MatchAdapter
+import remi.scoreboard.databinding.FragmentStatsBinding
+import remi.scoreboard.viewmodel.MatchViewModel
 
 class StatsFragment : Fragment() {
 
@@ -16,7 +21,17 @@ class StatsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_stats, container, false)
+        val binding = FragmentStatsBinding.inflate(inflater, container, false)
+
+        val matchViewModel = ViewModelProviders.of(this).get(MatchViewModel::class.java)
+
+        val adapter = MatchAdapter()
+        binding.recycler.adapter = adapter
+        matchViewModel.allMatchs.observe(this, Observer { matchList ->
+            matchList?.let { adapter.submitList(it) }
+        })
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

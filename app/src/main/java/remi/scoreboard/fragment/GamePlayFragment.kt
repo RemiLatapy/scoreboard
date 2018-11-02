@@ -34,7 +34,7 @@ class GamePlayFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentGamePlayBinding.inflate(inflater, container, false)
 
-        val adapter = PlayerAdapter()
+        val adapter = PlayerAdapter(sharedViewModel)
         binding.recycler.adapter = adapter
         adapter.submitList(sharedViewModel.currentMatch.value?.scorePlayerList)
 

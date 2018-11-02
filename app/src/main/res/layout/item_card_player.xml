@@ -14,9 +14,9 @@
             name="clickListener"
             type="android.view.View.OnClickListener" />
 
-        <data>
-            <import type="java.lang.Integer" />
-        </data>
+        <!--<data>-->
+            <!--<import type="java.lang.Integer" />-->
+        <!--</data>-->
 
     </data>
 

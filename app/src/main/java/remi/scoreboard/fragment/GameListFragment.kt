@@ -44,7 +44,7 @@ class GameListFragment : Fragment(), GameAdapter.GameSelectedCallback {
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.hide()
     }
 
-    // TODO delete match if not started
+    // TODO match should not be persit here
     override fun onGameSelected(game: Game) {
         activity?.let {
             ViewModelProviders.of(it).get(SharedViewModel::class.java).createMatch(game)
