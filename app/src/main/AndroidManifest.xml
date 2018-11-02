@@ -8,13 +8,17 @@
         android:icon="@drawable/ic_score"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.PlayActivity"></activity>
+        <activity
+            android:name=".activity.PlayerActivity"
+            android:label="@string/title_activity_player"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
