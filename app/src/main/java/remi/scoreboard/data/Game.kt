@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @RealmClass(name = "games", fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 @Parcelize
 open class Game(
-    @PrimaryKey var id: Long,
+    @PrimaryKey var id: Long = 0,
     @Required var name: String = "game_default",
     var thumbnail: String = "",
     var type: String = ""

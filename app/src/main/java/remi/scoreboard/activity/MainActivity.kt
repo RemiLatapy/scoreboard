@@ -10,7 +10,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import remi.scoreboard.R
@@ -32,7 +33,10 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
         val navController = host.navController
 
-        setupActionBarWithNavController(navController)
+//        setupActionBarWithNavController(navController)
+
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+        bottomNav?.setupWithNavController(navController)
 
         // TODO is it the right place to prepopulate DB
         val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+// TODO this way lead to fragment stacking instead of replacing (= back button navigate back instead of exit)
         return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment))
                 || super.onOptionsItemSelected(item)
     }
