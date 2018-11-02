@@ -6,10 +6,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.textfield.TextInputEditText
 import remi.scoreboard.R
 import remi.scoreboard.adapter.UserAdapter
-import remi.scoreboard.data.User
 import remi.scoreboard.databinding.FragmentUserListBinding
 import remi.scoreboard.viewmodel.UserViewModel
 
@@ -55,9 +53,10 @@ class UserListFragment : Fragment() {
                         .setPositiveButton(
                             "Add"
                         ) { _, _ ->
-                            val firstName = view.findViewById<TextInputEditText>(R.id.first_name)
-                            val lastName = view.findViewById<TextInputEditText>(R.id.last_name)
-                            userViewModel.insert(User(firstName.text.toString(), lastName.text.toString()))
+                            // TODO insert player in user player list here
+//                            val firstName = view.findViewById<TextInputEditText>(R.id.first_name)
+//                            val lastName = view.findViewById<TextInputEditText>(R.id.last_name)
+//                            userViewModel.insert(User(firstName.text.toString(), lastName.text.toString()))
                         }
                         .setNegativeButton("Cancel", null)
                         .show()

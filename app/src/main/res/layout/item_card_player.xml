@@ -40,7 +40,7 @@
                 android:layout_marginEnd="@dimen/big_padding"
                 android:contentDescription="@string/avatar_desc"
                 android:tint="@color/colorPrimary"
-                app:imageFromUrl="@{playerScore.user.avatar}" />
+                app:imageFromUrl="@{playerScore.player.avatar}" />
 
             <TextView
                 android:id="@+id/player_num"
@@ -59,7 +59,7 @@
                 android:layout_below="@id/player_num"
                 android:layout_gravity="center_vertical"
                 android:layout_toEndOf="@+id/avatar"
-                android:text="@{playerScore.user.displayName}"
+                android:text="@{playerScore.player.name}"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="24sp"
                 tools:text="John" />

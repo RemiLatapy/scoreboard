@@ -30,7 +30,7 @@ class PlayerAdapter :
         builder?.let {
             val inflater = LayoutInflater.from(view.rootView.context)
             val view = inflater.inflate(R.layout.dialog_add_score, null)
-            it.setTitle(playerScore.user?.displayName + " score")
+            it.setTitle(playerScore.player?.name + " score")
                 .setView(view)
                 .setPositiveButton(
                     "Add"
