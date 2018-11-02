@@ -2,27 +2,20 @@ package remi.scoreboard.fragment
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import remi.scoreboard.R
 import remi.scoreboard.adapter.UserAdapter
 import remi.scoreboard.data.User
 import remi.scoreboard.databinding.FragmentUserListBinding
-import remi.scoreboard.viewmodel.SharedViewModel
 import remi.scoreboard.viewmodel.UserViewModel
 
-class UserListFragment : Fragment(), UserAdapter.UserSelectedCallback {
+class UserListFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
-    private lateinit var sharedViewModel: SharedViewModel
-
-    private var fab: FloatingActionButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +26,8 @@ class UserListFragment : Fragment(), UserAdapter.UserSelectedCallback {
         val binding = FragmentUserListBinding.inflate(inflater, container, false)
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        activity?.let {
-            sharedViewModel = ViewModelProviders.of(it).get(SharedViewModel::class.java)
-        }
 
-        val userListAdapter = UserAdapter(this)
+        val userListAdapter = UserAdapter()
         binding.recycler.adapter = userListAdapter
         // https://stackoverflow.com/questions/49726385/listadapter-not-updating-item-in-reyclerview
         userListAdapter.submitList(userViewModel.allUsers.value)
@@ -45,34 +35,7 @@ class UserListFragment : Fragment(), UserAdapter.UserSelectedCallback {
         userViewModel.allUsers.observe(this,
             Observer { userListAdapter.notifyDataSetChanged() })
 
-        sharedViewModel.currentMatch.observe(this, Observer {
-            if (it.scorePlayerList.size >= 2) fab?.show()
-            else fab?.hide()
-            Toast.makeText(context, "num player " + it.scorePlayerList.size, Toast.LENGTH_SHORT).show()
-        })
-
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        fab = activity?.findViewById(R.id.fab)
-        fab?.run {
-            hide()
-            setImageResource(R.drawable.ic_play_arrow_black_24dp)
-            setOnClickListener {
-                view.findNavController().navigate(R.id.gameplay_dest)
-            }
-        }
-    }
-
-    override fun onUserSelected(user: User) {
-        sharedViewModel.toogleUser(user)
-    }
-
-    override fun isUserSelected(user: User): Boolean {
-        return sharedViewModel.currentMatch.value?.scorePlayerList?.count { it.user == user } == 1
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

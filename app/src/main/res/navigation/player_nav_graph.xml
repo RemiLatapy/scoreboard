@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/player_nav_graph"
+    app:startDestination="@id/player_list_dest">
+
+    <fragment
+        android:id="@+id/player_list_dest"
+        android:name="remi.scoreboard.fragment.UserListFragment"
+        android:label="Players">
+        <action
+            android:id="@+id/nextAction"
+            app:destination="@id/playActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/playActivity"
+        android:name="remi.scoreboard.activity.PlayActivity"
+        android:label="PlayActivity" />
+</navigation>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/game_list_dest">
+
+    <fragment
+        android:id="@+id/game_list_dest"
+        android:name="remi.scoreboard.fragment.GameListFragment"
+        android:label="Games"
+        tools:layout="@layout/fragment_game_list">
+        <action
+            android:id="@+id/nextAction"
+            app:destination="@+id/playerActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/stats_dest"
+        android:name="remi.scoreboard.fragment.StatsFragment"
+        android:label="Stats"
+        tools:layout="@layout/fragment_stats" />
+    <fragment
+        android:id="@+id/settings_dest"
+        android:name="remi.scoreboard.fragment.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
+    <activity
+        android:id="@+id/playerActivity"
+        android:name="remi.scoreboard.activity.PlayerActivity"
+        android:label="Players">
+        <argument
+            android:name="match_id"
+            app:argType="long" />
+    </activity>
+    <fragment
+        android:id="@+id/user_dest"
+        android:name="remi.scoreboard.fragment.UserFragment"
+        android:label="My account"
+        tools:layout="@layout/fragment_user" />
+</navigation>

@@ -11,9 +11,8 @@ import com.google.android.material.textfield.TextInputEditText
 import remi.scoreboard.R
 import remi.scoreboard.data.PlayerScore
 import remi.scoreboard.databinding.ItemCardPlayerBinding
-import remi.scoreboard.viewmodel.SharedViewModel
 
-class PlayerAdapter(val sharedViewModel: SharedViewModel) :
+class PlayerAdapter :
     ListAdapter<PlayerScore, PlayerAdapter.ViewHolder>(PlayerScoreDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -37,7 +36,7 @@ class PlayerAdapter(val sharedViewModel: SharedViewModel) :
                     "Add"
                 ) { _, _ ->
                     val points = view.findViewById<TextInputEditText>(R.id.points)
-                    sharedViewModel.addPoints(playerScore, Integer.valueOf(points.text.toString()))
+                    // TODO add score here
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
