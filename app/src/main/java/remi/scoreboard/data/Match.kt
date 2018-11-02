@@ -12,11 +12,11 @@ typealias PlayerScoreList = RealmList<PlayerScore>
 
 @RealmClass(name = "matches", fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 open class Match(
-    @PrimaryKey var id: Long,
+    @PrimaryKey var id: Long = 0,
     var game: Game? = null,
     var scorePlayerList: PlayerScoreList,
     @Required var date: Date
 ) : RealmObject() {
 
-    constructor() : this(0, null, PlayerScoreList(), Date())
+    constructor() : this(scorePlayerList = PlayerScoreList(), date = Date())
 }
