@@ -9,7 +9,7 @@ class MainEmptyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val token = "fake token"
+        val token = ""
 
         val activityIntent = if (token.isNotEmpty()) {
             Intent(this, MainActivity::class.java)
