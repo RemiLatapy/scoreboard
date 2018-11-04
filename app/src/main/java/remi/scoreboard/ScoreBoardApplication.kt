@@ -4,6 +4,8 @@ import android.app.Application
 import com.parse.Parse
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 
 
 open class ScoreBoardApplication : Application() {
@@ -11,13 +13,18 @@ open class ScoreBoardApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // OkHttp interceptor
+        val logger = HttpLoggingInterceptor()
+        logger.level = HttpLoggingInterceptor.Level.BODY
+
         // Initialize Parse
-        Parse.enableLocalDatastore(applicationContext)
         Parse.initialize(
             Parse.Configuration.Builder(this)
                 .applicationId("gameScoring")
                 .clientKey(null)
                 .server("https://server.lunabee.studio:9008/parse/")
+                .enableLocalDataStore()
+                .clientBuilder(OkHttpClient.Builder().addInterceptor(logger))
                 .build()
         )
 
