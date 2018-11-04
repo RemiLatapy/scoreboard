@@ -78,6 +78,10 @@ dependencies {
     implementation 'com.joooonho:selectableroundedimageview:1.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    // Parse
+    implementation 'com.github.parse-community.Parse-SDK-Android:parse:' + rootProject.parseVersion
+    implementation 'com.github.parse-community.Parse-SDK-Android:ktx:' + rootProject.parseVersion
+
     // Helper debug
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
     debugImplementation 'com.facebook.stetho:stetho:1.5.0'
