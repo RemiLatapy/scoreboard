@@ -50,4 +50,8 @@
     <string name="signup_text_btn">Signing up</string>
     <string name="skip_login">Skip login</string>
     <string name="prompt_username">Username</string>
+    <string name="CLIENT_KEY">v3ldp8zuBRNIBMywlFx2BEWZ1b256SlIERKW097l</string>
+    <string name="APP_ID">D4UigXmGn9LFJ9r5tDt9Ndn4KZuW6KBXORD8BNMG</string>
+    <string name="PARSE_SERVER_URL">https://server.lunabee.studio:9008/gameScoring/</string>
+    <string name="sign_out_btn">Sign out</string>
 </resources>

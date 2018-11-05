@@ -42,9 +42,11 @@ class LoginActivity : AppCompatActivity() {
             user.email = email
             user.setPassword(pwd)
             user.signUpInBackground { e ->
-                if (e == null)
-                    Toast.makeText(this, "Signup succeed", Toast.LENGTH_SHORT).show()
-                else
+                if (e == null) {
+                    Toast.makeText(this, "Signup succeed for ${ParseUser.getCurrentUser().username}", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                } else
                     Toast.makeText(this, "Signup failed, ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
@@ -54,11 +56,11 @@ class LoginActivity : AppCompatActivity() {
         findViewById<Button>(R.id.login_btn)?.setOnClickListener {
             val username = findViewById<EditText>(R.id.username).text.toString()
             val pwd = findViewById<EditText>(R.id.password).text.toString()
-            var user: ParseUser?
             ParseUser.logInInBackground(username, pwd) { loggedUser, e ->
                 if (loggedUser != null) {
-                    Toast.makeText(this, "Logging succeed", Toast.LENGTH_SHORT).show()
-                    user = loggedUser
+                    Toast.makeText(this, "Logging succeed for ${ParseUser.getCurrentUser().username}", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 } else
                     Toast.makeText(this, "Logging failed, ${e.message}", Toast.LENGTH_LONG).show()
             }
