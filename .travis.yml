@@ -1,4 +1,6 @@
 language: android
+jdk:
+  - oraclejdk8
 android:
   components:
     - tools
@@ -15,6 +17,8 @@ android:
   before_cache:
     - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
     - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+    
+  after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
     
   cache:
     directories:
