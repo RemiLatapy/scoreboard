@@ -44,9 +44,10 @@
     <string name="game_name">Game name</string>
     <string name="match_date">Match date</string>
     <string name="number_of_players">Number of players</string>
-    <string name="title_activity_player">PlayerActivity</string>
+    <string name="title_activity_player">Players</string>
     <string name="my_account">My account</string>
-    <string name="sign_in">Sign in</string>
-    <string name="register">Register</string>
+    <string name="login_text_btn">Logging in</string>
+    <string name="signup_text_btn">Signing up</string>
     <string name="skip_login">Skip login</string>
+    <string name="prompt_username">Username</string>
 </resources>
