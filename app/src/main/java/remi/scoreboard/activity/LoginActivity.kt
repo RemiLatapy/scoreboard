@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.parse.ParseACL
 import com.parse.ParseUser
 import remi.scoreboard.R
 
@@ -33,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupSignup() {
+
         findViewById<Button>(R.id.signup_btn)?.setOnClickListener {
             val username = findViewById<EditText>(R.id.username).text.toString()
             val email = findViewById<EditText>(R.id.email).text.toString()
@@ -43,7 +45,15 @@ class LoginActivity : AppCompatActivity() {
             user.setPassword(pwd)
             user.signUpInBackground { e ->
                 if (e == null) {
-                    Toast.makeText(this, "Signup succeed for ${ParseUser.getCurrentUser().username}", Toast.LENGTH_SHORT).show()
+                    val newUser = ParseUser.getCurrentUser()
+                    newUser.acl = ParseACL(user)
+                    newUser.saveInBackground()
+
+                    Toast.makeText(
+                        this,
+                        "Signup succeed for ${ParseUser.getCurrentUser().username}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else
@@ -58,7 +68,11 @@ class LoginActivity : AppCompatActivity() {
             val pwd = findViewById<EditText>(R.id.password).text.toString()
             ParseUser.logInInBackground(username, pwd) { loggedUser, e ->
                 if (loggedUser != null) {
-                    Toast.makeText(this, "Logging succeed for ${ParseUser.getCurrentUser().username}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Logging succeed for ${ParseUser.getCurrentUser().username}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else

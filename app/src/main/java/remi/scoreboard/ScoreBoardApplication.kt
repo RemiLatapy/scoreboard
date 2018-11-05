@@ -2,6 +2,7 @@ package remi.scoreboard
 
 import android.app.Application
 import com.parse.Parse
+import com.parse.ParseACL
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -24,6 +25,8 @@ open class ScoreBoardApplication : Application() {
                 .enableLocalDataStore()
                 .build()
         )
+        ParseACL.setDefaultACL(ParseACL(), true)
+
     }
 
     protected open fun setupRealm() {
