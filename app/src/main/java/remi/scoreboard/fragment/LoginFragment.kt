@@ -10,9 +10,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.parse.ParseUser
 import remi.scoreboard.R
@@ -39,6 +41,7 @@ class LoginFragment : Fragment() {
         setupLogging(view)
         setupCreateAccount(view)
         setupSkip(view)
+        setupResetPassword(view)
     }
 
     private fun setupTextViews(view: View) {
@@ -100,6 +103,38 @@ class LoginFragment : Fragment() {
             val action = LoginFragmentDirections.actionLoginToMain()
             findNavController().navigate(action)
             activity?.finish() // Manually finish login activity -- Should use popUpTo but doesn't work as expected...
+        }
+    }
+
+    private fun setupResetPassword(view: View) {
+        view.findViewById<TextView>(R.id.link_forgot_pwd)?.setOnClickListener {
+            AlertDialog.Builder(view.rootView.context).let { b ->
+                val inflater = LayoutInflater.from(view.rootView.context)
+                val dialogView = inflater.inflate(R.layout.dialog_forgot_password, null)
+                val dialog = b.setTitle("Reset password")
+                    .setView(dialogView)
+                    .setPositiveButton("Reset", null)
+                    .setNegativeButton("Cancel", null)
+                    .create()
+
+                dialog.setOnShowListener {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                        val emailLayout = dialogView.findViewById<TextInputLayout>(R.id.textInputLayoutEmail)
+                        val email = emailLayout.findViewById<TextInputEditText>(R.id.email)
+                        email.setOnFocusChangeListener { _, hasFocus -> if (hasFocus) emailLayout.error = null }
+                        ParseUser.requestPasswordResetInBackground(email.text.toString()) { e ->
+                            if (e == null) {
+                                Snackbar.make(view, "Email sent", Snackbar.LENGTH_LONG)
+                                dialog.dismiss()
+                            } else {
+                                emailLayout.error = "Unknow email"
+                            }
+                        }
+                    }
+                }
+
+                dialog.show()
+            }
         }
     }
 }
