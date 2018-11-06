@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_nav_graph.xml"
+    app:startDestination="@id/login_dest">
+
+    <fragment
+        android:id="@+id/login_dest"
+        android:name="remi.scoreboard.fragment.LoginFragment"
+        android:label=" Log in"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_signup"
+            app:destination="@id/signup_dest" />
+        <action
+            android:id="@+id/action_login_to_main"
+            app:destination="@id/main_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/signup_dest"
+        android:name="remi.scoreboard.fragment.SignupFragment"
+        android:label="Sign up"
+        tools:layout="@layout/fragment_signup">
+        <action
+            android:id="@+id/action_signup_to_main"
+            app:destination="@id/main_dest" />
+    </fragment>
+    <activity
+        android:id="@+id/main_dest"
+        android:name="remi.scoreboard.activity.MainActivity"
+        android:label="Score Board" />
+</navigation>

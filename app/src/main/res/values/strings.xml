@@ -46,12 +46,15 @@
     <string name="number_of_players">Number of players</string>
     <string name="title_activity_player">Players</string>
     <string name="my_account">My account</string>
-    <string name="login_text_btn">Logging in</string>
-    <string name="signup_text_btn">Signing up</string>
+    <string name="login_text_btn">Log in</string>
+    <string name="signup_text_btn">Sign up</string>
     <string name="skip_login">Skip login</string>
     <string name="prompt_username">Username</string>
     <string name="CLIENT_KEY">v3ldp8zuBRNIBMywlFx2BEWZ1b256SlIERKW097l</string>
     <string name="APP_ID">D4UigXmGn9LFJ9r5tDt9Ndn4KZuW6KBXORD8BNMG</string>
     <string name="PARSE_SERVER_URL">https://server.lunabee.studio:9008/gameScoring/</string>
     <string name="sign_out_btn">Sign out</string>
+    <string name="link_forgot_password">Forgot Password</string>
+    <string name="link_skip_login">Continue without log in</string>
+    <string name="link_sign_up">Create account</string>
 </resources>

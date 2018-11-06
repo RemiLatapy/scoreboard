@@ -3,7 +3,6 @@ package remi.scoreboard.activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
@@ -15,7 +14,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.parse.ParseConfig
 import remi.scoreboard.R
 import remi.scoreboard.data.Game
 import remi.scoreboard.viewmodel.GameViewModel
@@ -32,24 +30,13 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
         setSupportActionBar(toolbar)
 
         val host: NavHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
+            .findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment? ?: return
         val navController = host.navController
 
 //        setupActionBarWithNavController(navController)
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
         bottomNav?.setupWithNavController(navController)
-
-        // Parse ping test
-        ParseConfig.getInBackground { config, e ->
-            if (e != null) {
-                Toast.makeText(applicationContext, "Parse connection failed: " + e.code, Toast.LENGTH_LONG).show()
-            } else {
-                val ping = config.getInt("ping")
-                if (ping == 73) Toast.makeText(applicationContext, "Parse connection OK!", Toast.LENGTH_LONG).show()
-                else Toast.makeText(applicationContext, "Parse connection failed", Toast.LENGTH_LONG).show()
-            }
-        }
 
         // TODO is it the right place to prepopulate DB
         val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
@@ -59,7 +46,7 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp()
+        return Navigation.findNavController(this, R.id.nav_host_fragment_main).navigateUp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -69,7 +56,7 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 // TODO this way lead to fragment stacking instead of replacing (= back button navigate back instead of exit)
-        return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment))
+        return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment_main))
                 || super.onOptionsItemSelected(item)
     }
 
