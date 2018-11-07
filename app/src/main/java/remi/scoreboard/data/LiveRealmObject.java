@@ -71,7 +71,7 @@ public class LiveRealmObject<T extends RealmModel> extends LiveData<T> {
         if (!RealmObject.isValid(object)) {
             throw new IllegalArgumentException("The provided RealmObject is no longer valid, and therefore cannot be observed for changes.");
         }
-        postValue(object);
+        setValue(object);
     }
 
     // We should start observing and stop observing, depending on whether we have observers.

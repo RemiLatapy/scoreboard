@@ -1,9 +1,11 @@
 package remi.scoreboard.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import io.realm.Realm
 import io.realm.RealmModel
 import io.realm.RealmResults
+import remi.scoreboard.AbsentLiveData
 
 // TODO CLOSE ALL REALM INSTANCE!!
 
@@ -46,14 +48,18 @@ class UserDao {
         fun deleteAll() =
             Realm.getDefaultInstance().executeTransaction { it.delete(User::class.java) }
 
-        fun load(userId: String): LiveRealmObject<User>? {
+        fun load(userId: String): LiveData<User> {
             val realm = Realm.getDefaultInstance()
             val user = realm.where(User::class.java).equalTo("id", userId).findFirst()
             realm.close()
-            return if (user == null)
-                null
-            else
+            return if (user == null) {
+                Log.d("LOGIN", "DAO Realm load $userId failed")
+                AbsentLiveData.create()
+            }
+            else {
+                Log.d("LOGIN", "DAO Realm load $userId succeed")
                 LiveRealmObject(user)
+            }
         }
 
         fun create(user: User): LiveRealmObject<User> {

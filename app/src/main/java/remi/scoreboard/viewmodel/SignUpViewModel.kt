@@ -7,16 +7,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.User
 import remi.scoreboard.repository.UserRepository
 import kotlin.coroutines.CoroutineContext
 
 
-class UserProfileViewModel : ViewModel() {
+class SignUpViewModel : ViewModel() {
 
     private val userRepository: UserRepository = UserRepository()
 
-    val currentUser: LiveData<User> = userRepository.currentUser
+//    val currentUser: LiveData<Resource<User>> = userRepository.currentUser
+    val signupState: LiveData<MessageStatus> = userRepository.signupState
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
