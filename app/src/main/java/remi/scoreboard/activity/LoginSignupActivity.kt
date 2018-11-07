@@ -8,7 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import remi.scoreboard.R
 
-class LoginActivity : AppCompatActivity() {
+class LoginSignupActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()

@@ -13,12 +13,14 @@ import remi.scoreboard.repository.UserRepository
 import kotlin.coroutines.CoroutineContext
 
 
-class SignUpViewModel : ViewModel() {
+class LoginSignupViewModel : ViewModel() {
 
     private val userRepository: UserRepository = UserRepository()
 
 //    val currentUser: LiveData<Resource<User>> = userRepository.currentUser
     val signupState: LiveData<MessageStatus> = userRepository.signupState
+    val loginState: LiveData<MessageStatus> = userRepository.loginState
+    val resetPasswordState: LiveData<MessageStatus> = userRepository.resetPasswordState
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -38,6 +40,18 @@ class SignUpViewModel : ViewModel() {
             Log.d("THREAD", "createUser/Scope = #${Thread.currentThread().id} // ${Thread.currentThread()}")
             val user = User(username = username, email = email, password = password)
             userRepository.createUser(user)
+        }
+    }
+
+    fun loginUser(username: String, password: String) {
+        scope.launch {
+            userRepository.loginUser(username = username,password =  password)
+        }
+    }
+
+    fun resetPassword(email: String) {
+        scope.launch {
+            userRepository.resetPassword(email)
         }
     }
 }

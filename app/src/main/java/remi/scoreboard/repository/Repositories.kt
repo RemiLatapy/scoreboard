@@ -17,6 +17,8 @@ import remi.scoreboard.data.*
 class UserRepository {
 
     val signupState = MutableLiveData<MessageStatus>()
+    val loginState = MutableLiveData<MessageStatus>()
+    val resetPasswordState = MutableLiveData<MessageStatus>()
 
     val currentUser: MediatorLiveData<Resource<User>> by lazy {
         val ret = MediatorLiveData<Resource<User>>()
@@ -40,6 +42,9 @@ class UserRepository {
 
     @WorkerThread
     suspend fun insert(user: User) = UserDao.insert(user)
+
+    @WorkerThread
+    suspend fun insertOrUpdate(user: User) = UserDao.insertOrUpdate(user)
 
     @WorkerThread
     suspend fun deleteAll() = UserDao.deleteAll()
@@ -109,7 +114,39 @@ class UserRepository {
         }
     }
 
-    fun user(id: String): LiveData<User>? = UserDao.load(id)
+    @WorkerThread
+    suspend fun loginUser(username: String, password: String) {
+        loginState.postValue(MessageStatus(Status.LOADING))
+
+        val isLoginOk = withContext(Dispatchers.IO) {
+            try {
+                ParseUser.logIn(username, password)
+            } catch (e: ParseException) {
+                loginState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+                return@withContext false
+            }
+// TODO fetch user
+            insertOrUpdate(User(ParseUser.getCurrentUser()))
+            true
+        }
+
+        if (isLoginOk)
+            loginState.postValue(MessageStatus(Status.SUCCESS))
+    }
+
+    @WorkerThread
+    suspend fun resetPassword(email: String) {
+        resetPasswordState.postValue(MessageStatus(Status.LOADING))
+
+        withContext(Dispatchers.IO) {
+            try {
+                ParseUser.requestPasswordReset(email)
+                resetPasswordState.postValue(MessageStatus(Status.SUCCESS, "Reset password email sent"))
+            } catch (e: ParseException) {
+                resetPasswordState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+            }
+        }
+    }
 }
 
 class MatchRepository {

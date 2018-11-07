@@ -26,7 +26,7 @@ class MainEmptyActivity : AppCompatActivity() {
         val activityIntent = if (ParseUser.getCurrentUser()?.isAuthenticated == true) {
             Intent(this, MainActivity::class.java)
         } else {
-            Intent(this, LoginActivity::class.java)
+            Intent(this, LoginSignupActivity::class.java)
         }
 
         startActivity(activityIntent)

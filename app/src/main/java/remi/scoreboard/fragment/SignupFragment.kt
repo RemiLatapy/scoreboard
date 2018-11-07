@@ -15,14 +15,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import remi.scoreboard.R
 import remi.scoreboard.data.Status
-import remi.scoreboard.viewmodel.SignUpViewModel
+import remi.scoreboard.viewmodel.LoginSignupViewModel
 
 // TODO check connection state
 class SignupFragment : Fragment() {
 
     private lateinit var progressBar: ProgressBar // TODO move control to viewModel
     private lateinit var errorText: TextView // TODO move control to viewModel
-    private lateinit var viewModel: SignUpViewModel
+    private lateinit var viewModel: LoginSignupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +34,7 @@ class SignupFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(SignUpViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(LoginSignupViewModel::class.java)
 
 //        // Observe current user changes (aka callback from create user flow)
 //        viewModel.currentUser.observe(this, Observer { resUser ->

@@ -25,6 +25,14 @@ class UserDao {
             realm.close()
         }
 
+        fun insertOrUpdate(user: User) {
+            val realm = Realm.getDefaultInstance()
+            realm.beginTransaction()
+            realm.insertOrUpdate(user)
+            realm.commitTransaction()
+            realm.close()
+        }
+
         fun update(user: User) {
             val realm = Realm.getDefaultInstance()
             realm.beginTransaction()

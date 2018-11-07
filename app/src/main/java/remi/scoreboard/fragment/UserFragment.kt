@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.parse.ParseUser
 import remi.scoreboard.R
-import remi.scoreboard.activity.LoginActivity
+import remi.scoreboard.activity.LoginSignupActivity
 
 
 class UserFragment : Fragment() {
@@ -31,7 +31,7 @@ class UserFragment : Fragment() {
                 if (e == null) {
                     Toast.makeText(context, "Sign out succeed", Toast.LENGTH_SHORT).show()
                     activity?.run {
-                        startActivity(Intent(this, LoginActivity::class.java))
+                        startActivity(Intent(this, LoginSignupActivity::class.java))
                         finish()
                     }
                 } else

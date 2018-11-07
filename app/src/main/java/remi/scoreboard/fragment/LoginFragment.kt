@@ -1,8 +1,8 @@
 package remi.scoreboard.fragment
 
 
+import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +12,16 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.parse.ParseUser
 import remi.scoreboard.R
+import remi.scoreboard.data.Status
+import remi.scoreboard.viewmodel.LoginSignupViewModel
+
 
 // TODO check connection state
 class LoginFragment : Fragment() {
@@ -27,12 +31,60 @@ class LoginFragment : Fragment() {
     private lateinit var textInputLayoutPwd: TextInputLayout
     private lateinit var textUsername: EditText
     private lateinit var textPwd: EditText
+    private lateinit var resetPasswordDialog: AlertDialog
+
+    private lateinit var viewModel: LoginSignupViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(activity!!).get(LoginSignupViewModel::class.java)
+
+        viewModel.loginState.observe(this, Observer { cb ->
+            when (cb.status) {
+                Status.SUCCESS -> {
+                    progressBar.visibility = View.INVISIBLE
+                    val action = LoginFragmentDirections.ActionLoginToMain()
+                    findNavController().navigate(action)
+                    activity?.finish()
+                }
+                Status.ERROR -> {
+                    progressBar.visibility = View.INVISIBLE
+                    Snackbar.make(view!!, cb.message, Snackbar.LENGTH_LONG).show()
+                    // TODO handle different errors
+                }
+                Status.LOADING -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+                Status.IDLE -> {
+                    progressBar.visibility = View.INVISIBLE
+                }
+            }
+        })
+
+        viewModel.resetPasswordState.observe(this, Observer { cb ->
+            when (cb.status) {
+                Status.SUCCESS -> {
+                    Snackbar.make(view!!, cb.message, Snackbar.LENGTH_LONG).show()
+                    resetPasswordDialog.dismiss()
+                }
+                Status.ERROR -> {
+                    Snackbar.make(view!!, cb.message, Snackbar.LENGTH_LONG).show()
+                    // TODO handle different errors
+                }
+                Status.LOADING -> {
+                }
+                Status.IDLE -> {
+                }
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,24 +119,10 @@ class LoginFragment : Fragment() {
     private fun setupLogging(view: View) {
         view.run {
             findViewById<Button>(R.id.login_btn)?.setOnClickListener {
+
                 val username = findViewById<EditText>(R.id.username).text.toString()
-                val pwd = findViewById<EditText>(R.id.password).text.toString()
-                progressBar.visibility = View.VISIBLE
-                ParseUser.logInInBackground(username, pwd) { loggedUser, e ->
-                    if (loggedUser != null) {
-                        Log.d("LOGIN", "Logging succeed for ${ParseUser.getCurrentUser().username}")
-                        val action = LoginFragmentDirections.actionLoginToMain()
-                        findNavController().navigate(action)
-                        activity?.finish() // Manually finish login activity -- Should use popUpTo but doesn't work as expected...
-                    } else {
-                        // TODO handle error (UI)
-                        Log.d("LOGIN", "Logging failed: ${e.message}")
-                        progressBar.visibility = View.INVISIBLE
-                        Snackbar.make(view, "Log in failed", Snackbar.LENGTH_SHORT).show()
-                        textInputLayoutUsername.error = "Verify username"
-                        textInputLayoutPwd.error = "Verify password"
-                    }
-                }
+                val password = findViewById<EditText>(R.id.password).text.toString()
+                viewModel.loginUser(username, password)
             }
         }
     }
@@ -107,34 +145,29 @@ class LoginFragment : Fragment() {
     }
 
     private fun setupResetPassword(view: View) {
-        view.findViewById<TextView>(R.id.link_forgot_pwd)?.setOnClickListener {
-            AlertDialog.Builder(view.rootView.context).let { b ->
-                val inflater = LayoutInflater.from(view.rootView.context)
-                val dialogView = inflater.inflate(R.layout.dialog_forgot_password, null)
-                val dialog = b.setTitle("Reset password")
-                    .setView(dialogView)
-                    .setPositiveButton("Reset", null)
-                    .setNegativeButton("Cancel", null)
-                    .create()
+        AlertDialog.Builder(view.rootView.context).let { builder ->
+            val inflater = LayoutInflater.from(view.rootView.context)
+            val dialogView = inflater.inflate(R.layout.dialog_forgot_password, null)
+            resetPasswordDialog = builder.setTitle("Reset password")
+                .setView(dialogView)
+                .setPositiveButton("Reset", null)
+                .setNegativeButton("Cancel", null)
+                .create()
 
-                dialog.setOnShowListener {
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        val emailLayout = dialogView.findViewById<TextInputLayout>(R.id.textInputLayoutEmail)
-                        val email = emailLayout.findViewById<TextInputEditText>(R.id.email)
-                        email.setOnFocusChangeListener { _, hasFocus -> if (hasFocus) emailLayout.error = null }
-                        ParseUser.requestPasswordResetInBackground(email.text.toString()) { e ->
-                            if (e == null) {
-                                Snackbar.make(view, "Email sent", Snackbar.LENGTH_LONG)
-                                dialog.dismiss()
-                            } else {
-                                emailLayout.error = "Unknow email"
-                            }
-                        }
-                    }
+            resetPasswordDialog.setOnShowListener {
+                resetPasswordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    val emailLayout = dialogView.findViewById<TextInputLayout>(R.id.textInputLayoutEmail)
+                    val email = emailLayout.findViewById<TextInputEditText>(R.id.email)
+                    email.setOnFocusChangeListener { _, hasFocus -> if (hasFocus) emailLayout.error = null }
+                    viewModel.resetPassword(email.text.toString())
                 }
-
-                dialog.show()
             }
+        }
+
+        val resetPasswordTextView = view.findViewById<TextView>(R.id.link_forgot_pwd)
+        resetPasswordTextView.paintFlags = resetPasswordTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        resetPasswordTextView.setOnClickListener {
+            resetPasswordDialog.show()
         }
     }
 }
