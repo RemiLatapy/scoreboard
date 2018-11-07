@@ -33,16 +33,14 @@ class SignupFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
-        viewModel.isCurrentUserAvailable.observe(this, Observer { b ->
-            if (b) // start observing current user
-            {
+        // Observe current user changes (aka callback from create user flow)
+        viewModel.currentUser.observe(this, Observer { user ->
+            Log.d("LOGIN", "current user is now: ${user?.toString()}")
+            if (user != null) {
                 progressBar.visibility = View.INVISIBLE
-                viewModel.currentUser?.observe(this, Observer { user ->
-                    Log.d("LOGIN", "current user is now: " + user.toString())
-                    val action = SignupFragmentDirections.actionSignupToMain()
-                    findNavController().navigate(action)
-                    activity?.finish()
-                })
+                val action = SignupFragmentDirections.actionSignupToMain()
+                findNavController().navigate(action)
+                activity?.finish()
             }
         })
     }

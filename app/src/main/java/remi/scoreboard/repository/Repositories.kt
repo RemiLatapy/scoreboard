@@ -3,6 +3,7 @@ package remi.scoreboard.repository
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.parse.ParseACL
 import com.parse.ParseException
 import com.parse.ParseUser
@@ -13,24 +14,26 @@ import remi.scoreboard.data.*
 
 class UserRepository {
 
-    lateinit var currentUser: LiveData<User>
-    val allUsers: LiveData<List<User>> = UserDao.loadAll()
-
-    val storedCurrentUser: LiveData<User>? by lazy {
+    val currentUser: MediatorLiveData<User> by lazy {
+        val ret = MediatorLiveData<User>()
         val user = ParseUser.getCurrentUser()
-        if (user != null)
-//            refreshCurrentUser(user) // TODO call from thread + check last update to avoid fetch
-            UserDao.load(user.objectId) // find current user in DB (might be null)
-        else
-            null
+        if (user != null) {
+            // TODO try to fetch and update db here
+            val liveUser = UserDao.load(user.objectId) // find current user in DB (might be null)
+            if (liveUser != null)
+                ret.addSource(liveUser) { value -> ret.value = value }
+            // TODO else handle error
+        }
+        ret
     }
+
+    val allUsers: LiveData<List<User>> = UserDao.loadAll()
 
     @WorkerThread
     suspend fun refreshCurrentUser(user: ParseUser) {
         user.fetch()
         UserDao.update(User(ParseUser()))
     }
-
 
     @WorkerThread
     suspend fun insert(user: User) = UserDao.insert(user)
@@ -39,13 +42,13 @@ class UserRepository {
     suspend fun deleteAll() = UserDao.deleteAll()
 
     @WorkerThread
-    suspend fun createUser(user: User): String {
+    suspend fun createUser(user: User) {
         Log.d("THREAD", "createUser/Scope/repository = #${Thread.currentThread().id} // ${Thread.currentThread()}")
         val parseUser = user.getParseUser() // create parse object user
         withContext(Dispatchers.IO) {
             Log.d(
                 "THREAD",
-                "createUser/Scope/repository/withContext = #${Thread.currentThread().id} // ${Thread.currentThread()}"
+                "createUser/Scope/repository/withContext(io) = #${Thread.currentThread().id} // ${Thread.currentThread()}"
             )
             try {
                 parseUser.signUp() // sign up user in parse TODO exception
@@ -56,13 +59,23 @@ class UserRepository {
 
                 Log.d(
                     "THREAD",
-                    "createUser/Scope/repository/withContext2 = #${Thread.currentThread().id} // ${Thread.currentThread()}"
+                    "createUser/Scope/repository/withContext(io)2 = #${Thread.currentThread().id} // ${Thread.currentThread()}"
                 )
             } catch (e: ParseException) {
                 Log.e("LOGIN", "Signup failed: ${e.message}")
             }
         }
-        return parseUser.objectId
+
+        withContext(Dispatchers.Main) {
+            Log.d(
+                "THREAD",
+                "createUser/Scope/repository/withcontext(main) = #${Thread.currentThread().id} // ${Thread.currentThread()}"
+            )
+
+            val liveUser = UserDao.load(userId = parseUser.objectId)
+            if (liveUser != null)
+                currentUser.addSource(liveUser) { value -> currentUser.value = value }
+        }
     }
 
     fun user(id: String): LiveData<User>? = UserDao.load(id)
