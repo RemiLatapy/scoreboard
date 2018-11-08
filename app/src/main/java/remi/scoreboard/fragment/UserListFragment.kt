@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import remi.scoreboard.R
 import remi.scoreboard.adapter.UserAdapter
@@ -28,10 +27,11 @@ class UserListFragment : Fragment() {
         val userListAdapter = UserAdapter()
         binding.recycler.adapter = userListAdapter
         // https://stackoverflow.com/questions/49726385/listadapter-not-updating-item-in-reyclerview
-        userListAdapter.submitList(userViewModel.allUsers.value)
-
-        userViewModel.allUsers.observe(this,
-            Observer { userListAdapter.notifyDataSetChanged() })
+        // TODO user -> player
+//        userListAdapter.submitList(userViewModel.allUsers.value)
+//
+//        userViewModel.allUsers.observe(this,
+//            Observer { userListAdapter.notifyDataSetChanged() })
 
         return binding.root
     }
@@ -73,7 +73,7 @@ class UserListFragment : Fragment() {
                 true
             }
             R.id.action_delete -> {
-                userViewModel.deleteAll()
+//                userViewModel.deleteAll()
                 true
             }
             else -> super.onContextItemSelected(item)

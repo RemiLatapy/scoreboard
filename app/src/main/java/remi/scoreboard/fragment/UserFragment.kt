@@ -3,15 +3,19 @@ package remi.scoreboard.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.parse.ParseUser
 import remi.scoreboard.R
 import remi.scoreboard.activity.LoginSignupActivity
+import remi.scoreboard.viewmodel.UserViewModel
 
 
 class UserFragment : Fragment() {
@@ -21,6 +25,16 @@ class UserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_user, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        viewModel.currentUser.observe(this, Observer { user ->
+            Log.d("USER", "Current user is $user")
+        })
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

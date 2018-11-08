@@ -14,6 +14,7 @@ open class User(
     @Required var email: String = "",
     var avatar: String = "file:///android_asset/dafault_avatar.png",
     var playerList: PlayerList = PlayerList(),
+    var isLocalUser: Boolean = false,
     @Ignore var password: String = ""
 ) : RealmObject() {
 

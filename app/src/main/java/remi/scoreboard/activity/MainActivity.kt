@@ -19,6 +19,7 @@ import remi.scoreboard.data.Game
 import remi.scoreboard.viewmodel.GameViewModel
 import java.io.InputStreamReader
 
+// TODO user merger to use is user finally log in and don't want to lose his local matches/players
 
 class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
 

@@ -1,6 +1,5 @@
 package remi.scoreboard.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import io.realm.Realm
 import io.realm.RealmModel
@@ -14,9 +13,6 @@ fun <T : RealmModel> RealmResults<T>.asLiveData() = LiveRealmResults(this)
 
 class UserDao {
     companion object {
-        fun loadAll(): LiveRealmResults<User> =
-            Realm.getDefaultInstance().run { where(User::class.java).findAll().asLiveData() }
-
         fun insert(user: User) {
             val realm = Realm.getDefaultInstance()
             realm.beginTransaction()
@@ -59,24 +55,12 @@ class UserDao {
         fun load(userId: String): LiveData<User> {
             val realm = Realm.getDefaultInstance()
             val user = realm.where(User::class.java).equalTo("id", userId).findFirst()
-            realm.close()
-            return if (user == null) {
-                Log.d("LOGIN", "DAO Realm load $userId failed")
+            val ret: LiveData<User> = if (user == null)
                 AbsentLiveData.create()
-            }
-            else {
-                Log.d("LOGIN", "DAO Realm load $userId succeed")
+            else
                 LiveRealmObject(user)
-            }
-        }
-
-        fun create(user: User): LiveRealmObject<User> {
-            Realm.getDefaultInstance().let {
-                it.beginTransaction()
-                val realmUser: User = it.copyToRealm(user)
-                it.commitTransaction()
-                return LiveRealmObject(realmUser)
-            }
+            realm.close()
+            return ret
         }
     }
 }

@@ -17,10 +17,10 @@ class LoginSignupViewModel : ViewModel() {
 
     private val userRepository: UserRepository = UserRepository()
 
-//    val currentUser: LiveData<Resource<User>> = userRepository.currentUser
     val signupState: LiveData<MessageStatus> = userRepository.signupState
     val loginState: LiveData<MessageStatus> = userRepository.loginState
     val resetPasswordState: LiveData<MessageStatus> = userRepository.resetPasswordState
+
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
