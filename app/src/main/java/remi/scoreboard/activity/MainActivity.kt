@@ -19,6 +19,7 @@ import remi.scoreboard.data.Game
 import remi.scoreboard.viewmodel.GameViewModel
 import java.io.InputStreamReader
 
+// TODO user merger to use is user finally log in and don't want to lose his local matches/players
 
 class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
 
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
         setSupportActionBar(toolbar)
 
         val host: NavHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
+            .findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment? ?: return
         val navController = host.navController
 
 //        setupActionBarWithNavController(navController)
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp()
+        return Navigation.findNavController(this, R.id.nav_host_fragment_main).navigateUp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 // TODO this way lead to fragment stacking instead of replacing (= back button navigate back instead of exit)
-        return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment))
+        return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment_main))
                 || super.onOptionsItemSelected(item)
     }
 

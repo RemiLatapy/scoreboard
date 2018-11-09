@@ -1,18 +1,147 @@
 package remi.scoreboard.repository
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.parse.ParseACL
+import com.parse.ParseException
+import com.parse.ParseUser
+import io.realm.exceptions.RealmException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import remi.scoreboard.data.*
+
 
 class UserRepository {
 
-    val allUsers: LiveData<List<User>> = UserDao.loadAll()
+    val signupState = MutableLiveData<MessageStatus>()
+    val loginState = MutableLiveData<MessageStatus>()
+    val resetPasswordState = MutableLiveData<MessageStatus>()
+    val currentUserId = ParseUser.getCurrentUser()?.objectId ?: "0"
+    val currentUser = UserDao.load(currentUserId)
+
+
+    @WorkerThread
+    suspend fun refreshCurrentUser(user: ParseUser) {
+        user.fetch()
+        UserDao.update(User(ParseUser()))
+    }
 
     @WorkerThread
     suspend fun insert(user: User) = UserDao.insert(user)
 
     @WorkerThread
+    suspend fun insertOrUpdate(user: User) = UserDao.insertOrUpdate(user)
+
+    @WorkerThread
     suspend fun deleteAll() = UserDao.deleteAll()
+
+    @WorkerThread
+    suspend fun createUser(user: User) {
+        signupState.postValue(MessageStatus(Status.LOADING)) // Inform UI
+        Log.d("THREAD", "createUser/Scope/repository = #${Thread.currentThread().id} // ${Thread.currentThread()}")
+
+        val parseUser = user.getParseUser() // create parse object user
+        val insertedOk = withContext<Boolean>(Dispatchers.IO) {
+            Log.d(
+                "THREAD",
+                "createUser/Scope/repository/withContext(io) = #${Thread.currentThread().id} // ${Thread.currentThread()}"
+            )
+            try {
+                parseUser.signUp()
+            } catch (e: ParseException) {
+                signupState.postValue(MessageStatus(Status.ERROR, e.message.toString())) // Inform UI
+                Log.e("LOGIN", "Signup failed: ${e.message}")
+                return@withContext false
+            }
+
+            val newUser = ParseUser.getCurrentUser() // get back parse managed user
+            newUser.acl = ParseACL(parseUser) // set ACL
+
+            newUser.saveInBackground { e ->
+                if (e != null) {
+                    signupState.postValue(MessageStatus(Status.ERROR, e.message.toString())) // Inform UI
+                    Log.e("LOGIN", "Save ACL failed: ${e.message}")
+                }
+            }
+
+            try {
+                UserDao.insert(User(newUser)) // create user in DB
+            } catch (e: RealmException) {
+                signupState.postValue(MessageStatus(Status.ERROR, e.message.toString())) // Inform UI
+                Log.e("LOGIN", "Reaml insert failed: ${e.message}")
+                return@withContext false
+            }
+            true
+        }
+
+        if (insertedOk) {
+            withContext(Dispatchers.Main) {
+                Log.d(
+                    "THREAD",
+                    "createUser/Scope/repository/withcontext(main) = #${Thread.currentThread().id} // ${Thread.currentThread()}"
+                )
+
+                val liveUser: LiveData<User> = UserDao.load(userId = parseUser.objectId)
+                if (liveUser.value != null) {
+                    signupState.postValue(MessageStatus(Status.SUCCESS)) // Inform UI
+                } else {
+                    signupState.postValue(
+                        MessageStatus(
+                            Status.ERROR,
+                            "Failed to load user with ID ${parseUser.objectId}"
+                        )
+                    ) // Inform UI
+                }
+            }
+        }
+    }
+
+    @WorkerThread
+    suspend fun loginUser(username: String, password: String) {
+        loginState.postValue(MessageStatus(Status.LOADING))
+
+        val isLoginOk = withContext(Dispatchers.IO) {
+            try {
+                ParseUser.logIn(username, password)
+            } catch (e: ParseException) {
+                loginState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+                return@withContext false
+            }
+// TODO fetch user
+            insertOrUpdate(User(ParseUser.getCurrentUser()))
+            true
+        }
+
+        if (isLoginOk)
+            loginState.postValue(MessageStatus(Status.SUCCESS))
+    }
+
+    @WorkerThread
+    suspend fun resetPassword(email: String) {
+        resetPasswordState.postValue(MessageStatus(Status.LOADING))
+
+        withContext(Dispatchers.IO) {
+            try {
+                ParseUser.requestPasswordReset(email)
+                resetPasswordState.postValue(MessageStatus(Status.SUCCESS, "Reset password email sent"))
+            } catch (e: ParseException) {
+                resetPasswordState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+            }
+        }
+    }
+
+    fun loadLocalUser(): LiveData<User> {
+        return UserDao.load("0")
+    }
+
+    @WorkerThread
+    suspend fun insertLocalUser() {
+        UserDao.insert(User(isLocalUser = true, id = "0"))
+    }
+
+    fun loadUser(currentUserId: String): LiveData<User> = UserDao.load(currentUserId)
 }
 
 class MatchRepository {

@@ -2,29 +2,40 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="remi.scoreboard">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".ScoreBoardApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_score"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.PlayActivity"></activity>
+
         <activity
-            android:name=".activity.PlayerActivity"
-            android:label="@string/title_activity_player"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activity.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/app_name">
+            android:name=".activity.MainEmptyActivity"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".activity.LoginSignupActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.PlayerActivity"
+            android:label="@string/title_activity_player" />
+
+        <activity android:name=".activity.PlayActivity" />
+
     </application>
 
 </manifest>

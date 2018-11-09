@@ -1,0 +1,50 @@
+package remi.scoreboard.activity
+
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
+import com.parse.ParseConfig
+import com.parse.ParseUser
+import remi.scoreboard.viewmodel.MainEmptyViewModel
+
+
+class MainEmptyActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // TODO looks like unsafe
+        val prefs = getPreferences(Context.MODE_PRIVATE)
+        val localUserExist = prefs.getBoolean("local_user_exist", false)
+        if(!localUserExist)
+        {
+            val viewModel = ViewModelProviders.of(this).get(MainEmptyViewModel::class.java)
+            viewModel.createLocalUser()
+            prefs.edit().putBoolean("local_user_exist", true).apply()
+        }
+
+
+        // Parse ping test
+        ParseConfig.getInBackground { config, e ->
+            if (e != null) {
+                Toast.makeText(applicationContext, "Parse connection failed: ${e.message}", Toast.LENGTH_LONG).show()
+            } else {
+                val ping = config.getInt("ping")
+                if (ping == 73) Toast.makeText(applicationContext, "Parse connection OK!", Toast.LENGTH_LONG).show()
+                else Toast.makeText(applicationContext, "Parse connection failed: wrong config", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        val activityIntent: Intent = if (ParseUser.getCurrentUser()?.isAuthenticated == true) {
+            Intent(this, MainActivity::class.java)
+        } else {
+            Intent(this, LoginSignupActivity::class.java)
+        }
+
+        startActivity(activityIntent)
+        finish()
+    }
+}

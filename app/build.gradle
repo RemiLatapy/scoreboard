@@ -77,6 +77,11 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'com.joooonho:selectableroundedimageview:1.0.1'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
+    // Parse
+    implementation 'com.github.parse-community.Parse-SDK-Android:parse:' + rootProject.parseVersion
+    implementation 'com.github.parse-community.Parse-SDK-Android:ktx:' + rootProject.parseVersion
 
     // Helper debug
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
