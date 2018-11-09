@@ -3,6 +3,7 @@ package remi.scoreboard.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,7 +22,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val scope = CoroutineScope(coroutineContext)
 
     //    val currentUser: LiveData<User> = userRepository.loadUser(currentUserId)
-    val currentUser: LiveData<User> = userRepository.currentUser
+    private val currentUser: LiveData<User> = userRepository.currentUser
+
+    val username: LiveData<String> = Transformations.map(currentUser) { user -> user.username }
+    val email: LiveData<String> = Transformations.map(currentUser) { user -> user.email }
+    val avatar: LiveData<String> = Transformations.map(currentUser) { user -> user.avatar }
+    val isLocal: LiveData<Boolean> = Transformations.map(currentUser) { user -> user.isLocalUser }
 
     override fun onCleared() {
         super.onCleared()

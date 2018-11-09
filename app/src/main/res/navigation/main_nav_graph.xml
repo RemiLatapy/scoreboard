@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/main_nav_graph"
     app:startDestination="@id/game_list_dest">
 
     <fragment
@@ -32,6 +32,15 @@
         android:id="@+id/user_dest"
         android:name="remi.scoreboard.fragment.UserFragment"
         android:label="My account"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user">
+        <action
+            android:id="@+id/actionLoginSignup"
+            app:destination="@id/loginSignupActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/loginSignupActivity"
+        android:name="remi.scoreboard.activity.LoginSignupActivity"
+        android:label="LoginSignupActivity" />
     <include app:graph="@navigation/player_nav_graph" />
+
 </navigation>
