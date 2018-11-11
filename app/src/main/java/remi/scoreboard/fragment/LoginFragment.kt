@@ -50,10 +50,23 @@ class LoginFragment : Fragment() {
         viewModel.loginState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
-                    progressBar.visibility = View.INVISIBLE
-                    val action = LoginFragmentDirections.ActionLoginToMain()
-                    findNavController().navigate(action)
-                    activity?.finish()
+                    viewModel.updateGameListState.observe(this, Observer { gameCb ->
+                        when (gameCb.status) {
+                            Status.SUCCESS -> {
+                                progressBar.visibility = View.INVISIBLE
+                                val action = LoginFragmentDirections.ActionLoginToMain()
+                                findNavController().navigate(action)
+                                activity?.finish()
+                            }
+                            Status.ERROR -> {
+                                progressBar.visibility = View.INVISIBLE
+                                Snackbar.make(view!!, cb.message, Snackbar.LENGTH_LONG).show()
+                            }
+                            else -> {
+                            }
+                        }
+                    })
+                    viewModel.updateGameList()
                 }
                 Status.ERROR -> {
                     progressBar.visibility = View.INVISIBLE

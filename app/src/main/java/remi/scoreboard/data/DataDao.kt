@@ -67,14 +67,20 @@ class UserDao {
 
 class GameDao {
     companion object {
-        fun loadAll(): LiveRealmResults<Game> =
+        fun loadAll(): LiveData<List<Game>> =
             Realm.getDefaultInstance().run { where(Game::class.java).findAll().asLiveData() }
 
         fun insert(game: Game) =
-            Realm.getDefaultInstance().executeTransaction { it.insertOrUpdate(game) }
+            Realm.getDefaultInstance().executeTransaction { it.insert(game) }
 
         fun insert(games: List<Game>) =
-            Realm.getDefaultInstance().executeTransaction { it.insertOrUpdate(games) }
+            Realm.getDefaultInstance().executeTransaction { it.insert(games) }
+
+        fun insertOrUpdate(games: List<Game>) =
+            Realm.getDefaultInstance().run {
+                executeTransaction { it.insertOrUpdate(games) }
+                close()
+            }
 
         fun deleteAll() =
             Realm.getDefaultInstance().executeTransaction { it.delete(Game::class.java) }

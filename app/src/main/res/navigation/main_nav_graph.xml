@@ -30,7 +30,7 @@
         android:label="Players">
         <argument
             android:name="game_id"
-            app:argType="long" />
+            app:argType="string" />
     </activity>
     <fragment
         android:id="@+id/user_dest"

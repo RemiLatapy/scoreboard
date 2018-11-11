@@ -7,8 +7,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import remi.scoreboard.data.Game
 import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.User
+import remi.scoreboard.repository.GameRepository
 import remi.scoreboard.repository.UserRepository
 import kotlin.coroutines.CoroutineContext
 
@@ -16,10 +18,15 @@ import kotlin.coroutines.CoroutineContext
 class LoginSignupViewModel : ViewModel() {
 
     private val userRepository: UserRepository = UserRepository()
+    private val gameRepository: GameRepository by lazy { GameRepository() }
 
     val signupState: LiveData<MessageStatus> = userRepository.signupState
     val loginState: LiveData<MessageStatus> = userRepository.loginState
     val resetPasswordState: LiveData<MessageStatus> = userRepository.resetPasswordState
+
+    val updateGameListState: LiveData<MessageStatus> = gameRepository.updateGameListState
+
+    val allGames: LiveData<List<Game>> by lazy { gameRepository.allGames }
 
 
     private var parentJob = Job()
@@ -52,6 +59,12 @@ class LoginSignupViewModel : ViewModel() {
     fun resetPassword(email: String) {
         scope.launch {
             userRepository.resetPassword(email)
+        }
+    }
+
+    fun updateGameList()  {
+        scope.launch {
+            gameRepository.updateGameList()
         }
     }
 }

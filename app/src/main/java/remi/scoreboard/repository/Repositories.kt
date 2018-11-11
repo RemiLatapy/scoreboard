@@ -4,10 +4,9 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.parse.ParseACL
-import com.parse.ParseException
-import com.parse.ParseUser
+import com.parse.*
 import io.realm.exceptions.RealmException
+import io.realm.exceptions.RealmMigrationNeededException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import remi.scoreboard.data.*
@@ -168,6 +167,27 @@ class GameRepository {
 
     val allGames: LiveData<List<Game>> = GameDao.loadAll()
 
+    val updateGameListState = MutableLiveData<MessageStatus>()
+    @WorkerThread
+    suspend fun updateGameList() {
+        updateGameListState.postValue(MessageStatus(Status.LOADING))
+        val query = ParseQuery.getQuery<ParseObject>("games")
+        try {
+            val parseGameList = query.find()
+            GameDao.insertOrUpdate(parseGameList.map { Game(it) })
+        } catch (e: Exception) {
+            when (e) {
+                is ParseException, is IllegalArgumentException, is RealmMigrationNeededException -> {
+                    updateGameListState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
+                    return
+                }
+                else -> throw e
+            }
+        }
+
+        updateGameListState.postValue(MessageStatus(Status.SUCCESS))
+    }
+
     @WorkerThread
     suspend fun insert(game: Game) = GameDao.insert(game)
 
@@ -176,4 +196,5 @@ class GameRepository {
 
     @WorkerThread
     suspend fun deleteAll() = GameDao.deleteAll()
+
 }
