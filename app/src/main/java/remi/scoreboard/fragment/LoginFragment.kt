@@ -1,7 +1,6 @@
 package remi.scoreboard.fragment
 
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.fragment_login.*
 import remi.scoreboard.R
 import remi.scoreboard.data.Status
 import remi.scoreboard.viewmodel.LoginSignupViewModel
@@ -177,9 +177,7 @@ class LoginFragment : Fragment() {
             }
         }
 
-        val resetPasswordTextView = view.findViewById<TextView>(R.id.link_forgot_pwd)
-        resetPasswordTextView.paintFlags = resetPasswordTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-        resetPasswordTextView.setOnClickListener {
+        link_forgot_pwd.setOnClickListener {
             resetPasswordDialog.show()
         }
     }

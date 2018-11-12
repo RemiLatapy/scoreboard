@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dot_separator"
+        app:layout_constraintTop_toBottomOf="@+id/link_sign_up"
         tools:visibility="visible" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -73,32 +73,30 @@
     <TextView
         android:id="@+id/link_forgot_pwd"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:clickable="false"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:text="@string/link_forgot_password"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dot_separator"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPwd" />
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/link_sign_up"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:gravity="end|center_vertical"
         android:text="@string/link_sign_up"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/link_forgot_pwd"
-        app:layout_constraintEnd_toStartOf="@+id/dot_separator"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/link_forgot_pwd" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPwd" />
 
     <Button
         android:id="@+id/login_btn"
@@ -120,22 +118,11 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:visibility="gone"
         android:text="@string/link_skip_login"
         android:textColor="@color/black"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/dot_separator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="\u25CF"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/link_forgot_pwd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/link_forgot_pwd" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
