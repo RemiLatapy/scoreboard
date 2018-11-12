@@ -27,8 +27,8 @@ class UserFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_user, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         val viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         viewModel.currentUser.observe(this, Observer { user ->
