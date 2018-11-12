@@ -12,8 +12,8 @@
   ~ limitations under the License.
   -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/settings_dest"
-        android:menuCategory="secondary"
-        android:title="@string/settings" />
+    <!--<item-->
+        <!--android:id="@+id/settings_dest"-->
+        <!--android:menuCategory="secondary"-->
+        <!--android:title="@string/settings" />-->
 </menu>
