@@ -12,3 +12,11 @@ fun bindImageFromUrl(view: ImageView, url: String) {
         .apply(RequestOptions().centerCrop())
         .into(view)
 }
+
+@BindingAdapter("circleImageFromUrl")
+fun bindCircleImageFromUrl(view: ImageView, url: String) {
+    Glide.with(view.context)
+        .load(url)
+        .apply(RequestOptions().circleCrop())
+        .into(view)
+}
