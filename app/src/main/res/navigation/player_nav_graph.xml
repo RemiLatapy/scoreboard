@@ -10,6 +10,9 @@
         <action
             android:id="@+id/nextAction"
             app:destination="@id/playActivity" />
+        <argument
+            android:name="gameId"
+            app:argType="string" />
     </fragment>
     <activity
         android:id="@+id/playActivity"
