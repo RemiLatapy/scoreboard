@@ -89,7 +89,7 @@ class GameDao {
 
 class MatchDao {
     companion object {
-        fun loadAll(): LiveRealmResults<Match> =
+        fun loadAll(): LiveData<List<Match>> =
             Realm.getDefaultInstance().run { where(Match::class.java).findAll().asLiveData() }
 
         fun insert(match: Match) =

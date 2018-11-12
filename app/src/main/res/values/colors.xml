@@ -16,6 +16,7 @@
     <item name="darkorange" type="color">#FFFF8800</item>
     <item name="darkred" type="color">#FFCC0000</item>
     <item name="transparent" type="color">#0000</item>
+    <item name="gray" type="color">#9E9E9E</item>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
 
