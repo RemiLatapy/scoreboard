@@ -17,6 +17,7 @@
     <item name="darkred" type="color">#FFCC0000</item>
     <item name="transparent" type="color">#0000</item>
     <color name="white">#FFF</color>
+    <color name="black">#000</color>
 
     <integer-array name="androidcolors">
         <item>@color/blue</item>
@@ -31,5 +32,6 @@
         <item>@color/darkred</item>
         <item>@color/transparent</item>
         <item>@color/white</item>
+        <item>@color/black</item>
     </integer-array>
 </resources>

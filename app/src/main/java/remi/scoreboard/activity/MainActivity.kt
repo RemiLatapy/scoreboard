@@ -5,19 +5,15 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import remi.scoreboard.R
-import remi.scoreboard.data.Game
-import remi.scoreboard.viewmodel.GameViewModel
-import java.io.InputStreamReader
 
+// TODO user merger to use is user finally log in and don't want to lose his local matches/players
 
 class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
 
@@ -29,20 +25,23 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
         setSupportActionBar(toolbar)
 
         val host: NavHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment? ?: return
+            .findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment? ?: return
         val navController = host.navController
 
-        setupActionBarWithNavController(navController)
+//        setupActionBarWithNavController(navController)
 
-        // TODO is it the right place to prepopulate DB
-        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
-        val reader = InputStreamReader(assets.open("games.json"))
-        var gameList: List<Game> = Gson().fromJson(reader, object : TypeToken<List<Game>>() {}.type)
-        gameViewModel.insert(gameList)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+        bottomNav?.setupWithNavController(navController)
+
+        // TODO is it the right place to prepopulate DB -- (temp) disable offline mode
+//        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+//        val reader = InputStreamReader(assets.open("games.json"))
+//        var gameList: List<Game> = Gson().fromJson(reader, object : TypeToken<List<Game>>() {}.type)
+//        gameViewModel.insert(gameList)
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp()
+        return Navigation.findNavController(this, R.id.nav_host_fragment_main).navigateUp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -51,7 +50,8 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment))
+// TODO this way lead to fragment stacking instead of replacing (= back button navigate back instead of exit)
+        return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment_main))
                 || super.onOptionsItemSelected(item)
     }
 

@@ -33,10 +33,8 @@
     <string name="games">Games</string>
     <string name="stats">Stats</string>
     <string name="title_activity_login">Sign in</string>
-    <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -46,4 +44,17 @@
     <string name="game_name">Game name</string>
     <string name="match_date">Match date</string>
     <string name="number_of_players">Number of players</string>
+    <string name="title_activity_player">Players</string>
+    <string name="my_account">My account</string>
+    <string name="login_text_btn">Log in</string>
+    <string name="signup_text_btn">Sign up</string>
+    <string name="skip_login">Skip login</string>
+    <string name="prompt_username">Username</string>
+    <string name="CLIENT_KEY">v3ldp8zuBRNIBMywlFx2BEWZ1b256SlIERKW097l</string>
+    <string name="APP_ID">D4UigXmGn9LFJ9r5tDt9Ndn4KZuW6KBXORD8BNMG</string>
+    <string name="PARSE_SERVER_URL">https://server.lunabee.studio:9008/gameScoring/</string>
+    <string name="sign_out_btn">Sign out</string>
+    <string name="link_forgot_password">Forgot Password</string>
+    <string name="link_skip_login">Continue without log in</string>
+    <string name="link_sign_up">Create account</string>
 </resources>

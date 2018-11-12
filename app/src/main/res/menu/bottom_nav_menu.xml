@@ -8,4 +8,8 @@
         android:id="@+id/stats_dest"
         android:icon="@drawable/ic_poll_black_24dp"
         android:title="@string/stats" />
+    <item
+        android:id="@+id/user_dest"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/my_account" />
 </menu>
