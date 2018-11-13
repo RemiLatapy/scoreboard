@@ -49,8 +49,15 @@ class UserDao {
                 ret
             }
 
-        fun deleteAll() =
-            Realm.getDefaultInstance().executeTransaction { it.delete(User::class.java) }
+        fun deleteAllPlayerOfUser(userId: String) {
+            Realm.getDefaultInstance().run {
+                beginTransaction()
+                val user = where(User::class.java).equalTo("id", userId).findFirst()
+                user?.playerList = PlayerList()
+                commitTransaction()
+                close()
+            }
+        }
 
         fun load(userId: String): LiveData<User> {
             val realm = Realm.getDefaultInstance()
@@ -61,6 +68,16 @@ class UserDao {
                 LiveRealmObject(user)
             realm.close()
             return ret
+        }
+
+        fun addPlayerToUser(player: Player, userId: String) {
+            Realm.getDefaultInstance().run {
+                beginTransaction()
+                val user = where(User::class.java).equalTo("id", userId).findFirst()
+                user?.playerList?.add(player)
+                commitTransaction()
+                close()
+            }
         }
     }
 }

@@ -8,6 +8,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import remi.scoreboard.data.MessageStatus
+import remi.scoreboard.data.Player
 import remi.scoreboard.data.User
 import remi.scoreboard.repository.UserRepository
 import kotlin.coroutines.CoroutineContext
@@ -24,6 +26,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     //    val currentUser: LiveData<User> = userRepository.loadUser(currentUserId)
     val currentUser: LiveData<User> = userRepository.currentUser
 
+    val addPlayerState: LiveData<MessageStatus> = userRepository.addPlayerState
+    val deleteAllPlayerState: LiveData<MessageStatus> = userRepository.deleteAllPlayerState
+
     val userId: LiveData<String> = Transformations.map(currentUser) { user -> user.id }
     val username: LiveData<String> = Transformations.map(currentUser) { user -> user.username }
     val email: LiveData<String> = Transformations.map(currentUser) { user -> user.email }
@@ -38,5 +43,14 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun createLocalUser() {
         scope.launch(Dispatchers.IO) { userRepository.insertLocalUser() }
+    }
+
+    fun addPlayer(username: String) {
+        val player = Player(username = username)
+        scope.launch(Dispatchers.IO) { userRepository.addPlayerToCurrentUser(player) }
+    }
+
+    fun deleteAllPlayer() {
+        scope.launch(Dispatchers.IO) { userRepository.deleteAllPlayerOfCurrentUser() }
     }
 }

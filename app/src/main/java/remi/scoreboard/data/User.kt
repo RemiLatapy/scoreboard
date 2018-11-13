@@ -20,11 +20,12 @@ open class User(
 
 //    constructor() : this(playerList = PlayerList())
 
-    constructor(user: ParseUser) : this(playerList = PlayerList()) {
+    constructor(user: ParseUser) : this() {
         id = user.objectId
         username = user.username
         email = user.email
         avatar = user.getParseFile("avatar")?.url ?: avatar
+        playerList
     }
 
     fun getParseUser(): ParseUser {
