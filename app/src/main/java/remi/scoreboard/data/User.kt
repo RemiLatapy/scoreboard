@@ -1,5 +1,6 @@
 package remi.scoreboard.data
 
+import com.parse.ParseObject
 import com.parse.ParseUser
 import io.realm.RealmList
 import io.realm.RealmObject
@@ -20,12 +21,12 @@ open class User(
 
 //    constructor() : this(playerList = PlayerList())
 
-    constructor(user: ParseUser) : this() {
+    constructor(user: ParseUser, parsePlayerList: List<ParseObject> = ArrayList()) : this() {
         id = user.objectId
         username = user.username
         email = user.email
         avatar = user.getParseFile("avatar")?.url ?: avatar
-        playerList
+        parsePlayerList.mapTo(playerList) { Player(it) }
     }
 
     fun getParseUser(): ParseUser {

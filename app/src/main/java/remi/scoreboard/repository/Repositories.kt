@@ -101,20 +101,22 @@ class UserRepository {
     suspend fun loginUser(username: String, password: String) {
         loginState.postValue(MessageStatus(Status.LOADING))
 
-        val isLoginOk = withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             try {
                 ParseUser.logIn(username, password)
-            } catch (e: ParseException) {
-                loginState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
-                return@withContext false
+                val playerList:List<ParseObject> = ParseQuery.getQuery<ParseObject>("player").find()
+                UserDao.insertOrUpdate(User(ParseUser.getCurrentUser(), playerList))
+            } catch (e: Exception) {
+                when (e) {
+                    is ParseException, is IllegalStateException -> {
+                        loginState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+                    }
+                    else -> throw e
+                }
             }
-// TODO fetch user
-            insertOrUpdate(User(ParseUser.getCurrentUser()))
-            true
         }
 
-        if (isLoginOk)
-            loginState.postValue(MessageStatus(Status.SUCCESS))
+        loginState.postValue(MessageStatus(Status.SUCCESS))
     }
 
     @WorkerThread
