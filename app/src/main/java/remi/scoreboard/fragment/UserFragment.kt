@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.parse.ParseUser
@@ -20,11 +21,12 @@ class UserFragment : Fragment() {
 
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: FragmentUserBinding
-
+    private var userId = "-1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        viewModel.userId.observe(this, Observer { userId = it })
     }
 
     override fun onCreateView(
@@ -36,6 +38,7 @@ class UserFragment : Fragment() {
         binding.setLifecycleOwner(viewLifecycleOwner)
         binding.signoutListener = createSignoutListener()
         binding.loginListener = createLoginListener()
+        binding.managePlayersListener = createManagePlayersListener()
         return binding.root
     }
 
@@ -55,6 +58,11 @@ class UserFragment : Fragment() {
 
     private fun createLoginListener() = View.OnClickListener {
         val action = UserFragmentDirections.actionLoginSignup()
+        findNavController().navigate(action)
+    }
+
+    private fun createManagePlayersListener() = View.OnClickListener {
+        val action = UserFragmentDirections.actionManagePlayers(userId)
         findNavController().navigate(action)
     }
 }

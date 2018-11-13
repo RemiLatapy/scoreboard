@@ -24,6 +24,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     //    val currentUser: LiveData<User> = userRepository.loadUser(currentUserId)
     private val currentUser: LiveData<User> = userRepository.currentUser
 
+    val userId: LiveData<String> = Transformations.map(currentUser) { user -> user.id }
     val username: LiveData<String> = Transformations.map(currentUser) { user -> user.username }
     val email: LiveData<String> = Transformations.map(currentUser) { user -> user.email }
     val avatar: LiveData<String> = Transformations.map(currentUser) { user -> user.avatar }

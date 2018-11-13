@@ -9,12 +9,17 @@
         <variable
             name="viewModel"
             type="remi.scoreboard.viewmodel.UserViewModel" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:onClick="@{clickListener}"
         android:orientation="vertical">
 
         <ImageView
@@ -36,9 +41,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textSize="20sp"
             android:text="Players"
             android:textColor="@color/black"
+            android:textSize="20sp"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="parent" />
 

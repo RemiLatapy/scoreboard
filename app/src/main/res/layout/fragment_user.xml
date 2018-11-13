@@ -19,6 +19,10 @@
         <variable
             name="loginListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="managePlayersListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,6 +74,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/username"
                     tools:text="remi.latapy@gmail.com" />
 
+                <!--<TextView-->
+                    <!--android:id="@+id/user_id"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text='@{"id: " + viewModel.userId}'-->
+                    <!--android:textColor="@color/black"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:visibility="@{viewModel.isLocal ? View.GONE : View.VISIBLE}"-->
+                    <!--app:layout_constraintHorizontal_bias="0.0"-->
+                    <!--app:layout_constraintTop_toBottomOf="@+id/email"-->
+                    <!--bind:layout_constraintEnd_toEndOf="@+id/username"-->
+                    <!--bind:layout_constraintStart_toStartOf="@+id/username"-->
+                    <!--tools:text="id: KLJBuiyHY" />-->
+
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="150dp"
@@ -110,6 +128,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
+            bind:clickListener="@{managePlayersListener}"
             bind:viewModel="@{viewModel}" />
 
         <View
