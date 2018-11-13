@@ -1,10 +1,7 @@
 package remi.scoreboard.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import remi.scoreboard.data.Game
-import remi.scoreboard.data.Match
-import remi.scoreboard.data.PlayerScore
-import remi.scoreboard.data.User
+import remi.scoreboard.data.*
 
 class GameDiffCallback : DiffUtil.ItemCallback<Game>() {
     override fun areItemsTheSame(oldItem: Game, newItem: Game) = oldItem.name == newItem.name
@@ -16,6 +13,12 @@ class UserDiffCallback : DiffUtil.ItemCallback<User>() {
     override fun areItemsTheSame(oldItem: User, newItem: User) = oldItem.email == newItem.email
 
     override fun areContentsTheSame(oldItem: User, newItem: User) = oldItem == newItem
+}
+
+class PlayerDiffCallback : DiffUtil.ItemCallback<Player>() {
+    override fun areItemsTheSame(oldItem: Player, newItem: Player) = oldItem.id == newItem.id
+
+    override fun areContentsTheSame(oldItem: Player, newItem: Player) = oldItem == newItem
 }
 
 class PlayerScoreDiffCallback : DiffUtil.ItemCallback<PlayerScore>() {

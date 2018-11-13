@@ -22,7 +22,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val scope = CoroutineScope(coroutineContext)
 
     //    val currentUser: LiveData<User> = userRepository.loadUser(currentUserId)
-    private val currentUser: LiveData<User> = userRepository.currentUser
+    val currentUser: LiveData<User> = userRepository.currentUser
 
     val userId: LiveData<String> = Transformations.map(currentUser) { user -> user.id }
     val username: LiveData<String> = Transformations.map(currentUser) { user -> user.username }

@@ -20,7 +20,6 @@ import remi.scoreboard.viewmodel.UserViewModel
 class UserFragment : Fragment() {
 
     private lateinit var viewModel: UserViewModel
-    private lateinit var binding: FragmentUserBinding
     private var userId = "-1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +32,7 @@ class UserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentUserBinding.inflate(inflater, container, false)
+        val binding = FragmentUserBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.setLifecycleOwner(viewLifecycleOwner)
         binding.signoutListener = createSignoutListener()

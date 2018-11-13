@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import remi.scoreboard.R
-import remi.scoreboard.adapter.UserAdapter
+import remi.scoreboard.adapter.PlayerAdapter
 import remi.scoreboard.databinding.FragmentUserListBinding
 import remi.scoreboard.viewmodel.UserViewModel
 
@@ -28,7 +28,7 @@ class UserListFragment : Fragment() {
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
-        val userListAdapter = UserAdapter()
+        val userListAdapter = PlayerAdapter()
         binding.recycler.adapter = userListAdapter
         // https://stackoverflow.com/questions/49726385/listadapter-not-updating-item-in-reyclerview
         // TODO user -> player
