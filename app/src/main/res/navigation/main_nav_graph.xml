@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/main_nav_graph"
     app:startDestination="@id/game_list_dest">
 
     <fragment
@@ -12,11 +12,7 @@
         tools:layout="@layout/fragment_game_list">
         <action
             android:id="@+id/actionChoosePlayers"
-            app:destination="@id/player_nav_graph">
-            <argument
-                android:name="gameId"
-                android:defaultValue='"-1"' />
-        </action>
+            app:destination="@id/player_activity_dest" />
     </fragment>
     <fragment
         android:id="@+id/stats_dest"
@@ -32,6 +28,33 @@
         android:id="@+id/user_dest"
         android:name="remi.scoreboard.fragment.UserFragment"
         android:label="My account"
-        tools:layout="@layout/fragment_user" />
-    <include app:graph="@navigation/player_nav_graph" />
+        tools:layout="@layout/fragment_user">
+        <action
+            android:id="@+id/actionLoginSignup"
+            app:destination="@id/loginSignupActivity" />
+        <action
+            android:id="@+id/actionManagePlayers"
+            app:destination="@id/manage_player_activity_dest" />
+    </fragment>
+    <activity
+        android:id="@+id/loginSignupActivity"
+        android:name="remi.scoreboard.activity.LoginSignupActivity"
+        android:label="LoginSignupActivity" />
+    <activity
+        android:id="@+id/manage_player_activity_dest"
+        android:name="remi.scoreboard.activity.ManagePlayerActivity"
+        android:label="Manage players">
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </activity>
+    <activity
+        android:id="@+id/player_activity_dest"
+        android:name="remi.scoreboard.activity.PlayerActivity"
+        android:label="Players">
+        <argument
+            android:name="gameId"
+            app:argType="string" />
+    </activity>
+
 </navigation>

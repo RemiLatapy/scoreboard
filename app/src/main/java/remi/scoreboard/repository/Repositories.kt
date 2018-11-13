@@ -17,7 +17,7 @@ class UserRepository {
     val signupState = MutableLiveData<MessageStatus>()
     val loginState = MutableLiveData<MessageStatus>()
     val resetPasswordState = MutableLiveData<MessageStatus>()
-    val currentUserId = ParseUser.getCurrentUser()?.objectId ?: "0"
+    private val currentUserId = ParseUser.getCurrentUser()?.objectId ?: "0"
     val currentUser = UserDao.load(currentUserId)
 
 

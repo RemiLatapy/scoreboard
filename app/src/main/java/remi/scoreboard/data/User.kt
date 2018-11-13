@@ -24,6 +24,7 @@ open class User(
         id = user.objectId
         username = user.username
         email = user.email
+        avatar = user.getParseFile("avatar")?.url ?: avatar
     }
 
     fun getParseUser(): ParseUser {
@@ -31,6 +32,7 @@ open class User(
         user.username = username
         user.email = email
         user.setPassword(password)
+//        user.put("avatar", avatar) // TODO upload file...
         return user
     }
 }

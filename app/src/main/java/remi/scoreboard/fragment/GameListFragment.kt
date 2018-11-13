@@ -31,8 +31,7 @@ class GameListFragment : Fragment(), GameAdapter.GameSelectedCallback {
     }
 
     override fun onGameSelected(game: Game) {
-        val action = GameListFragmentDirections.actionChoosePlayers()
-            .setGameId(game.id)
+        val action = GameListFragmentDirections.actionChoosePlayers(game.id)
         findNavController().navigate(action)
     }
 }

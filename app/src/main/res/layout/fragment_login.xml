@@ -95,7 +95,9 @@
         android:id="@+id/login_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:text="@string/login_text_btn"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/link_skip_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
