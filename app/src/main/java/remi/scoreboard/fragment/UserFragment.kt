@@ -19,6 +19,7 @@ import remi.scoreboard.viewmodel.UserViewModel
 // TODO fragment need to be 'recreate' when coming back from login activity to refresh view model with new current user id
 class UserFragment : Fragment() {
 
+    private lateinit var binding: FragmentUserBinding
     private lateinit var viewModel: UserViewModel
     private var userId = "-1"
 
@@ -32,13 +33,21 @@ class UserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentUserBinding.inflate(inflater, container, false)
+        binding = FragmentUserBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.setLifecycleOwner(viewLifecycleOwner)
         binding.signoutListener = createSignoutListener()
         binding.loginListener = createLoginListener()
         binding.managePlayersListener = createManagePlayersListener()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Do it here to be updated when coming back from ManagePlayersActivity
+        viewModel.playerList.observe(this, Observer {
+            binding.playerList = it
+        })
     }
 
     // TODO should move listener to viewModel ?

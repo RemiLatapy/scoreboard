@@ -10,6 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.Player
+import remi.scoreboard.data.PlayerList
 import remi.scoreboard.data.User
 import remi.scoreboard.repository.UserRepository
 import kotlin.coroutines.CoroutineContext
@@ -35,6 +36,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val avatar: LiveData<String> = Transformations.map(currentUser) { user -> user.avatar }
     val isLocal: LiveData<Boolean> = Transformations.map(currentUser) { user -> user.isLocalUser }
     val playerListSize: LiveData<Int> = Transformations.map(currentUser) { user -> user.playerList.size }
+    val playerList: LiveData<PlayerList> = Transformations.map(currentUser) { user -> user.playerList }
 
     override fun onCleared() {
         super.onCleared()

@@ -6,9 +6,13 @@
 
     <data>
 
+        <import type="java.util.List" />
+
+        <import type="remi.scoreboard.data.Player" />
+
         <variable
-            name="viewModel"
-            type="remi.scoreboard.viewmodel.UserViewModel" />
+            name="playerList"
+            type="List&lt;Player&gt;" />
 
         <variable
             name="clickListener"
@@ -65,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text='@{viewModel.playerListSize + " player(s)"}'
+            android:text='@{Integer.toString(playerList.size()) + " player(s)"}'
             android:textColor="@color/gray"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
