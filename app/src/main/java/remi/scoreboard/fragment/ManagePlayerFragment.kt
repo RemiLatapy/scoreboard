@@ -1,20 +1,42 @@
 package remi.scoreboard.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import remi.scoreboard.R
+import remi.scoreboard.adapter.PlayerAdapter
+import remi.scoreboard.data.MessageStatus
+import remi.scoreboard.data.Status
+import remi.scoreboard.databinding.FragmentManagePlayerBinding
+import remi.scoreboard.viewmodel.UserViewModel
 
 class ManagePlayerFragment : Fragment() {
+
+    private lateinit var userViewModel: UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        val userId = activity?.let {
-            ManagePlayerFragmentArgs.fromBundle(it.intent.extras).userId
+        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
+        // TODO loading state (ui + code)
+        userViewModel.deleteAllPlayerState.observe(this, Observer { showError(it) })
+        userViewModel.addPlayerState.observe(this, Observer { showError(it) })
+    }
+
+    private fun showError(ms: MessageStatus) {
+        if (ms.status == Status.ERROR) {
+            view?.let {
+                if (ms.message.isNotEmpty())
+                    Snackbar.make(it, ms.message, Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -22,8 +44,56 @@ class ManagePlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_manage_player, container, false)
+        val binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
+        binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
+
+        val playerListAdapter = PlayerAdapter()
+        binding.recycler.adapter = playerListAdapter
+
+        playerListAdapter.submitList(userViewModel.currentUser.value?.playerList)
+
+        userViewModel.currentUser.observe(this, Observer { user ->
+            binding.playerList = user.playerList
+            playerListAdapter.notifyDataSetChanged()
+            Log.d("PLAYER", "User update: $user")
+        })
+
+        return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_user, menu)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_add -> {
+                showAddPlayerDialog()
+                true
+            }
+            R.id.action_delete -> {
+                userViewModel.deleteAllPlayer()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showAddPlayerDialog() {
+        val builder: AlertDialog.Builder? = activity?.let {
+            AlertDialog.Builder(it)
+        }
+        builder?.let {
+            val view = layoutInflater.inflate(R.layout.dialog_new_user, null)
+            it.setTitle(R.string.create_user)
+                .setView(view)
+                .setPositiveButton(
+                    "Add"
+                ) { _, _ ->
+                    userViewModel.addPlayer(view.username.text.toString().trim())
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+    }
 }
