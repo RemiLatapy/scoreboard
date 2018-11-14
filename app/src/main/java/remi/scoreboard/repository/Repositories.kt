@@ -20,6 +20,7 @@ class UserRepository {
     val resetPasswordState = MutableLiveData<MessageStatus>()
     val addPlayerState = MutableLiveData<MessageStatus>()
     val deleteAllPlayerState = MutableLiveData<MessageStatus>()
+    val deletePlayerState = MutableLiveData<MessageStatus>()
     val signOutState = MutableLiveData<MessageStatus>()
 
     private val currentUserId = ParseUser.getCurrentUser()?.objectId ?: "0"
@@ -186,6 +187,24 @@ class UserRepository {
     }
 
     @WorkerThread
+    suspend fun deletePlayerOfCurrentUser(playerId: String) {
+        deletePlayerState.postValue(MessageStatus(Status.LOADING))
+        try {
+            ParseQuery.getQuery<ParseObject>("player").get(playerId).delete()
+            UserDao.deletePlayerOfUser(playerId, ParseUser.getCurrentUser().objectId)
+        } catch (e: Exception) {
+            when (e) {
+                is ParseException, is IllegalArgumentException, is NullPointerException, is UnsupportedOperationException -> {
+                    deletePlayerState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
+                    return
+                }
+                else -> throw e
+            }
+        }
+        deletePlayerState.postValue(MessageStatus(Status.SUCCESS))
+    }
+
+    @WorkerThread
     suspend fun signOut() {
         signOutState.postValue(MessageStatus(Status.LOADING))
         try {
@@ -196,6 +215,7 @@ class UserRepository {
 
         signOutState.postValue(MessageStatus(Status.SUCCESS))
     }
+
 }
 
 class MatchRepository {

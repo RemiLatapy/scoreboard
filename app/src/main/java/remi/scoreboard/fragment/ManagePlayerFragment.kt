@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import com.mikepenz.fastadapter.listeners.ClickEventHook
 import kotlinx.android.synthetic.main.dialog_new_user.view.*
+import kotlinx.android.synthetic.main.item_card_player.view.*
 import remi.scoreboard.R
 import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.Status
@@ -30,6 +34,7 @@ class ManagePlayerFragment : Fragment() {
 
         // TODO loading state (ui + code)
         userViewModel.deleteAllPlayerState.observe(this, Observer { showError(it) })
+        userViewModel.deletePlayerState.observe(this, Observer { showError(it) })
         userViewModel.addPlayerState.observe(this, Observer { showError(it) })
     }
 
@@ -52,12 +57,39 @@ class ManagePlayerFragment : Fragment() {
         val playerItemAdapter = ItemAdapter<PlayerItem>()
         val fastAdapter: FastAdapter<PlayerItem> = FastAdapter.with(playerItemAdapter)
 
-        fastAdapter.withSelectable(true)
-        fastAdapter.withOnClickListener { _, _, playerItem, _ ->
-            // TODO implement
-            Toast.makeText(context, "Click on ${playerItem.player}", Toast.LENGTH_SHORT).show()
-            true
-        }
+        fastAdapter.withEventHook(object : ClickEventHook<PlayerItem>() {
+            override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+                return (viewHolder as? PlayerItem.ViewHolder)?.itemView?.more_btn
+            }
+
+            override fun onClick(v: View, position: Int, fastAdapter: FastAdapter<PlayerItem>, playerItem: PlayerItem) {
+                context?.let {
+                    val popupMenu = PopupMenu(it, v)
+                    popupMenu.inflate(R.menu.popup_menu_player)
+                    popupMenu.setOnMenuItemClickListener { menuItem ->
+                        when (menuItem?.itemId) {
+                            R.id.action_rename_player -> {
+                                // TODO feature rename
+                                Toast.makeText(
+                                    context,
+                                    "Click rename option on ${playerItem.player}",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                                true
+                            }
+                            R.id.action_delete_player -> {
+                                userViewModel.deletePlayer(playerItem.player.id)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    popupMenu.show()
+                }
+                Toast.makeText(context, "Click more option on ${playerItem.player}", Toast.LENGTH_SHORT).show()
+            }
+        })
 
         binding.recycler.adapter = fastAdapter
 
@@ -74,11 +106,11 @@ class ManagePlayerFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.action_add -> {
+            R.id.action_add_player -> {
                 showAddPlayerDialog()
                 true
             }
-            R.id.action_delete -> {
+            R.id.action_delete_all_player -> {
                 userViewModel.deleteAllPlayer()
                 true
             }

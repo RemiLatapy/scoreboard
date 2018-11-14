@@ -46,7 +46,7 @@ class UserListFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_add -> {
+            R.id.action_add_player -> {
                 val builder: AlertDialog.Builder? = activity?.let {
                     AlertDialog.Builder(it)
                 }
@@ -76,7 +76,7 @@ class UserListFragment : Fragment() {
 //                )
                 true
             }
-            R.id.action_delete -> {
+            R.id.action_delete_all_player -> {
 //                userViewModel.deleteAll()
                 true
             }

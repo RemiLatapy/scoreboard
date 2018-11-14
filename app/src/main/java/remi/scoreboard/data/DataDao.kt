@@ -79,6 +79,18 @@ class UserDao {
                 close()
             }
         }
+
+        fun deletePlayerOfUser(playerId: String, userId: String) {
+            Realm.getDefaultInstance().run {
+                beginTransaction()
+                val user = where(User::class.java).equalTo("id", userId).findFirst()
+                if (user?.playerList?.removeIf { it.id == playerId } == true)
+                    commitTransaction()
+                else
+                    cancelTransaction()
+                close()
+            }
+        }
     }
 }
 
