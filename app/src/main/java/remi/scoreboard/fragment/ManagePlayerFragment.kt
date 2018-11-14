@@ -8,12 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import remi.scoreboard.R
-import remi.scoreboard.adapter.PlayerAdapter
 import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentManagePlayerBinding
+import remi.scoreboard.fastadapter.item.PlayerItem
 import remi.scoreboard.viewmodel.UserViewModel
 
 class ManagePlayerFragment : Fragment() {
@@ -47,14 +49,14 @@ class ManagePlayerFragment : Fragment() {
         val binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
 
-        val playerListAdapter = PlayerAdapter()
-        binding.recycler.adapter = playerListAdapter
 
-        playerListAdapter.submitList(userViewModel.currentUser.value?.playerList)
+        val playerItemAdapter = ItemAdapter<PlayerItem>()
+        val fastAdapter: FastAdapter<PlayerItem> = FastAdapter.with(playerItemAdapter)
+
+        binding.recycler.adapter = fastAdapter
 
         userViewModel.currentUser.observe(this, Observer { user ->
-            binding.playerList = user.playerList
-            playerListAdapter.notifyDataSetChanged()
+            playerItemAdapter.set(userViewModel.currentUser.value?.playerList?.map { PlayerItem(it) })
             Log.d("PLAYER", "User update: $user")
         })
 
