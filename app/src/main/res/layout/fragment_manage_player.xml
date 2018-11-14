@@ -33,7 +33,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="16dp"
             android:visibility="@{playerList.isEmpty ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_card_player" />
