@@ -11,12 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.parse.ParseUser
 import remi.scoreboard.activity.LoginSignupActivity
+import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentUserBinding
 import remi.scoreboard.viewmodel.UserViewModel
 
-// TODO fragment need to be 'recreate' when coming back from login activity to refresh view model with new current user id
 class UserFragment : Fragment() {
 
     private lateinit var binding: FragmentUserBinding
@@ -27,6 +26,19 @@ class UserFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         viewModel.userId.observe(this, Observer { userId = it })
+        viewModel.signOutState.observe(this, Observer { cb ->
+            when (cb.status) {
+                Status.SUCCESS -> {
+                    activity?.run {
+                        startActivity(Intent(this, LoginSignupActivity::class.java))
+                        finish()
+                    }
+                }
+                Status.ERROR -> Toast.makeText(context, "Sign out failed: ${cb.message}", Toast.LENGTH_SHORT).show()
+                else -> {
+                }
+            }
+        })
     }
 
     override fun onCreateView(
@@ -50,19 +62,7 @@ class UserFragment : Fragment() {
         })
     }
 
-    // TODO should move listener to viewModel ?
-    private fun createSignoutListener() = View.OnClickListener {
-        ParseUser.logOutInBackground { e ->
-            if (e == null) {
-                Toast.makeText(context, "Sign out succeed", Toast.LENGTH_SHORT).show()
-                activity?.run {
-                    startActivity(Intent(this, LoginSignupActivity::class.java))
-                    finish()
-                }
-            } else
-                Toast.makeText(context, "Sign out failed: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
+    private fun createSignoutListener() = View.OnClickListener { viewModel.signOut() }
 
     private fun createLoginListener() = View.OnClickListener {
         val action = UserFragmentDirections.actionLoginSignup()

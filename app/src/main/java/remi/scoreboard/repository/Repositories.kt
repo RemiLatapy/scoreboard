@@ -20,6 +20,7 @@ class UserRepository {
     val resetPasswordState = MutableLiveData<MessageStatus>()
     val addPlayerState = MutableLiveData<MessageStatus>()
     val deleteAllPlayerState = MutableLiveData<MessageStatus>()
+    val signOutState = MutableLiveData<MessageStatus>()
 
     private val currentUserId = ParseUser.getCurrentUser()?.objectId ?: "0"
     val currentUser = UserDao.load(currentUserId)
@@ -142,7 +143,8 @@ class UserRepository {
 
     fun loadUser(currentUserId: String): LiveData<User> = UserDao.load(currentUserId)
 
-    fun addPlayerToCurrentUser(player: Player) {
+    @WorkerThread
+    suspend fun addPlayerToCurrentUser(player: Player) {
         addPlayerState.postValue(MessageStatus(Status.LOADING))
 
         val parsePlayer = player.getParsePlayer()
@@ -164,7 +166,8 @@ class UserRepository {
         addPlayerState.postValue(MessageStatus(Status.SUCCESS))
     }
 
-    fun deleteAllPlayerOfCurrentUser() {
+    @WorkerThread
+    suspend fun deleteAllPlayerOfCurrentUser() {
         deleteAllPlayerState.postValue(MessageStatus(Status.LOADING))
         try {
             ParseQuery.getQuery<ParseObject>("player").find().forEach { it.delete() }
@@ -180,6 +183,18 @@ class UserRepository {
         }
 
         deleteAllPlayerState.postValue(MessageStatus(Status.SUCCESS))
+    }
+
+    @WorkerThread
+    suspend fun signOut() {
+        signOutState.postValue(MessageStatus(Status.LOADING))
+        try {
+            ParseUser.logOut()
+        } catch (e: ParseException) {
+            signOutState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
+        }
+
+        signOutState.postValue(MessageStatus(Status.SUCCESS))
     }
 }
 
