@@ -37,6 +37,5 @@ class PlayerItem(val player: Player) : AbstractItem<PlayerItem, PlayerItem.ViewH
                 executePendingBindings()
             }
         }
-
     }
 }

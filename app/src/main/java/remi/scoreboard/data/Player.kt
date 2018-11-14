@@ -25,4 +25,8 @@ open class Player(
         parsePlayer.put("avatar", avatar) // TODO upload file
         return parsePlayer
     }
+
+    override fun toString(): String {
+        return "player $username ($id)"
+    }
 }

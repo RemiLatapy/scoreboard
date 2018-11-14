@@ -1,8 +1,8 @@
 package remi.scoreboard.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -49,15 +49,20 @@ class ManagePlayerFragment : Fragment() {
         val binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
 
-
         val playerItemAdapter = ItemAdapter<PlayerItem>()
         val fastAdapter: FastAdapter<PlayerItem> = FastAdapter.with(playerItemAdapter)
+
+        fastAdapter.withSelectable(true)
+        fastAdapter.withOnClickListener { _, _, playerItem, _ ->
+            // TODO implement
+            Toast.makeText(context, "Click on ${playerItem.player}", Toast.LENGTH_SHORT).show()
+            true
+        }
 
         binding.recycler.adapter = fastAdapter
 
         userViewModel.currentUser.observe(this, Observer { user ->
             playerItemAdapter.set(userViewModel.currentUser.value?.playerList?.map { PlayerItem(it) })
-            Log.d("PLAYER", "User update: $user")
         })
 
         return binding.root
