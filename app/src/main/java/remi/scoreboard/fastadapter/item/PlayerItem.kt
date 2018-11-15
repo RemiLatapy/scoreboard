@@ -38,6 +38,7 @@ class PlayerItem(val player: Player) : AbstractItem<PlayerItem, PlayerItem.ViewH
         override fun bindView(item: PlayerItem, payloads: MutableList<Any>) {
             binding.apply {
                 player = item.player
+                matchNum.text = "not implemented yet" // TODO get number of match played
                 executePendingBindings()
             }
         }
