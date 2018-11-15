@@ -12,6 +12,10 @@ class PlayerItem(val player: Player) : AbstractItem<PlayerItem, PlayerItem.ViewH
         return R.id.fastadapter_player_id
     }
 
+    override fun getIdentifier(): Long {
+        return player.id.hashCode().toLong()
+    }
+
     override fun getViewHolder(v: View): ViewHolder {
         val binding = ItemCardPlayerBinding.bind(v)
         return ViewHolder(binding)

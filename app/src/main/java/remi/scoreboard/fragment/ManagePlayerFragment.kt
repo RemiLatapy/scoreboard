@@ -57,6 +57,7 @@ class ManagePlayerFragment : Fragment() {
         val playerItemAdapter = ItemAdapter<PlayerItem>()
         val fastAdapter: FastAdapter<PlayerItem> = FastAdapter.with(playerItemAdapter)
 
+        fastAdapter.setHasStableIds(true)
         fastAdapter.withEventHook(object : ClickEventHook<PlayerItem>() {
             override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
                 return (viewHolder as? PlayerItem.ViewHolder)?.itemView?.more_btn
@@ -94,7 +95,7 @@ class ManagePlayerFragment : Fragment() {
         binding.recycler.adapter = fastAdapter
 
         userViewModel.currentUser.observe(this, Observer { user ->
-            playerItemAdapter.set(userViewModel.currentUser.value?.playerList?.map { PlayerItem(it) })
+            playerItemAdapter.setNewList(user.playerList.map { PlayerItem(it) })
         })
 
         return binding.root
