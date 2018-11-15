@@ -95,8 +95,6 @@ class ManagePlayerFragment : Fragment() {
 
         binding.recycler.adapter = fastAdapter
 
-        fastAdapter.notifyAdapterDataSetChanged()
-
         userViewModel.currentUser.observe(this, Observer { user ->
             binding.playerList = user.playerList
             playerItemAdapter.setNewList(user.playerList.map { ManagePlayerItem(it) })

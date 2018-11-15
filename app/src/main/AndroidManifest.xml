@@ -27,7 +27,7 @@
             android:name=".activity.LoginSignupActivity"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".activity.PlayerActivity" />
+        <activity android:name=".activity.ChoosePlayerActivity" />
 
         <activity android:name=".activity.ManagePlayerActivity" />
 

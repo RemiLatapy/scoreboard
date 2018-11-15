@@ -20,12 +20,10 @@ class UserFragment : Fragment() {
 
     private lateinit var binding: FragmentUserBinding
     private lateinit var viewModel: UserViewModel
-    private var userId = "-1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        viewModel.userId.observe(this, Observer { userId = it })
         viewModel.playerList.observe(this, Observer { binding.playerList = it })
         viewModel.signOutState.observe(this, Observer { cb ->
             when (cb.status) {
@@ -63,7 +61,7 @@ class UserFragment : Fragment() {
     }
 
     private fun createManagePlayersListener() = View.OnClickListener {
-        val action = UserFragmentDirections.actionManagePlayers(userId)
+        val action = UserFragmentDirections.actionManagePlayers()
         findNavController().navigate(action)
     }
 }

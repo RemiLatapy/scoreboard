@@ -18,14 +18,11 @@ class ChoosePlayerFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var fastAdapter: FastAdapter<ChoosePlayerItem>
 
-    private var userId = "-1"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        userViewModel.userId.observe(this, Observer { userId = it })
     }
 
     override fun onCreateView(
@@ -39,22 +36,15 @@ class ChoosePlayerFragment : Fragment() {
         val playerItemAdapter = ItemAdapter<ChoosePlayerItem>()
         fastAdapter = FastAdapter.with(playerItemAdapter)
         fastAdapter.withSelectable(true)
+        fastAdapter.withMultiSelect(true)
         fastAdapter.setHasStableIds(true)
 
         binding.recycler.adapter = fastAdapter
 
-        fastAdapter.notifyAdapterDataSetChanged()
-
-        // https://stackoverflow.com/questions/49981734/observer-for-android-livedata-not-called-but-it-is-with-observeforever
         userViewModel.currentUser.observe(this, Observer { user ->
             binding.playerList = user.playerList
             playerItemAdapter.setNewList(user.playerList.map { ChoosePlayerItem(it) })
         })
-
-//        userViewModel.currentUser.observeForever { user ->
-//            binding.playerList = user.playerList
-//            playerItemAdapter.setNewList(user.playerList.map { ChoosePlayerItem(it) })
-//        }
 
         return binding.root
     }
@@ -74,7 +64,7 @@ class ChoosePlayerFragment : Fragment() {
     }
 
     private fun startManagePlayerActivity() {
-        val action = ChoosePlayerFragmentDirections.actionManagePlayers(userId)
+        val action = ChoosePlayerFragmentDirections.actionManagePlayers()
         findNavController().navigate(action)
     }
 }
