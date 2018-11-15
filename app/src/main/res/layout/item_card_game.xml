@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener" />
-
-        <variable
             name="game"
             type="remi.scoreboard.data.Game" />
     </data>
@@ -18,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginBottom="4dp"
-        android:onClick="@{clickListener}"
         app:cardCornerRadius="4dp"
         app:cardUseCompatPadding="true">
 
