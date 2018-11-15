@@ -52,7 +52,7 @@ class UserListFragment : Fragment() {
                 }
                 builder?.let {
                     val view = layoutInflater.inflate(R.layout.dialog_new_user, null)
-                    it.setTitle(R.string.create_user)
+                    it.setTitle(R.string.create_player)
                         .setView(view)
                         .setPositiveButton(
                             "Add"

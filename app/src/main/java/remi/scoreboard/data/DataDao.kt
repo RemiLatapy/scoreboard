@@ -91,6 +91,23 @@ class UserDao {
                 close()
             }
         }
+
+        fun renamePlayerOfUser(playerId: String, newPlayerName: String, userId: String?) {
+            Realm.getDefaultInstance().run {
+                beginTransaction()
+                val user = where(User::class.java).equalTo("id", userId).findFirst()
+                if (user != null) {
+                    val player = user.playerList.find { it.id == playerId }
+                    if (player != null) {
+                        player.username = newPlayerName
+                        commitTransaction()
+                    } else
+                        cancelTransaction()
+                } else
+                    cancelTransaction()
+                close()
+            }
+        }
     }
 }
 

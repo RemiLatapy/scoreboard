@@ -29,7 +29,8 @@
     <string name="avatar_desc">avatar</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
-    <string name="create_user">Create user</string>
+    <string name="create_player">Create player</string>
+    <string name="rename">Rename</string>
     <string name="games">Games</string>
     <string name="stats">Stats</string>
     <string name="title_activity_login">Sign in</string>

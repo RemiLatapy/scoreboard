@@ -25,6 +25,7 @@ import remi.scoreboard.viewmodel.UserViewModel
 class ManagePlayerFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
+    private lateinit var fastAdapter: FastAdapter<PlayerItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,12 @@ class ManagePlayerFragment : Fragment() {
         // TODO loading state (ui + code)
         userViewModel.deleteAllPlayerState.observe(this, Observer { showError(it) })
         userViewModel.deletePlayerState.observe(this, Observer { showError(it) })
+        userViewModel.renamePlayerState.observe(this, Observer {
+            if (it.status == Status.SUCCESS)
+                fastAdapter.notifyAdapterDataSetChanged()
+            else
+                showError(it)
+        })
         userViewModel.addPlayerState.observe(this, Observer { showError(it) })
     }
 
@@ -55,7 +62,7 @@ class ManagePlayerFragment : Fragment() {
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
 
         val playerItemAdapter = ItemAdapter<PlayerItem>()
-        val fastAdapter: FastAdapter<PlayerItem> = FastAdapter.with(playerItemAdapter)
+        fastAdapter = FastAdapter.with(playerItemAdapter)
 
         fastAdapter.setHasStableIds(true)
         fastAdapter.withEventHook(object : ClickEventHook<PlayerItem>() {
@@ -70,13 +77,7 @@ class ManagePlayerFragment : Fragment() {
                     popupMenu.setOnMenuItemClickListener { menuItem ->
                         when (menuItem?.itemId) {
                             R.id.action_rename_player -> {
-                                // TODO feature rename
-                                Toast.makeText(
-                                    context,
-                                    "Click rename option on ${playerItem.player}",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
+                                showRenamePlayerDialog(playerItem)
                                 true
                             }
                             R.id.action_delete_player -> {
@@ -93,6 +94,8 @@ class ManagePlayerFragment : Fragment() {
         })
 
         binding.recycler.adapter = fastAdapter
+
+        fastAdapter.notifyAdapterDataSetChanged()
 
         userViewModel.currentUser.observe(this, Observer { user ->
             playerItemAdapter.setNewList(user.playerList.map { PlayerItem(it) })
@@ -125,12 +128,31 @@ class ManagePlayerFragment : Fragment() {
         }
         builder?.let {
             val view = layoutInflater.inflate(R.layout.dialog_new_user, null)
-            it.setTitle(R.string.create_user)
+            it.setTitle(R.string.create_player)
                 .setView(view)
                 .setPositiveButton(
                     "Add"
                 ) { _, _ ->
                     userViewModel.addPlayer(view.username.text.toString().trim())
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+    }
+
+    private fun showRenamePlayerDialog(playerItem: PlayerItem) {
+        val builder: AlertDialog.Builder? = activity?.let {
+            AlertDialog.Builder(it)
+        }
+        builder?.let {
+            val view = layoutInflater.inflate(R.layout.dialog_new_user, null)
+            view.username.setText(playerItem.player.username)
+            it.setTitle("Rename ${playerItem.player.username}")
+                .setView(view)
+                .setPositiveButton(
+                    "Rename"
+                ) { _, _ ->
+                    userViewModel.renamePlayer(playerItem.player.id, view.username.text.toString().trim())
                 }
                 .setNegativeButton("Cancel", null)
                 .show()

@@ -21,6 +21,7 @@ class UserRepository {
     val addPlayerState = MutableLiveData<MessageStatus>()
     val deleteAllPlayerState = MutableLiveData<MessageStatus>()
     val deletePlayerState = MutableLiveData<MessageStatus>()
+    val renamePlayerState = MutableLiveData<MessageStatus>()
     val signOutState = MutableLiveData<MessageStatus>()
 
     private val currentUserId = ParseUser.getCurrentUser()?.objectId ?: "0"
@@ -214,6 +215,27 @@ class UserRepository {
         }
 
         signOutState.postValue(MessageStatus(Status.SUCCESS))
+    }
+
+    @WorkerThread
+    suspend
+    fun renamePlayerOfCurrentUser(playerId: String, newPlayerName: String) {
+        renamePlayerState.postValue(MessageStatus(Status.LOADING))
+        try {
+            val parsePlayer = ParseQuery.getQuery<ParseObject>("player").get(playerId)
+            parsePlayer.put("username", newPlayerName)
+            parsePlayer.save()
+            UserDao.renamePlayerOfUser(playerId, newPlayerName, ParseUser.getCurrentUser().objectId)
+        } catch (e: Exception) {
+            when (e) {
+                is ParseException, is IllegalArgumentException, is NullPointerException, is UnsupportedOperationException -> {
+                    renamePlayerState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
+                    return
+                }
+                else -> throw e
+            }
+        }
+        renamePlayerState.postValue(MessageStatus(Status.SUCCESS))
     }
 
 }
