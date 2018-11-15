@@ -29,6 +29,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     val addPlayerState: LiveData<MessageStatus> = userRepository.addPlayerState
     val deleteAllPlayerState: LiveData<MessageStatus> = userRepository.deleteAllPlayerState
+    val deletePlayerState: LiveData<MessageStatus> = userRepository.deletePlayerState
+    val renamePlayerState: LiveData<MessageStatus> = userRepository.renamePlayerState
     val signOutState: LiveData<MessageStatus> = userRepository.signOutState
 
     val userId: LiveData<String> = Transformations.map(currentUser) { user -> user.id }
@@ -59,5 +61,13 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun signOut() {
         scope.launch(Dispatchers.IO) { userRepository.signOut() }
+    }
+
+    fun deletePlayer(playerId: String) {
+        scope.launch(Dispatchers.IO) { userRepository.deletePlayerOfCurrentUser(playerId) }
+    }
+
+    fun renamePlayer(playerId: String, newPlayerName: String) {
+        scope.launch(Dispatchers.IO) { userRepository.renamePlayerOfCurrentUser(playerId, newPlayerName) }
     }
 }

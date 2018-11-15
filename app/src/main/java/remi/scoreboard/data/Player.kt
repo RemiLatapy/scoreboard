@@ -5,11 +5,12 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import io.realm.annotations.RealmNamingPolicy
+import io.realm.annotations.Required
 
 @RealmClass(fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 open class Player(
     @PrimaryKey var id: String = "-1",
-    var username: String = "default_name",
+    @Required var username: String = "default_name",
     var avatar: String = "file:///android_asset/dafault_avatar.png"
 ) : RealmObject() {
 
@@ -24,5 +25,9 @@ open class Player(
         parsePlayer.put("username", username)
         parsePlayer.put("avatar", avatar) // TODO upload file
         return parsePlayer
+    }
+
+    override fun toString(): String {
+        return "player $username ($id)"
     }
 }
