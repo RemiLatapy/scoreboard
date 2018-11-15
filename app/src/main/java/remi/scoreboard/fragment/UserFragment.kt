@@ -26,6 +26,7 @@ class UserFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         viewModel.userId.observe(this, Observer { userId = it })
+        viewModel.playerList.observe(this, Observer { binding.playerList = it })
         viewModel.signOutState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
@@ -52,14 +53,6 @@ class UserFragment : Fragment() {
         binding.loginListener = createLoginListener()
         binding.managePlayersListener = createManagePlayersListener()
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Do it here to be updated when coming back from ManagePlayersActivity
-        viewModel.playerList.observe(this, Observer {
-            binding.playerList = it
-        })
     }
 
     private fun createSignoutListener() = View.OnClickListener { viewModel.signOut() }

@@ -14,18 +14,18 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 import kotlinx.android.synthetic.main.dialog_new_user.view.*
-import kotlinx.android.synthetic.main.item_card_player.view.*
+import kotlinx.android.synthetic.main.item_card_manage_player.view.*
 import remi.scoreboard.R
 import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentManagePlayerBinding
-import remi.scoreboard.fastadapter.item.PlayerItem
+import remi.scoreboard.fastadapter.item.ManagePlayerItem
 import remi.scoreboard.viewmodel.UserViewModel
 
 class ManagePlayerFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
-    private lateinit var fastAdapter: FastAdapter<PlayerItem>
+    private lateinit var fastAdapter: FastAdapter<ManagePlayerItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,16 +61,16 @@ class ManagePlayerFragment : Fragment() {
         val binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
 
-        val playerItemAdapter = ItemAdapter<PlayerItem>()
+        val playerItemAdapter = ItemAdapter<ManagePlayerItem>()
         fastAdapter = FastAdapter.with(playerItemAdapter)
 
         fastAdapter.setHasStableIds(true)
-        fastAdapter.withEventHook(object : ClickEventHook<PlayerItem>() {
+        fastAdapter.withEventHook(object : ClickEventHook<ManagePlayerItem>() {
             override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-                return (viewHolder as? PlayerItem.ViewHolder)?.itemView?.more_btn
+                return (viewHolder as? ManagePlayerItem.ViewHolder)?.itemView?.more_btn
             }
 
-            override fun onClick(v: View, position: Int, fastAdapter: FastAdapter<PlayerItem>, playerItem: PlayerItem) {
+            override fun onClick(v: View, position: Int, fastAdapter: FastAdapter<ManagePlayerItem>, playerItem: ManagePlayerItem) {
                 context?.let {
                     val popupMenu = PopupMenu(it, v)
                     popupMenu.inflate(R.menu.popup_menu_player)
@@ -98,14 +98,15 @@ class ManagePlayerFragment : Fragment() {
         fastAdapter.notifyAdapterDataSetChanged()
 
         userViewModel.currentUser.observe(this, Observer { user ->
-            playerItemAdapter.setNewList(user.playerList.map { PlayerItem(it) })
+            binding.playerList = user.playerList
+            playerItemAdapter.setNewList(user.playerList.map { ManagePlayerItem(it) })
         })
 
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.menu_user, menu)
+        inflater?.inflate(R.menu.menu_manage_player, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -140,7 +141,7 @@ class ManagePlayerFragment : Fragment() {
         }
     }
 
-    private fun showRenamePlayerDialog(playerItem: PlayerItem) {
+    private fun showRenamePlayerDialog(playerItem: ManagePlayerItem) {
         val builder: AlertDialog.Builder? = activity?.let {
             AlertDialog.Builder(it)
         }

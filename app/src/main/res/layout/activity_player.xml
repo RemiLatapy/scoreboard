@@ -29,5 +29,5 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        app:navGraph="@navigation/player_nav_graph" />
+        app:navGraph="@navigation/choose_player_nav_graph" />
 </LinearLayout>

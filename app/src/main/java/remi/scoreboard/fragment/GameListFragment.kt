@@ -35,7 +35,7 @@ class GameListFragment : Fragment() {
         binding.recycler.adapter = fastAdapter
 
         gameViewModel.allGames.observe(this,
-            Observer { gameList -> gameList?.let { gameItemAdapter.set(it.map { GameItem(it) }) } })
+            Observer { gameList -> gameList?.let { gameItemAdapter.set(it.map { game -> GameItem(game) }) } })
 
         return binding.root
     }

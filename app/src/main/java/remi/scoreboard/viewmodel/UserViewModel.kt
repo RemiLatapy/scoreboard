@@ -38,7 +38,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val email: LiveData<String> = Transformations.map(currentUser) { user -> user.email }
     val avatar: LiveData<String> = Transformations.map(currentUser) { user -> user.avatar }
     val isLocal: LiveData<Boolean> = Transformations.map(currentUser) { user -> user.isLocalUser }
-    val playerListSize: LiveData<Int> = Transformations.map(currentUser) { user -> user.playerList.size }
     val playerList: LiveData<PlayerList> = Transformations.map(currentUser) { user -> user.playerList }
 
     override fun onCleared() {

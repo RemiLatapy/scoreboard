@@ -8,10 +8,6 @@
         <variable
             name="player"
             type="remi.scoreboard.data.Player" />
-
-        <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -20,7 +16,6 @@
         android:background="@color/white"
         app:cardCornerRadius="4dp"
         app:cardUseCompatPadding="true">
-        <!--card_view:cardBackgroundColor="@color/cardview_background">-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout4"

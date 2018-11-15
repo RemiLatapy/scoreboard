@@ -36,7 +36,7 @@
             android:layout_marginBottom="16dp"
             android:visibility="@{playerList.isEmpty ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_card_player" />
+            tools:listitem="@layout/item_card_manage_player" />
 
         <LinearLayout
             android:layout_width="wrap_content"
