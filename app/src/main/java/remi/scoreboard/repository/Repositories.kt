@@ -121,6 +121,13 @@ class UserRepository {
     }
 
     @WorkerThread
+    suspend fun updateCurrentUser() {
+        ParseUser.getCurrentUser().fetch()
+        val players = ParseQuery.getQuery<ParseObject>("player").find()
+        UserDao.insertOrUpdate(User(ParseUser.getCurrentUser(), players))
+    }
+
+    @WorkerThread
     suspend fun resetPassword(email: String) {
         resetPasswordState.postValue(MessageStatus(Status.LOADING))
 

@@ -69,4 +69,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun renamePlayer(playerId: String, newPlayerName: String) {
         scope.launch(Dispatchers.IO) { userRepository.renamePlayerOfCurrentUser(playerId, newPlayerName) }
     }
+
+    fun updateUser() {
+        scope.launch(Dispatchers.IO) { userRepository.updateCurrentUser() }
+    }
 }
