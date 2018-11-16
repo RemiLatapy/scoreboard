@@ -11,6 +11,8 @@ class GameItem(val game: Game) : AbstractItem<GameItem, GameItem.ViewHolder>() {
 
     override fun getType() = R.id.fastadapter_game_id
 
+    override fun getIdentifier() = game.id.hashCode().toLong()
+
     override fun getViewHolder(v: View): ViewHolder {
         val binding = ItemCardGameBinding.bind(v)
         return ViewHolder(binding)
