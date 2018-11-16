@@ -1,5 +1,6 @@
 package remi.scoreboard.fragment
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
@@ -88,7 +89,14 @@ class ManagePlayerFragment : Fragment() {
                 fastAdapter: FastAdapter<ManagePlayerItem>,
                 playerItem: ManagePlayerItem
             ) {
-                userViewModel.deletePlayer(playerItem.player.id)
+                activity?.let {
+                    AlertDialog.Builder(it)
+                        .setTitle(getString(R.string.confirm_delete_player_format, playerItem.player.username))
+                        .setPositiveButton(R.string.action_delete) { _: DialogInterface, _: Int ->
+                            userViewModel.deletePlayer(playerItem.player.id)
+                        }.setNegativeButton(R.string.action_cancel, null)
+                        .show()
+                }
             }
         })
 
@@ -120,7 +128,15 @@ class ManagePlayerFragment : Fragment() {
                 true
             }
             R.id.action_delete_all_player -> {
-                userViewModel.deleteAllPlayer()
+                activity?.let {
+                    AlertDialog.Builder(it)
+                        .setTitle(R.string.confirm_delete_all_player)
+                        .setMessage(R.string.delete_all_player_message)
+                        .setPositiveButton(R.string.action_delete) { _: DialogInterface, _: Int ->
+                            userViewModel.deleteAllPlayer()
+                        }.setNegativeButton(R.string.action_cancel, null)
+                        .show()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
