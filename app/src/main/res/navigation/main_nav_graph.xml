@@ -43,14 +43,10 @@
     <activity
         android:id="@+id/manage_player_activity_dest"
         android:name="remi.scoreboard.activity.ManagePlayerActivity"
-        android:label="Manage players">
-        <argument
-            android:name="userId"
-            app:argType="string" />
-    </activity>
+        android:label="Manage players"/>
     <activity
         android:id="@+id/player_activity_dest"
-        android:name="remi.scoreboard.activity.PlayerActivity"
+        android:name="remi.scoreboard.activity.ChoosePlayerActivity"
         android:label="Players">
         <argument
             android:name="gameId"

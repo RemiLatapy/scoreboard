@@ -8,19 +8,15 @@
         <variable
             name="player"
             type="remi.scoreboard.data.Player" />
-
-        <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="85dp"
         android:background="@color/white"
+        app:cardBackgroundColor="@color/cardview_background"
         app:cardCornerRadius="4dp"
         app:cardUseCompatPadding="true">
-        <!--card_view:cardBackgroundColor="@color/cardview_background">-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout4"
@@ -45,39 +41,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
                 android:text="@{player.username}"
                 android:textColor="@color/colorPrimary"
                 android:textSize="30sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/avatar"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="John" />
 
-            <TextView
-                android:id="@+id/match_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="TextView"
-                android:textColor="@color/gray"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView"
-                tools:text="25 matchs" />
-
-            <ImageButton
-                android:id="@+id/more_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_more_vert_black_24dp"
-                android:tint="@color/gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

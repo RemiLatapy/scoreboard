@@ -86,6 +86,7 @@ public class LiveRealmObject<T extends RealmModel> extends LiveData<T> {
         super.onActive();
         T object = getValue();
         if (object != null && RealmObject.isValid(object)) {
+            setValue(object);
             RealmObject.addChangeListener(object, listener);
         }
     }
