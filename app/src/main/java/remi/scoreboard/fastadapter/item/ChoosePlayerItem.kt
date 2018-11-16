@@ -32,7 +32,6 @@ class ChoosePlayerItem(val player: Player) : AbstractItem<ChoosePlayerItem, Choo
         override fun bindView(item: ChoosePlayerItem, payloads: MutableList<Any>) {
             binding.apply {
                 player = item.player
-                matchNum.text = "not implemented yet" // TODO get number of match played
                 executePendingBindings()
             }
         }

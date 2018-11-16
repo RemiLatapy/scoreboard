@@ -28,6 +28,18 @@ class ChoosePlayerFragment : Fragment() {
         setHasOptionsMenu(true)
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
+        fastAdapter = getFastAdapter()
+        selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
+    }
+
+    private fun getFastAdapter(): FastAdapter<ChoosePlayerItem> {
+        val playerItemAdapter = ItemAdapter<ChoosePlayerItem>()
+        val adapter: FastAdapter<ChoosePlayerItem> = FastAdapter.with(playerItemAdapter)
+        adapter.withSelectable(true)
+        adapter.withMultiSelect(true)
+        adapter.setHasStableIds(true)
+        return adapter
     }
 
     override fun onCreateView(
@@ -37,26 +49,18 @@ class ChoosePlayerFragment : Fragment() {
         val binding = FragmentChoosePlayerBinding.inflate(inflater, container, false)
 
         binding.managePlayerListener = View.OnClickListener { startManagePlayerActivity() }
-
-        val playerItemAdapter = ItemAdapter<ChoosePlayerItem>()
-        fastAdapter = FastAdapter.with(playerItemAdapter)
-        fastAdapter.withSelectable(true)
-        fastAdapter.withMultiSelect(true)
-        fastAdapter.setHasStableIds(true)
-
-        selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
-
         binding.recycler.adapter = fastAdapter
 
         userViewModel.currentUser.observe(this, Observer { user ->
             Log.d("PLAYER", "Current user observe called $user")
             binding.playerList = user.playerList
-            playerItemAdapter.setNewList(user.playerList.map { ChoosePlayerItem(it) })
-        })
+            (fastAdapter.adapter(0) as? ItemAdapter<ChoosePlayerItem>)
+                ?.setNewList(user.playerList.map { ChoosePlayerItem(it) })
 
-        savedInstanceState?.let {
-            fastAdapter.withSavedInstanceState(it)
-        }
+            savedInstanceState?.let {
+                fastAdapter.withSavedInstanceState(it)
+            }
+        })
 
         return binding.root
     }
@@ -86,8 +90,8 @@ class ChoosePlayerFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        fastAdapter.saveInstanceState(outState)
-        super.onSaveInstanceState(outState)
+        val newOutState = fastAdapter.saveInstanceState(outState)
+        super.onSaveInstanceState(newOutState)
     }
 
     private fun startManagePlayerActivity() {

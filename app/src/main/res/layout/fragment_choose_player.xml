@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:visibility="@{playerList.isEmpty ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_card_manage_player" />
+            tools:listitem="@layout/item_card_choose_player" />
 
         <LinearLayout
             android:layout_width="wrap_content"

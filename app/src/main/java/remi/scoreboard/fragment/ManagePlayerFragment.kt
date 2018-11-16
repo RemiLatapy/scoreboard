@@ -2,9 +2,7 @@ package remi.scoreboard.fragment
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -32,6 +30,8 @@ class ManagePlayerFragment : Fragment() {
         setHasOptionsMenu(true)
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
+        fastAdapter = getFastAdapter()
 
         // TODO loading state (ui + code)
         userViewModel.deleteAllPlayerState.observe(this, Observer { showError(it) })
@@ -61,46 +61,52 @@ class ManagePlayerFragment : Fragment() {
         val binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
 
-        val playerItemAdapter = ItemAdapter<ManagePlayerItem>()
-        fastAdapter = FastAdapter.with(playerItemAdapter)
-
-        fastAdapter.setHasStableIds(true)
-        fastAdapter.withEventHook(object : ClickEventHook<ManagePlayerItem>() {
-            override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
-                return (viewHolder as? ManagePlayerItem.ViewHolder)?.itemView?.more_btn
-            }
-
-            override fun onClick(v: View, position: Int, fastAdapter: FastAdapter<ManagePlayerItem>, playerItem: ManagePlayerItem) {
-                context?.let {
-                    val popupMenu = PopupMenu(it, v)
-                    popupMenu.inflate(R.menu.popup_menu_player)
-                    popupMenu.setOnMenuItemClickListener { menuItem ->
-                        when (menuItem?.itemId) {
-                            R.id.action_rename_player -> {
-                                showRenamePlayerDialog(playerItem)
-                                true
-                            }
-                            R.id.action_delete_player -> {
-                                userViewModel.deletePlayer(playerItem.player.id)
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-                    popupMenu.show()
-                }
-                Toast.makeText(context, "Click more option on ${playerItem.player}", Toast.LENGTH_SHORT).show()
-            }
-        })
-
         binding.recycler.adapter = fastAdapter
 
         userViewModel.currentUser.observe(this, Observer { user ->
             binding.playerList = user.playerList
-            playerItemAdapter.setNewList(user.playerList.map { ManagePlayerItem(it) })
+            (fastAdapter.adapter(0) as? ItemAdapter<ManagePlayerItem>)
+                ?.setNewList(user.playerList.map { ManagePlayerItem(it) })
         })
 
         return binding.root
+    }
+
+    private fun getFastAdapter(): FastAdapter<ManagePlayerItem> {
+        val playerItemAdapter = ItemAdapter<ManagePlayerItem>()
+        val adapter: FastAdapter<ManagePlayerItem> = FastAdapter.with(playerItemAdapter)
+
+        adapter.setHasStableIds(true)
+        adapter.withEventHook(object : ClickEventHook<ManagePlayerItem>() {
+            override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+                return (viewHolder as? ManagePlayerItem.ViewHolder)?.itemView?.btn_delete
+            }
+
+            override fun onClick(
+                v: View,
+                position: Int,
+                fastAdapter: FastAdapter<ManagePlayerItem>,
+                playerItem: ManagePlayerItem
+            ) {
+                userViewModel.deletePlayer(playerItem.player.id)
+            }
+        })
+
+        adapter.withEventHook(object : ClickEventHook<ManagePlayerItem>() {
+            override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
+                return (viewHolder as? ManagePlayerItem.ViewHolder)?.itemView?.btn_edit
+            }
+
+            override fun onClick(
+                v: View,
+                position: Int,
+                fastAdapter: FastAdapter<ManagePlayerItem>,
+                playerItem: ManagePlayerItem
+            ) {
+                showRenamePlayerDialog(playerItem)
+            }
+        })
+        return adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

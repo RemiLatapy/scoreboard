@@ -32,7 +32,8 @@ class ManagePlayerItem(val player: Player) : AbstractItem<ManagePlayerItem, Mana
         override fun bindView(item: ManagePlayerItem, payloads: MutableList<Any>) {
             binding.apply {
                 player = item.player
-                matchNum.text = "not implemented yet" // TODO get number of match played
+                matchNum.text = "12 games played" // TODO get number of match played
+                lastGameDate.text = "Played last on 16/04/2019" // TODO get last game date
                 executePendingBindings()
             }
         }
