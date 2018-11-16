@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -8,41 +7,40 @@
 
         <import type="android.view.View" />
 
+        <import type="remi.scoreboard.data.Player" />
+
+        <import type="java.util.List" />
+
         <variable
-            name="displayEmptyView"
-            type="Boolean" />
+            name="playerList"
+            type="List&lt;Player&gt;" />
+
+        <variable
+            name="managePlayerListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".activity.MainActivity" >
+        tools:context=".activity.MainActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginBottom="12dp"
-            android:visibility="@{displayEmptyView ? View.GONE : View.VISIBLE}"
+            android:layout_height="match_parent"
+            android:visibility="@{playerList.isEmpty ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".activity.ActivityMain"
-            tools:listitem="@layout/item_card_match" />
+            tools:listitem="@layout/item_card_choose_player" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="@{displayEmptyView ? View.VISIBLE : View.GONE}"
+            android:visibility="@{playerList.isEmpty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,14 +50,23 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:tint="@color/gray"
-                app:srcCompat="@drawable/ic_poll_black_24dp" />
+                app:srcCompat="@drawable/ic_people_outline_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/empty_text_stats"
+                android:text="You don't have any player yet"
                 android:textColor="@color/gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Manage players"
+                android:textColor="@color/colorPrimary"
+                android:onClick="@{managePlayerListener}"
+                android:theme="@style/Base.Widget.AppCompat.Button.Borderless" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,7 +59,7 @@
                 android:layout_below="@id/player_num"
                 android:layout_gravity="center_vertical"
                 android:layout_toEndOf="@+id/avatar"
-                android:text="@{playerScore.player.name}"
+                android:text="@{playerScore.player.username}"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="24sp"
                 tools:text="John" />

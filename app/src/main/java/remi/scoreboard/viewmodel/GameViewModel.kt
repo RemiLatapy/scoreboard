@@ -33,4 +33,8 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun insert(gameList: List<Game>) = scope.launch(Dispatchers.IO) { repository.insert(gameList) }
 
     fun deleteAll() = scope.launch(Dispatchers.IO) { repository.deleteAll() }
+
+    fun updateGameList() {
+        scope.launch { repository.updateGameList() }
+    }
 }

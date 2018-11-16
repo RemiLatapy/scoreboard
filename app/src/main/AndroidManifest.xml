@@ -21,21 +21,16 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/app_name" />
+        <activity android:name=".activity.MainActivity" />
 
         <activity
             android:name=".activity.LoginSignupActivity"
-            android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".activity.PlayerActivity"
-            android:label="@string/title_activity_player" />
+        <activity android:name=".activity.ChoosePlayerActivity" />
+
+        <activity android:name=".activity.ManagePlayerActivity" />
 
         <activity android:name=".activity.PlayActivity" />
-
     </application>
-
 </manifest>

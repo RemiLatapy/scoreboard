@@ -31,10 +31,10 @@ class SignupFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_signup, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(activity!!).get(LoginSignupViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(LoginSignupViewModel::class.java)
 
 //        // Observe current user changes (aka callback from create user flow)
 //        viewModel.currentUser.observe(this, Observer { resUser ->

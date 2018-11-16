@@ -25,11 +25,12 @@
     <string name="settings">Settings</string>
     <string name="action_add">Add player</string>
     <string name="action_search">Search player</string>
-    <string name="action_delete">Delete all</string>
+    <string name="action_delete_all">Delete all</string>
     <string name="avatar_desc">avatar</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
-    <string name="create_user">Create user</string>
+    <string name="create_player">Create player</string>
+    <string name="rename">Rename</string>
     <string name="games">Games</string>
     <string name="stats">Stats</string>
     <string name="title_activity_login">Sign in</string>
@@ -48,13 +49,21 @@
     <string name="my_account">My account</string>
     <string name="login_text_btn">Log in</string>
     <string name="signup_text_btn">Sign up</string>
+    <string name="signout_text_btn">Sign out</string>
     <string name="skip_login">Skip login</string>
     <string name="prompt_username">Username</string>
     <string name="CLIENT_KEY">v3ldp8zuBRNIBMywlFx2BEWZ1b256SlIERKW097l</string>
     <string name="APP_ID">D4UigXmGn9LFJ9r5tDt9Ndn4KZuW6KBXORD8BNMG</string>
     <string name="PARSE_SERVER_URL">https://server.lunabee.studio:9008/gameScoring/</string>
-    <string name="sign_out_btn">Sign out</string>
     <string name="link_forgot_password">Forgot Password</string>
     <string name="link_skip_login">Continue without log in</string>
     <string name="link_sign_up">Create account</string>
+    <string name="empty_text_stats">Played games will appear here</string>
+    <string name="empty_text_add_players">Start adding your first player</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_manage_player">Manage players</string>
 </resources>

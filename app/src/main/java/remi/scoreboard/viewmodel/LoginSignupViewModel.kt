@@ -51,7 +51,7 @@ class LoginSignupViewModel : ViewModel() {
     }
 
     fun loginUser(username: String, password: String) {
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
             userRepository.loginUser(username = username,password =  password)
         }
     }

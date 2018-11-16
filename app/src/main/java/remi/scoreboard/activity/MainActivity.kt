@@ -5,17 +5,22 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import remi.scoreboard.R
+import remi.scoreboard.viewmodel.GameViewModel
+import remi.scoreboard.viewmodel.UserViewModel
 
 // TODO user merger to use is user finally log in and don't want to lose his local matches/players
 
-class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +33,17 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
             .findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment? ?: return
         val navController = host.navController
 
-//        setupActionBarWithNavController(navController)
+        val actionBarConfig = AppBarConfiguration(setOf(R.id.game_list_dest, R.id.stats_dest, R.id.user_dest))
+        setupActionBarWithNavController(navController, actionBarConfig)
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
         bottomNav?.setupWithNavController(navController)
+
+        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+        gameViewModel.updateGameList()
+
+        val userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        userViewModel.updateUser()
 
         // TODO is it the right place to prepopulate DB -- (temp) disable offline mode
 //        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
@@ -54,13 +66,4 @@ class MainActivity : AppCompatActivity(), TempToolbarTitleListener {
         return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment_main))
                 || super.onOptionsItemSelected(item)
     }
-
-    // https://stackoverflow.com/questions/50599238/dynamic-actionbar-title-from-a-fragment-using-androidx-navigation
-    override fun updateTitle(title: String) {
-        findViewById<Toolbar>(R.id.toolbar).title = title
-    }
-}
-
-interface TempToolbarTitleListener {
-    fun updateTitle(title: String)
 }

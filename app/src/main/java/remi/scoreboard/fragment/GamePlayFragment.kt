@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import remi.scoreboard.R
-import remi.scoreboard.adapter.PlayerAdapter
+import remi.scoreboard.adapter.PlayerScoreAdapter
 import remi.scoreboard.databinding.FragmentGamePlayBinding
 
 class GamePlayFragment : Fragment() {
@@ -19,7 +19,7 @@ class GamePlayFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentGamePlayBinding.inflate(inflater, container, false)
 
-        val adapter = PlayerAdapter()
+        val adapter = PlayerScoreAdapter()
         binding.recycler.adapter = adapter
 
         // TODO submit list of playerscore & observe

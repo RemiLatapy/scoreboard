@@ -5,14 +5,24 @@
 
     <fragment
         android:id="@+id/player_list_dest"
-        android:name="remi.scoreboard.fragment.UserListFragment"
+        android:name="remi.scoreboard.fragment.ChoosePlayerFragment"
         android:label="Players">
         <action
             android:id="@+id/nextAction"
             app:destination="@id/playActivity" />
+        <argument
+            android:name="gameId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_manage_players"
+            app:destination="@+id/manage_player_fragment" />
     </fragment>
     <activity
         android:id="@+id/playActivity"
         android:name="remi.scoreboard.activity.PlayActivity"
         android:label="PlayActivity" />
+    <fragment
+        android:id="@+id/manage_player_fragment"
+        android:name="remi.scoreboard.fragment.ManagePlayerFragment"
+        android:label="Manage players" />
 </navigation>

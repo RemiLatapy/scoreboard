@@ -11,6 +11,6 @@
         android:paddingRight="12dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context=".activity.ActivityMain"
-        tools:listitem="@layout/item_card_player" />
+        tools:listitem="@layout/item_card_playerscore" />
 
 </layout>

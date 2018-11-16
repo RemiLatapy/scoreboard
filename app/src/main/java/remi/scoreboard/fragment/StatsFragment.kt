@@ -24,6 +24,7 @@ class StatsFragment : Fragment() {
         val adapter = MatchAdapter()
         binding.recycler.adapter = adapter
         matchViewModel.allMatchs.observe(this, Observer { matchList ->
+            binding.displayEmptyView = matchList.isEmpty()
             matchList?.let { adapter.submitList(it) }
         })
 

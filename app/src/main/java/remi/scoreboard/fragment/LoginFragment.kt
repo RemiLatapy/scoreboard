@@ -1,7 +1,6 @@
 package remi.scoreboard.fragment
 
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.fragment_login.*
 import remi.scoreboard.R
 import remi.scoreboard.data.Status
 import remi.scoreboard.viewmodel.LoginSignupViewModel
@@ -42,30 +42,14 @@ class LoginFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(activity!!).get(LoginSignupViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(LoginSignupViewModel::class.java)
 
         viewModel.loginState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
-                    viewModel.updateGameListState.observe(this, Observer { gameCb ->
-                        when (gameCb.status) {
-                            Status.SUCCESS -> {
-                                progressBar.visibility = View.INVISIBLE
-                                val action = LoginFragmentDirections.ActionLoginToMain()
-                                findNavController().navigate(action)
-                                activity?.finish()
-                            }
-                            Status.ERROR -> {
-                                progressBar.visibility = View.INVISIBLE
-                                Snackbar.make(view!!, cb.message, Snackbar.LENGTH_LONG).show()
-                            }
-                            else -> {
-                            }
-                        }
-                    })
                     viewModel.updateGameList()
                 }
                 Status.ERROR -> {
@@ -78,6 +62,23 @@ class LoginFragment : Fragment() {
                 }
                 Status.IDLE -> {
                     progressBar.visibility = View.INVISIBLE
+                }
+            }
+        })
+
+        viewModel.updateGameListState.observe(this, Observer { cb ->
+            when (cb.status) {
+                Status.SUCCESS -> {
+                    progressBar.visibility = View.INVISIBLE
+                    val action = LoginFragmentDirections.ActionLoginToMain()
+                    findNavController().navigate(action)
+                    activity?.finish()
+                }
+                Status.ERROR -> {
+                    progressBar.visibility = View.INVISIBLE
+                    Snackbar.make(view!!, cb.message, Snackbar.LENGTH_LONG).show()
+                }
+                else -> {
                 }
             }
         })
@@ -177,9 +178,7 @@ class LoginFragment : Fragment() {
             }
         }
 
-        val resetPasswordTextView = view.findViewById<TextView>(R.id.link_forgot_pwd)
-        resetPasswordTextView.paintFlags = resetPasswordTextView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-        resetPasswordTextView.setOnClickListener {
+        link_forgot_pwd.setOnClickListener {
             resetPasswordDialog.show()
         }
     }

@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import remi.scoreboard.R
 import remi.scoreboard.data.PlayerScore
-import remi.scoreboard.databinding.ItemCardPlayerBinding
+import remi.scoreboard.databinding.ItemCardPlayerscoreBinding
 
-class PlayerAdapter :
-    ListAdapter<PlayerScore, PlayerAdapter.ViewHolder>(PlayerScoreDiffCallback()) {
+class PlayerScoreAdapter :
+    ListAdapter<PlayerScore, PlayerScoreAdapter.ViewHolder>(PlayerScoreDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val playerScore: PlayerScore = getItem(position)
@@ -30,7 +30,7 @@ class PlayerAdapter :
         builder?.let {
             val inflater = LayoutInflater.from(view.rootView.context)
             val view = inflater.inflate(R.layout.dialog_add_score, null)
-            it.setTitle(playerScore.player?.name + " score")
+            it.setTitle(playerScore.player?.username + " score")
                 .setView(view)
                 .setPositiveButton(
                     "Add"
@@ -45,15 +45,15 @@ class PlayerAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemCardPlayerBinding.inflate(inflater, parent, false)
+        val binding = ItemCardPlayerscoreBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
 
-    inner class ViewHolder(private val binding: ItemCardPlayerBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemCardPlayerscoreBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: PlayerScore, listener: View.OnClickListener) {
             binding.apply {
                 clickListener = listener
-                playerScore = item
+//                playerScore = item // TODO fix
                 executePendingBindings()
             }
         }

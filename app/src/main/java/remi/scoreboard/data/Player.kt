@@ -1,13 +1,33 @@
 package remi.scoreboard.data
 
+import com.parse.ParseObject
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import io.realm.annotations.RealmNamingPolicy
+import io.realm.annotations.Required
 
 @RealmClass(fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 open class Player(
-    @PrimaryKey var id: Long = 0,
-    var name: String = "default_name",
+    @PrimaryKey var id: String = "-1",
+    @Required var username: String = "default_name",
     var avatar: String = "file:///android_asset/dafault_avatar.png"
-) : RealmObject()
+) : RealmObject() {
+
+    constructor(parsePlayer: ParseObject) : this() {
+        id = parsePlayer.objectId
+        username = parsePlayer.getString("username") ?: username
+        avatar = parsePlayer.getString("avatar") ?: avatar
+    }
+
+    fun getParsePlayer(): ParseObject {
+        val parsePlayer = ParseObject("player")
+        parsePlayer.put("username", username)
+        parsePlayer.put("avatar", avatar) // TODO upload file
+        return parsePlayer
+    }
+
+    override fun toString(): String {
+        return "player $username ($id)"
+    }
+}
