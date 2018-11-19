@@ -108,6 +108,7 @@ class UserRepository {
             ParseUser.logIn(username, password)
             val playerList: List<ParseObject> = ParseQuery.getQuery<ParseObject>("player").find()
             UserDao.insertOrUpdate(User(ParseUser.getCurrentUser(), playerList))
+            loginState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
                 is ParseException, is IllegalStateException -> {
@@ -116,8 +117,6 @@ class UserRepository {
                 else -> throw e
             }
         }
-
-        loginState.postValue(MessageStatus(Status.SUCCESS))
     }
 
     @WorkerThread
@@ -162,17 +161,15 @@ class UserRepository {
             parsePlayer.save()
             val savedPlayer = Player(parsePlayer)
             UserDao.addPlayerToUser(savedPlayer, ParseUser.getCurrentUser().objectId)
+            addPlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
                 is ParseException, is IllegalArgumentException -> {
                     addPlayerState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
-                    return
                 }
                 else -> throw e
             }
         }
-
-        addPlayerState.postValue(MessageStatus(Status.SUCCESS))
     }
 
     @WorkerThread
@@ -181,17 +178,15 @@ class UserRepository {
         try {
             ParseQuery.getQuery<ParseObject>("player").find().forEach { it.delete() }
             UserDao.deleteAllPlayerOfUser(ParseUser.getCurrentUser().objectId)
+            deleteAllPlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
                 is ParseException, is IllegalArgumentException -> {
                     deleteAllPlayerState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
-                    return
                 }
                 else -> throw e
             }
         }
-
-        deleteAllPlayerState.postValue(MessageStatus(Status.SUCCESS))
     }
 
     @WorkerThread
@@ -200,16 +195,15 @@ class UserRepository {
         try {
             ParseQuery.getQuery<ParseObject>("player").get(playerId).delete()
             UserDao.deletePlayerOfUser(playerId, ParseUser.getCurrentUser().objectId)
+            deletePlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
                 is ParseException, is IllegalArgumentException, is NullPointerException, is UnsupportedOperationException -> {
                     deletePlayerState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
-                    return
                 }
                 else -> throw e
             }
         }
-        deletePlayerState.postValue(MessageStatus(Status.SUCCESS))
     }
 
     @WorkerThread
@@ -217,11 +211,10 @@ class UserRepository {
         signOutState.postValue(MessageStatus(Status.LOADING))
         try {
             ParseUser.logOut()
+            signOutState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: ParseException) {
             signOutState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
         }
-
-        signOutState.postValue(MessageStatus(Status.SUCCESS))
     }
 
     @WorkerThread
@@ -233,18 +226,16 @@ class UserRepository {
             parsePlayer.put("username", newPlayerName)
             parsePlayer.save()
             UserDao.renamePlayerOfUser(playerId, newPlayerName, ParseUser.getCurrentUser().objectId)
+            renamePlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
                 is ParseException, is IllegalArgumentException, is NullPointerException, is UnsupportedOperationException -> {
                     renamePlayerState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
-                    return
                 }
                 else -> throw e
             }
         }
-        renamePlayerState.postValue(MessageStatus(Status.SUCCESS))
     }
-
 }
 
 class MatchRepository {
@@ -279,17 +270,15 @@ class GameRepository {
         try {
             val parseGameList = query.find()
             GameDao.insertOrUpdate(parseGameList.map { Game(it) })
+            updateGameListState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
                 is ParseException, is IllegalArgumentException, is RealmMigrationNeededException -> {
                     updateGameListState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
-                    return
                 }
                 else -> throw e
             }
         }
-
-        updateGameListState.postValue(MessageStatus(Status.SUCCESS))
     }
 
     @WorkerThread
