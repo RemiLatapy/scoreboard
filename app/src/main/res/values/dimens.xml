@@ -7,4 +7,7 @@
 
     <dimen name="small_padding">6dp</dimen>
     <dimen name="big_padding">16dp</dimen>
+
+    <dimen name="fragment_padding">16dp</dimen>
+    <dimen name="fragment_gamelist_bottom_padding">12dp</dimen>
 </resources>
