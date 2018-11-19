@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.select.SelectExtension
+import com.wajahatkarim3.easyflipview.EasyFlipView
 import remi.scoreboard.R
 import remi.scoreboard.databinding.FragmentChoosePlayerBinding
 import remi.scoreboard.fastadapter.item.ChoosePlayerItem
@@ -47,6 +48,10 @@ class ChoosePlayerFragment : Fragment() {
         adapter.withSelectable(true)
         adapter.withMultiSelect(true)
         adapter.setHasStableIds(true)
+        adapter.withOnClickListener { v, _, _, _ ->
+            v?.findViewById<EasyFlipView>(R.id.avatar_flipview)?.flipTheView()
+            true
+        }
         return adapter
     }
 

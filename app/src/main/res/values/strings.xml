@@ -77,4 +77,5 @@
     <string name="arrow_icon">Arrow icon</string>
     <string name="manage_player_icon">Manage player icon</string>
     <string name="add_player_icon">Add player icon</string>
+    <string name="checked_player_icon">Checked player icon</string>
 </resources>

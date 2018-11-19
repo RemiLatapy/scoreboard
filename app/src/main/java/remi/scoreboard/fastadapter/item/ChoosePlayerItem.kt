@@ -25,6 +25,10 @@ class ChoosePlayerItem(val player: Player) : AbstractItem<ChoosePlayerItem, Choo
         override fun unbindView(item: ChoosePlayerItem) {
             binding.apply {
                 player = null
+                if (avatarFlipview.isBackSide) { // reset flipped view
+                    avatarFlipview.flipDuration = 0
+                    avatarFlipview.flipTheView()
+                }
                 executePendingBindings()
             }
         }
@@ -32,6 +36,11 @@ class ChoosePlayerItem(val player: Player) : AbstractItem<ChoosePlayerItem, Choo
         override fun bindView(item: ChoosePlayerItem, payloads: MutableList<Any>) {
             binding.apply {
                 player = item.player
+                if (item.isSelected && avatarFlipview.isFrontSide) {
+                    avatarFlipview.flipDuration = 0
+                    avatarFlipview.flipTheView()
+                    avatarFlipview.flipDuration = 400
+                }
                 executePendingBindings()
             }
         }

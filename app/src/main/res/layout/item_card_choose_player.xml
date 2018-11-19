@@ -13,8 +13,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="@dimen/player_card_height"
-        android:background="@color/white"
-        app:cardBackgroundColor="@color/cardview_background"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardUseCompatPadding="true"
         app:contentPadding="@dimen/card_margin">
@@ -23,17 +21,57 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/avatar"
+            <com.wajahatkarim3.easyflipview.EasyFlipView
+                android:id="@+id/avatar_flipview"
                 android:layout_width="@dimen/no_size"
                 android:layout_height="@dimen/no_size"
-                android:contentDescription="@string/avatar_desc"
-                app:circleImageFromUrl="@{player.avatar}"
+                app:flipDuration="400"
+                app:flipEnabled="true"
+                app:flipFrom="right"
+                app:flipOnTouch="false"
+                app:flipType="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/avatars" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/oval_shape"
+                    android:backgroundTint="@color/primary"
+                    android:contentDescription="@string/checked_player_icon"
+                    android:padding="@dimen/middle_padding"
+                    android:src="@drawable/ic_check_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/avatar_desc"
+                    app:circleImageFromUrl="@{player.avatar}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/avatars" />
+
+            </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+            <!--<ImageView-->
+            <!--android:id="@+id/avatar"-->
+            <!--android:layout_width="@dimen/no_size"-->
+            <!--android:layout_height="@dimen/no_size"-->
+            <!--android:contentDescription="@string/avatar_desc"-->
+            <!--app:circleImageFromUrl="@{player.avatar}"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintDimensionRatio="1:1"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--tools:src="@tools:sample/avatars" />-->
 
             <TextView
                 android:id="@+id/player_name"
@@ -46,7 +84,7 @@
                 android:textSize="@dimen/player_name_text_size"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/avatar"
+                app:layout_constraintStart_toEndOf="@id/avatar_flipview"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="John" />
 
