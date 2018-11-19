@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.adapters.ItemAdapter
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import kotlinx.android.synthetic.main.item_card_manage_player.view.*
@@ -25,7 +25,7 @@ class ManagePlayerFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var binding: FragmentManagePlayerBinding
-    private lateinit var fastAdapter: FastAdapter<ManagePlayerItem>
+    private lateinit var fastAdapter: FastItemAdapter<ManagePlayerItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +49,7 @@ class ManagePlayerFragment : Fragment() {
         userViewModel.currentUser.observe(this, Observer { user ->
             binding.playerListIsEmpty = user.playerList.isEmpty()
             activity?.invalidateOptionsMenu()
-            (fastAdapter.adapter(0) as? ItemAdapter<ManagePlayerItem>)
-                ?.setNewList(user.playerList.map { ManagePlayerItem(it) })
+            fastAdapter.setNewList(user.playerList.map { ManagePlayerItem(it) })
         })
     }
 
@@ -74,9 +73,8 @@ class ManagePlayerFragment : Fragment() {
         return binding.root
     }
 
-    private fun getFastAdapter(): FastAdapter<ManagePlayerItem> {
-        val playerItemAdapter = ItemAdapter<ManagePlayerItem>()
-        val adapter: FastAdapter<ManagePlayerItem> = FastAdapter.with(playerItemAdapter)
+    private fun getFastAdapter(): FastItemAdapter<ManagePlayerItem> {
+        val adapter: FastItemAdapter<ManagePlayerItem> = FastItemAdapter()
 
         adapter.setHasStableIds(true)
         adapter.withEventHook(object : ClickEventHook<ManagePlayerItem>() {

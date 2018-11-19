@@ -6,8 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.adapters.ItemAdapter
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.select.SelectExtension
 import remi.scoreboard.R
 import remi.scoreboard.databinding.FragmentChoosePlayerBinding
@@ -18,7 +17,7 @@ class ChoosePlayerFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var binding: FragmentChoosePlayerBinding
-    private lateinit var fastAdapter: FastAdapter<ChoosePlayerItem>
+    private lateinit var fastAdapter: FastItemAdapter<ChoosePlayerItem>
 
     private var listOfSelectedId: List<Long>? = null
     private var selectExtension: SelectExtension<ChoosePlayerItem>? = null
@@ -32,8 +31,7 @@ class ChoosePlayerFragment : Fragment() {
         userViewModel.currentUser.observe(this, Observer { user ->
             binding.playerListIsEmpty = user.playerList.isEmpty()
             activity?.invalidateOptionsMenu()
-            (fastAdapter.adapter(0) as? ItemAdapter<ChoosePlayerItem>)
-                ?.setNewList(user.playerList.map { ChoosePlayerItem(it) })
+            fastAdapter.setNewList(user.playerList.map { ChoosePlayerItem(it) })
 
             savedInstanceState?.let {
                 fastAdapter.withSavedInstanceState(it)
@@ -44,9 +42,8 @@ class ChoosePlayerFragment : Fragment() {
         selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
     }
 
-    private fun getFastAdapter(): FastAdapter<ChoosePlayerItem> {
-        val playerItemAdapter = ItemAdapter<ChoosePlayerItem>()
-        val adapter: FastAdapter<ChoosePlayerItem> = FastAdapter.with(playerItemAdapter)
+    private fun getFastAdapter(): FastItemAdapter<ChoosePlayerItem> {
+        val adapter: FastItemAdapter<ChoosePlayerItem> = FastItemAdapter()
         adapter.withSelectable(true)
         adapter.withMultiSelect(true)
         adapter.setHasStableIds(true)
