@@ -31,6 +31,7 @@ class ChoosePlayerFragment : Fragment() {
 
         userViewModel.currentUser.observe(this, Observer { user ->
             binding.playerListIsEmpty = user.playerList.isEmpty()
+            activity?.invalidateOptionsMenu()
             (fastAdapter.adapter(0) as? ItemAdapter<ChoosePlayerItem>)
                 ?.setNewList(user.playerList.map { ChoosePlayerItem(it) })
 
@@ -66,6 +67,12 @@ class ChoosePlayerFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_choose_player, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        super.onPrepareOptionsMenu(menu)
+        if (binding.playerListIsEmpty == true)
+            menu?.removeItem(R.id.action_search)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

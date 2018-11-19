@@ -47,9 +47,10 @@ class ManagePlayerFragment : Fragment() {
         userViewModel.addPlayerState.observe(this, Observer { showError(it) })
 
         userViewModel.currentUser.observe(this, Observer { user ->
+            binding.playerListIsEmpty = user.playerList.isEmpty()
+            activity?.invalidateOptionsMenu()
             (fastAdapter.adapter(0) as? ItemAdapter<ManagePlayerItem>)
                 ?.setNewList(user.playerList.map { ManagePlayerItem(it) })
-            binding.playerListIsEmpty = user.playerList.isEmpty()
         })
     }
 
@@ -119,6 +120,14 @@ class ManagePlayerFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_manage_player, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        super.onPrepareOptionsMenu(menu)
+        if (binding.playerListIsEmpty == true) {
+            menu?.removeItem(R.id.action_delete_all_player)
+            menu?.removeItem(R.id.action_search)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
