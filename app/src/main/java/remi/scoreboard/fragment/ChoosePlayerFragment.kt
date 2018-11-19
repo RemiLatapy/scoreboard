@@ -72,7 +72,7 @@ class ChoosePlayerFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_manage_player -> {
-                startManagePlayerActivity()
+                startManagePlayerFragment()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -94,7 +94,7 @@ class ChoosePlayerFragment : Fragment() {
         super.onSaveInstanceState(newOutState)
     }
 
-    private fun startManagePlayerActivity() {
+    private fun startManagePlayerFragment() {
         listOfSelectedId = selectExtension?.selectedItems?.map { it.identifier }
         val action = ChoosePlayerFragmentDirections.actionManagePlayers()
         findNavController().navigate(action)
