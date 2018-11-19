@@ -42,8 +42,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/emptyview_square_icon_size"
+                android:layout_height="@dimen/emptyview_square_icon_size"
+                android:contentDescription="@string/manage_player_icon"
                 android:tint="@color/gray"
                 app:srcCompat="@drawable/ic_people_outline_black_24dp" />
 
@@ -54,13 +55,15 @@
                 android:textColor="@color/gray" />
 
             <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/ic_add_black_24dp"
-                android:backgroundTint="@color/colorPrimary"
+                android:layout_width="@dimen/small_square_icon_size"
+                android:layout_height="@dimen/small_square_icon_size"
+                android:layout_marginTop="@dimen/small_padding"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/add_player_icon"
                 android:onClick="@{addPlayerListener}"
-                android:theme="@style/Base.Widget.AppCompat.Button.Borderless" />
+                android:src="@drawable/ic_add_black_24dp"
+                android:theme="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:tint="@color/primary" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

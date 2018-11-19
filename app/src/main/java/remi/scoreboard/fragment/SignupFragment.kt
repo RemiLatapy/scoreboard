@@ -80,21 +80,21 @@ class SignupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupSignup(view)
 
-        view.findViewById<EditText>(R.id.username).setOnFocusChangeListener { v, hasFocus ->
+        view.findViewById<EditText>(R.id.txt_username).setOnFocusChangeListener { v, hasFocus ->
             (v as? EditText)?.let { if (!hasFocus) it.setText(it.text.toString().trim()) }
         }
 
         progressBar = view.findViewById(R.id.progress)
-        errorText = view.findViewById(R.id.error)
+        errorText = view.findViewById(R.id.txt_error)
     }
 
     private fun setupSignup(view: View) {
         view.run {
             findViewById<Button>(R.id.signup_btn)?.setOnClickListener {
 
-                val username = findViewById<EditText>(R.id.username).text.toString()
-                val email = findViewById<EditText>(R.id.email).text.toString()
-                val password = findViewById<EditText>(R.id.password).text.toString()
+                val username = findViewById<EditText>(R.id.txt_username).text.toString()
+                val email = findViewById<EditText>(R.id.txt_email).text.toString()
+                val password = findViewById<EditText>(R.id.txt_password).text.toString()
                 viewModel.createUser(username, email, password)
             }
         }

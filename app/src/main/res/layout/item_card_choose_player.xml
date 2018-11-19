@@ -12,22 +12,21 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="@dimen/player_card_height"
         android:background="@color/white"
         app:cardBackgroundColor="@color/cardview_background"
-        app:cardCornerRadius="4dp"
-        app:cardUseCompatPadding="true">
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="@dimen/card_margin">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="4dp">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/avatar"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/no_size"
+                android:layout_height="@dimen/no_size"
                 android:contentDescription="@string/avatar_desc"
                 app:circleImageFromUrl="@{player.avatar}"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -37,16 +36,14 @@
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/player_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="@dimen/big_padding"
                 android:gravity="center_vertical"
                 android:text="@{player.username}"
                 android:textColor="@color/colorPrimary"
-                android:textSize="30sp"
+                android:textSize="@dimen/player_name_text_size"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/avatar"

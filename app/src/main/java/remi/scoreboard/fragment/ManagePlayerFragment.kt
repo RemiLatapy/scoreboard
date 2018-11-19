@@ -161,7 +161,7 @@ class ManagePlayerFragment : Fragment() {
                 .setPositiveButton(
                     "Add"
                 ) { _, _ ->
-                    userViewModel.addPlayer(view.username.text.toString().trim())
+                    userViewModel.addPlayer(view.txt_username.text.toString().trim())
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
@@ -174,13 +174,13 @@ class ManagePlayerFragment : Fragment() {
         }
         builder?.let {
             val view = layoutInflater.inflate(R.layout.dialog_new_user, null)
-            view.username.setText(playerItem.player.username)
+            view.txt_username.setText(playerItem.player.username)
             it.setTitle("Rename ${playerItem.player.username}")
                 .setView(view)
                 .setPositiveButton(
                     "Rename"
                 ) { _, _ ->
-                    userViewModel.renamePlayer(playerItem.player.id, view.username.text.toString().trim())
+                    userViewModel.renamePlayer(playerItem.player.id, view.txt_username.text.toString().trim())
                 }
                 .setNegativeButton("Cancel", null)
                 .show()

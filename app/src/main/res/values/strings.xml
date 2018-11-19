@@ -70,4 +70,11 @@
     <string name="confirm_delete_player_format">Delete player %s?</string>
     <string name="confirm_delete_all_player">Delete all players?</string>
     <string name="delete_all_player_message">You are about to delete all players from your account.</string>
+    <string name="choose_player_emptyview_text">You don\'t have any player yet</string>
+    <string name="add_points">Add points</string>
+    <string name="manage_players_icon">Manage players icon</string>
+    <string name="players">Players</string>
+    <string name="arrow_icon">Arrow icon</string>
+    <string name="manage_player_icon">Manage player icon</string>
+    <string name="add_player_icon">Add player icon</string>
 </resources>

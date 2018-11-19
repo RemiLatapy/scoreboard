@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/small_padding">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/points"
+            android:id="@+id/txt_points"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Add points"
+            android:hint="@string/add_points"
             android:inputType="numberSigned" />
 
     </com.google.android.material.textfield.TextInputLayout>

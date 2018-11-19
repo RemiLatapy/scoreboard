@@ -35,7 +35,7 @@ class PlayerScoreAdapter :
                 .setPositiveButton(
                     "Add"
                 ) { _, _ ->
-                    val points = view.findViewById<TextInputEditText>(R.id.points)
+                    val points = view.findViewById<TextInputEditText>(R.id.txt_points)
                     // TODO add score here
                 }
                 .setNegativeButton("Cancel", null)
