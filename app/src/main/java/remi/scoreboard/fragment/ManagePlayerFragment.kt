@@ -24,6 +24,7 @@ import remi.scoreboard.viewmodel.UserViewModel
 class ManagePlayerFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
+    private lateinit var binding: FragmentManagePlayerBinding
     private lateinit var fastAdapter: FastAdapter<ManagePlayerItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +45,12 @@ class ManagePlayerFragment : Fragment() {
                 showError(it)
         })
         userViewModel.addPlayerState.observe(this, Observer { showError(it) })
+
+        userViewModel.currentUser.observe(this, Observer { user ->
+            (fastAdapter.adapter(0) as? ItemAdapter<ManagePlayerItem>)
+                ?.setNewList(user.playerList.map { ManagePlayerItem(it) })
+            binding.playerListIsEmpty = user.playerList.isEmpty()
+        })
     }
 
     private fun showError(ms: MessageStatus) {
@@ -59,16 +66,9 @@ class ManagePlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
+        binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
-
         binding.recycler.adapter = fastAdapter
-
-        userViewModel.currentUser.observe(this, Observer { user ->
-            binding.playerList = user.playerList
-            (fastAdapter.adapter(0) as? ItemAdapter<ManagePlayerItem>)
-                ?.setNewList(user.playerList.map { ManagePlayerItem(it) })
-        })
 
         return binding.root
     }

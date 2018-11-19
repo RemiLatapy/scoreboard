@@ -1,7 +1,6 @@
 package remi.scoreboard.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,7 +30,7 @@ class ChoosePlayerFragment : Fragment() {
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
         userViewModel.currentUser.observe(this, Observer { user ->
-            binding.playerList = user.playerList
+            binding.playerListIsEmpty = user.playerList.isEmpty()
             (fastAdapter.adapter(0) as? ItemAdapter<ChoosePlayerItem>)
                 ?.setNewList(user.playerList.map { ChoosePlayerItem(it) })
 

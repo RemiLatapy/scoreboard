@@ -7,13 +7,9 @@
 
         <import type="android.view.View" />
 
-        <import type="remi.scoreboard.data.Player" />
-
-        <import type="java.util.List" />
-
         <variable
-            name="playerList"
-            type="List&lt;Player&gt;" />
+            name="playerListIsEmpty"
+            type="Boolean" />
 
         <variable
             name="managePlayerListener"
@@ -31,7 +27,7 @@
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{playerList.isEmpty ? View.GONE : View.VISIBLE}"
+            android:visibility="@{playerListIsEmpty? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_card_choose_player" />
 
@@ -40,7 +36,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="@{playerList.isEmpty ? View.VISIBLE : View.GONE}"
+            android:visibility="@{playerListIsEmpty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
