@@ -15,7 +15,7 @@
         android:layout_height="@dimen/player_card_height"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardUseCompatPadding="true"
-        app:contentPadding="@dimen/card_margin">
+        app:contentPadding="@dimen/middle_padding">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
