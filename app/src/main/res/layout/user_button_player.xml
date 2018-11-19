@@ -58,7 +58,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_navigate_next_white_24dp" />
+            app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
 
         <!--TODO how to format text & remove hardcoded player(s)-->
         <TextView
