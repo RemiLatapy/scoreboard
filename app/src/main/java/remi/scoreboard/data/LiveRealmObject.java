@@ -19,7 +19,6 @@ package remi.scoreboard.data;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import io.realm.ObjectChangeSet;
 import io.realm.RealmModel;
 import io.realm.RealmObject;
 import io.realm.RealmObjectChangeListener;
@@ -39,16 +38,15 @@ import io.realm.RealmObjectChangeListener;
  * @param <T> the type of the RealmModel
  */
 public class LiveRealmObject<T extends RealmModel> extends LiveData<T> {
+    private final T object;
+
     // The listener will listen until the object is deleted.
     // An invalidated object shouldn't be set in LiveData, null is set instead.
-    private RealmObjectChangeListener<T> listener = new RealmObjectChangeListener<T>() {
-        @Override
-        public void onChange(@NonNull T object, ObjectChangeSet objectChangeSet) {
-            if (!objectChangeSet.isDeleted()) {
-                setValue(object);
-            } else {
-                setValue(null);
-            }
+    private RealmObjectChangeListener<T> listener = (object, objectChangeSet) -> {
+        if (!(objectChangeSet != null && objectChangeSet.isDeleted())) {
+            setValue(object);
+        } else {
+            setValue(null);
         }
     };
 
@@ -71,7 +69,7 @@ public class LiveRealmObject<T extends RealmModel> extends LiveData<T> {
         if (!RealmObject.isValid(object)) {
             throw new IllegalArgumentException("The provided RealmObject is no longer valid, and therefore cannot be observed for changes.");
         }
-        setValue(object);
+        this.object = object;
     }
 
     // We should start observing and stop observing, depending on whether we have observers.
@@ -85,9 +83,12 @@ public class LiveRealmObject<T extends RealmModel> extends LiveData<T> {
     protected void onActive() {
         super.onActive();
         T object = getValue();
-        if (object != null && RealmObject.isValid(object)) {
+        if (RealmObject.isValid(object)) {
             setValue(object);
             RealmObject.addChangeListener(object, listener);
+        } else if (this.object != null) {
+            setValue(this.object);
+            RealmObject.addChangeListener(this.object, listener);
         }
     }
 
@@ -98,7 +99,7 @@ public class LiveRealmObject<T extends RealmModel> extends LiveData<T> {
     protected void onInactive() {
         super.onInactive();
         T object = getValue();
-        if (object != null && RealmObject.isValid(object)) {
+        if (RealmObject.isValid(object)) {
             RealmObject.removeChangeListener(object, listener);
         }
     }
