@@ -18,6 +18,7 @@ import remi.scoreboard.viewmodel.UserViewModel
 class ChoosePlayerFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
+    private lateinit var binding: FragmentChoosePlayerBinding
     private lateinit var fastAdapter: FastAdapter<ChoosePlayerItem>
 
     private var listOfSelectedId: List<Long>? = null
@@ -28,6 +29,16 @@ class ChoosePlayerFragment : Fragment() {
         setHasOptionsMenu(true)
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
+        userViewModel.currentUser.observe(this, Observer { user ->
+            binding.playerList = user.playerList
+            (fastAdapter.adapter(0) as? ItemAdapter<ChoosePlayerItem>)
+                ?.setNewList(user.playerList.map { ChoosePlayerItem(it) })
+
+            savedInstanceState?.let {
+                fastAdapter.withSavedInstanceState(it)
+            }
+        })
 
         fastAdapter = getFastAdapter()
         selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
@@ -46,21 +57,10 @@ class ChoosePlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentChoosePlayerBinding.inflate(inflater, container, false)
-
-        binding.managePlayerListener = View.OnClickListener { startManagePlayerActivity() }
+        binding = FragmentChoosePlayerBinding.inflate(inflater, container, false)
+        binding.managePlayerListener = View.OnClickListener { startManagePlayerFragment() }
         binding.recycler.adapter = fastAdapter
-
-        userViewModel.currentUser.observe(this, Observer { user ->
-            Log.d("PLAYER", "Current user observe called $user")
-            binding.playerList = user.playerList
-            (fastAdapter.adapter(0) as? ItemAdapter<ChoosePlayerItem>)
-                ?.setNewList(user.playerList.map { ChoosePlayerItem(it) })
-
-            savedInstanceState?.let {
-                fastAdapter.withSavedInstanceState(it)
-            }
-        })
+        binding.setLifecycleOwner(viewLifecycleOwner)
 
         return binding.root
     }
