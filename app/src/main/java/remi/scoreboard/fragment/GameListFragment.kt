@@ -69,7 +69,6 @@ class GameListFragment : Fragment() {
         binding = FragmentGameListBinding.inflate(inflater, container, false)
 
         binding.recycler.adapter = fastAdapter
-        binding.recycler.itemAnimator = null
         // https://stackoverflow.com/a/34012893/9994620
         binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

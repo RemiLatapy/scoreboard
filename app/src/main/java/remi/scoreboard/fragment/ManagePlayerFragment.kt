@@ -71,7 +71,17 @@ class ManagePlayerFragment : Fragment() {
         binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
         binding.recycler.adapter = fastAdapter
-        binding.recycler.itemAnimator = null
+        // https://stackoverflow.com/a/34012893/9994620
+        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val topRowVerticalPosition =
+                    if (recyclerView.childCount == 0)
+                        0
+                    else
+                        recyclerView.getChildAt(0).top
+                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
+            }
+        })
         binding.swipeRefresh.setOnRefreshListener { userViewModel.refreshUser() }
 
         return binding.root
