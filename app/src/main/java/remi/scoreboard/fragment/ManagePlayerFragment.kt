@@ -71,6 +71,7 @@ class ManagePlayerFragment : Fragment() {
         binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
         binding.recycler.adapter = fastAdapter
+        binding.recycler.itemAnimator = null
         binding.swipeRefresh.setOnRefreshListener { userViewModel.updateUser() }
 
         return binding.root

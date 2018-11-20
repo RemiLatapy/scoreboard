@@ -67,6 +67,7 @@ class GameListFragment : Fragment() {
         binding = FragmentGameListBinding.inflate(inflater, container, false)
 
         binding.recycler.adapter = fastAdapter
+        binding.recycler.itemAnimator = null
         binding.swipeRefresh.setOnRefreshListener { gameViewModel.updateGameList() }
 
         return binding.root

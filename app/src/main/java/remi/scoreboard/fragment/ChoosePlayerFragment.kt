@@ -86,6 +86,7 @@ class ChoosePlayerFragment : Fragment() {
         binding = FragmentChoosePlayerBinding.inflate(inflater, container, false)
         binding.managePlayerListener = View.OnClickListener { startManagePlayerFragment() }
         binding.recycler.adapter = fastAdapter
+        binding.recycler.itemAnimator = null
         binding.swipeRefresh.setOnRefreshListener { userViewModel.updateUser() }
         binding.setLifecycleOwner(viewLifecycleOwner)
 
