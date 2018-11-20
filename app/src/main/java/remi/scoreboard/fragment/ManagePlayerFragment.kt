@@ -36,19 +36,19 @@ class ManagePlayerFragment : Fragment() {
         fastAdapter = getFastAdapter()
 
         // TODO loading state (ui + code)
-        userViewModel.deleteAllPlayerState.observe(this, Observer { showError(it) })
-        userViewModel.deletePlayerState.observe(this, Observer { showError(it) })
+        userViewModel.deleteAllPlayerState.observe(this, Observer { showErrorIfNeeded(it) })
+        userViewModel.deletePlayerState.observe(this, Observer { showErrorIfNeeded(it) })
         userViewModel.renamePlayerState.observe(this, Observer {
             if (it.status == Status.SUCCESS)
                 fastAdapter.notifyAdapterDataSetChanged()
             else
-                showError(it)
+                showErrorIfNeeded(it)
         })
-        userViewModel.addPlayerState.observe(this, Observer { showError(it) })
+        userViewModel.addPlayerState.observe(this, Observer { showErrorIfNeeded(it) })
         userViewModel.updateUserState.observe(this, Observer {
             if (it.status != Status.LOADING)
                 binding.swipeRefresh.isRefreshing = false
-            showError(it)
+            showErrorIfNeeded(it)
         })
 
         userViewModel.currentUser.observe(this, Observer { user ->
@@ -58,15 +58,6 @@ class ManagePlayerFragment : Fragment() {
         })
 
         userViewModel.updateUser()
-    }
-
-    private fun showError(ms: MessageStatus) {
-        if (ms.status == Status.ERROR) {
-            view?.let {
-                if (ms.message.isNotEmpty())
-                    Snackbar.make(it, ms.message, Snackbar.LENGTH_SHORT).show()
-            }
-        }
     }
 
     override fun onCreateView(
@@ -192,6 +183,15 @@ class ManagePlayerFragment : Fragment() {
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
+        }
+    }
+
+    private fun showErrorIfNeeded(ms: MessageStatus) {
+        if (ms.status == Status.ERROR) {
+            view?.let {
+                if (ms.message.isNotEmpty())
+                    Snackbar.make(it, ms.message, Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 }
