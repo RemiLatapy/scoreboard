@@ -161,7 +161,7 @@ class ManagePlayerFragment : Fragment() {
                 .setPositiveButton(
                     "Add"
                 ) { _, _ ->
-                    userViewModel.addPlayer(view.txt_username.text.toString().trim())
+                    userViewModel.addPlayer(view.txt_username.text.toString().trim(), activity)
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
