@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/oval_shape"
-                    android:backgroundTint="@color/primary"
+                    android:backgroundTint="@color/gray"
                     android:contentDescription="@string/checked_player_icon"
                     android:padding="@dimen/middle_padding"
                     android:src="@drawable/ic_check_black_24dp"
