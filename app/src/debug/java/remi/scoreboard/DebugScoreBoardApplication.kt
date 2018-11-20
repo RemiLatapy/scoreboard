@@ -2,7 +2,6 @@ package remi.scoreboard
 
 import com.facebook.stetho.Stetho
 import com.parse.Parse
-import com.uphyca.stetho_realm.RealmInspectorModulesProvider
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
@@ -11,12 +10,7 @@ class DebugScoreBoardApplication : ScoreBoardApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        Stetho.initialize(
-            Stetho.newInitializerBuilder(this)
-                .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
-                .build()
-        )
+        Stetho.initializeWithDefaults(this);
     }
 
     override fun setupParse() {
