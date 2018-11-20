@@ -1,15 +1,18 @@
 package remi.scoreboard.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import remi.scoreboard.R
 import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentGameListBinding
 import remi.scoreboard.fastadapter.item.GameItem
@@ -23,9 +26,17 @@ class GameListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         fastAdapter = FastItemAdapter()
         fastAdapter.setHasStableIds(true)
+        fastAdapter.itemFilter.withFilterPredicate { item, constraint ->
+            runBlocking {
+                async(Dispatchers.Main) { // Need to run on UI thread to access game (live realm object)
+                    item.game.name.contains(constraint ?: "", true)
+                }.await()
+            }
+        }
         fastAdapter.withOnClickListener { _, _, gameItem, _ ->
             val action = GameListFragmentDirections.actionChoosePlayers(gameItem.game.id)
             findNavController().navigate(action)
@@ -59,6 +70,23 @@ class GameListFragment : Fragment() {
         binding.swipeRefresh.setOnRefreshListener { gameViewModel.updateGameList() }
 
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_game, menu)
+        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.setOnQueryTextListener(queryTextListener)
+    }
+
+    private val queryTextListener = object: SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            fastAdapter.filter(query)
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            fastAdapter.filter(newText)
+            return true
+        }
     }
 }
 

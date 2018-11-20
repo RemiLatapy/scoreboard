@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,6 +15,9 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import kotlinx.android.synthetic.main.item_card_manage_player.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import remi.scoreboard.R
 import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.Status
@@ -74,7 +78,6 @@ class ManagePlayerFragment : Fragment() {
 
     private fun getFastAdapter(): FastItemAdapter<ManagePlayerItem> {
         val adapter: FastItemAdapter<ManagePlayerItem> = FastItemAdapter()
-
         adapter.setHasStableIds(true)
         adapter.withEventHook(object : ClickEventHook<ManagePlayerItem>() {
             override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
@@ -97,7 +100,6 @@ class ManagePlayerFragment : Fragment() {
                 }
             }
         })
-
         adapter.withEventHook(object : ClickEventHook<ManagePlayerItem>() {
             override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {
                 return (viewHolder as? ManagePlayerItem.ViewHolder)?.itemView?.btn_edit
@@ -112,11 +114,32 @@ class ManagePlayerFragment : Fragment() {
                 showRenamePlayerDialog(playerItem)
             }
         })
+        adapter.itemFilter.withFilterPredicate { item, constraint ->
+            runBlocking {
+                async(Dispatchers.Main) {
+                    // Need to run on UI thread to access player (live realm object)
+                    item.player.username.contains(constraint ?: "", true)
+                }.await()
+            }
+        }
         return adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_manage_player, menu)
+        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.setOnQueryTextListener(queryTextListener)
+    }
+
+    private val queryTextListener = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            fastAdapter.filter(query)
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            fastAdapter.filter(newText)
+            return true
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {

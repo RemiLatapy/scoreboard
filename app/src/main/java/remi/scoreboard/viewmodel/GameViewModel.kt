@@ -14,7 +14,6 @@ import kotlin.coroutines.CoroutineContext
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
     private val gameRepository: GameRepository = GameRepository()
-    val allGames: LiveData<List<Game>> = gameRepository.allGames
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -22,18 +21,13 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val scope = CoroutineScope(coroutineContext)
 
+    val allGames: LiveData<List<Game>> = gameRepository.allGames
     val updateGameListState: LiveData<MessageStatus> = gameRepository.updateGameListState
 
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()
     }
-
-    fun insert(game: Game) = scope.launch(Dispatchers.IO) { gameRepository.insert(game) }
-
-    fun insert(gameList: List<Game>) = scope.launch(Dispatchers.IO) { gameRepository.insert(gameList) }
-
-    fun deleteAll() = scope.launch(Dispatchers.IO) { gameRepository.deleteAll() }
 
     fun updateGameList() {
         scope.launch(Dispatchers.IO) { gameRepository.updateGameList() }

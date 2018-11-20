@@ -2,6 +2,7 @@ package remi.scoreboard.fragment
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -10,6 +11,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.select.SelectExtension
 import com.wajahatkarim3.easyflipview.EasyFlipView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import remi.scoreboard.R
 import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentChoosePlayerBinding
@@ -65,6 +69,13 @@ class ChoosePlayerFragment : Fragment() {
             v?.findViewById<EasyFlipView>(R.id.avatar_flipview)?.flipTheView()
             true
         }
+        adapter.itemFilter.withFilterPredicate { item, constraint ->
+            runBlocking {
+                async(Dispatchers.Main) { // Need to run on UI thread to access player (live realm object)
+                    item.player.username.contains(constraint ?: "", true)
+                }.await()
+            }
+        }
         return adapter
     }
 
@@ -83,6 +94,19 @@ class ChoosePlayerFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_choose_player, menu)
+        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.setOnQueryTextListener(queryTextListener)
+    }
+
+    private val queryTextListener = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            fastAdapter.filter(query)
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            fastAdapter.filter(newText)
+            return true
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
