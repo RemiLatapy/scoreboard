@@ -36,6 +36,6 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteAll() = scope.launch(Dispatchers.IO) { gameRepository.deleteAll() }
 
     fun updateGameList() {
-        scope.launch { gameRepository.updateGameList() }
+        scope.launch(Dispatchers.IO) { gameRepository.updateGameList() }
     }
 }
