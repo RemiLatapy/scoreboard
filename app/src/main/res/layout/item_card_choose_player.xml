@@ -23,8 +23,8 @@
 
             <com.wajahatkarim3.easyflipview.EasyFlipView
                 android:id="@+id/avatar_flipview"
-                android:layout_width="@dimen/no_size"
-                android:layout_height="@dimen/no_size"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 app:flipDuration="400"
                 app:flipEnabled="true"
                 app:flipFrom="right"
@@ -63,8 +63,8 @@
 
             <!--<ImageView-->
             <!--android:id="@+id/avatar"-->
-            <!--android:layout_width="@dimen/no_size"-->
-            <!--android:layout_height="@dimen/no_size"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="0dp"-->
             <!--android:contentDescription="@string/avatar_desc"-->
             <!--app:circleImageFromUrl="@{player.avatar}"-->
             <!--app:layout_constraintBottom_toBottomOf="parent"-->

@@ -24,7 +24,7 @@
 
             <ImageView
                 android:id="@+id/avatar"
-                android:layout_width="@dimen/no_size"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:contentDescription="@string/avatar_desc"
                 app:circleImageFromUrl="@{player.avatar}"

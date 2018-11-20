@@ -9,7 +9,7 @@
 
     <ProgressBar
         android:id="@+id/progress"
-        android:layout_width="@dimen/no_size"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/signup_spinner_spacing"
         android:indeterminate="true"
@@ -22,7 +22,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_username"
-        android:layout_width="@dimen/no_size"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_password"
-        android:layout_width="@dimen/no_size"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_padding"
         app:errorEnabled="true"
@@ -68,7 +68,7 @@
 
     <TextView
         android:id="@+id/link_forgot_pwd"
-        android:layout_width="@dimen/no_size"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/small_padding"
         android:layout_marginTop="@dimen/small_padding"
@@ -94,7 +94,7 @@
 
     <Button
         android:id="@+id/login_btn"
-        android:layout_width="@dimen/no_size"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:text="@string/login_text_btn"

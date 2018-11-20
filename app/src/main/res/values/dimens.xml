@@ -1,7 +1,4 @@
 <resources>
-    <!--auto sizing-->
-    <dimen name="no_size">0dp</dimen>
-
     <!--margin/padding-->
     <dimen name="tiny_padding">4dp</dimen>
     <dimen name="small_padding">8dp</dimen>

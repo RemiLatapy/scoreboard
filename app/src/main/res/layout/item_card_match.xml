@@ -81,7 +81,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="@dimen/no_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:visibility="@{playerList.size() >= 1 ? View.VISIBLE : View.INVISIBLE}"
@@ -120,7 +120,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout3"
-                android:layout_width="@dimen/no_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:visibility="@{playerList.size() >= 2 ? View.VISIBLE : View.INVISIBLE}"
@@ -161,7 +161,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout2"
-                android:layout_width="@dimen/no_size"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
