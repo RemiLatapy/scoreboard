@@ -4,16 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingHorizontal="@dimen/fragment_padding"
-        android:paddingTop="@dimen/fragment_padding"
-        android:paddingBottom="@dimen/fragment_gamelist_bottom_padding"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:context=".activity.ActivityMain"
-        tools:listitem="@layout/item_card_game" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/fragment_padding"
+            android:paddingTop="@dimen/fragment_padding"
+            android:paddingBottom="@dimen/fragment_gamelist_bottom_padding"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:context=".activity.ActivityMain"
+            tools:listitem="@layout/item_card_game" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

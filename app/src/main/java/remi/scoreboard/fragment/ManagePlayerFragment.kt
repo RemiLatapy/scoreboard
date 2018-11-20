@@ -45,6 +45,11 @@ class ManagePlayerFragment : Fragment() {
                 showError(it)
         })
         userViewModel.addPlayerState.observe(this, Observer { showError(it) })
+        userViewModel.updateUserState.observe(this, Observer {
+            if (it.status != Status.LOADING)
+                binding.swipeRefresh.isRefreshing = false
+            showError(it)
+        })
 
         userViewModel.currentUser.observe(this, Observer { user ->
             binding.playerListIsEmpty = user.playerList.isEmpty()
@@ -71,6 +76,7 @@ class ManagePlayerFragment : Fragment() {
         binding = FragmentManagePlayerBinding.inflate(inflater, container, false)
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
         binding.recycler.adapter = fastAdapter
+        binding.swipeRefresh.setOnRefreshListener { userViewModel.updateUser() }
 
         return binding.root
     }

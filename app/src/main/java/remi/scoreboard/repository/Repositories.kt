@@ -23,6 +23,7 @@ class UserRepository {
     val deletePlayerState = MutableLiveData<MessageStatus>()
     val renamePlayerState = MutableLiveData<MessageStatus>()
     val signOutState = MutableLiveData<MessageStatus>()
+    val updateUserState = MutableLiveData<MessageStatus>()
 
     private val currentUserId = ParseUser.getCurrentUser()?.objectId ?: "0"
     val currentUser = UserDao.load(currentUserId)
@@ -121,9 +122,20 @@ class UserRepository {
 
     @WorkerThread
     suspend fun updateCurrentUser() {
-        ParseUser.getCurrentUser().fetch()
-        val players = ParseQuery.getQuery<ParseObject>("player").find()
-        UserDao.insertOrUpdate(User(ParseUser.getCurrentUser(), players))
+        updateUserState.postValue(MessageStatus(Status.LOADING))
+        try {
+            ParseUser.getCurrentUser().fetch()
+            val players = ParseQuery.getQuery<ParseObject>("player").find()
+            UserDao.insertOrUpdate(User(ParseUser.getCurrentUser(), players))
+            updateUserState.postValue(MessageStatus(Status.SUCCESS))
+        } catch (e: Exception) {
+            when (e) {
+                is ParseException, is IllegalArgumentException -> {
+                    loginState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+                }
+                else -> throw e
+            }
+        }
     }
 
     @WorkerThread
@@ -263,6 +275,7 @@ class GameRepository {
     val allGames: LiveData<List<Game>> = GameDao.loadAll()
 
     val updateGameListState = MutableLiveData<MessageStatus>()
+
     @WorkerThread
     suspend fun updateGameList() {
         updateGameListState.postValue(MessageStatus(Status.LOADING))

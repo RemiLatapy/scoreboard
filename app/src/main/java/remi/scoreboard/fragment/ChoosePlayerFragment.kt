@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.select.SelectExtension
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import remi.scoreboard.R
+import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentChoosePlayerBinding
 import remi.scoreboard.fastadapter.item.ChoosePlayerItem
 import remi.scoreboard.viewmodel.UserViewModel
@@ -28,6 +30,15 @@ class ChoosePlayerFragment : Fragment() {
         setHasOptionsMenu(true)
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        userViewModel.updateUserState.observe(this, Observer {
+            if (it.status != Status.LOADING)
+                binding.swipeRefresh.isRefreshing = false
+            if (it.status == Status.ERROR)
+                view?.let { view ->
+                    if (it.message.isNotEmpty())
+                        Snackbar.make(view, it.message, Snackbar.LENGTH_SHORT).show()
+                }
+        })
 
         userViewModel.currentUser.observe(this, Observer { user ->
             binding.playerListIsEmpty = user.playerList.isEmpty()
@@ -64,6 +75,7 @@ class ChoosePlayerFragment : Fragment() {
         binding = FragmentChoosePlayerBinding.inflate(inflater, container, false)
         binding.managePlayerListener = View.OnClickListener { startManagePlayerFragment() }
         binding.recycler.adapter = fastAdapter
+        binding.swipeRefresh.setOnRefreshListener { userViewModel.updateUser() }
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         return binding.root

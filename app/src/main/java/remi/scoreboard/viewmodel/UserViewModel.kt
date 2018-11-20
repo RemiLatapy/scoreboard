@@ -35,6 +35,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val deletePlayerState: LiveData<MessageStatus> = userRepository.deletePlayerState
     val renamePlayerState: LiveData<MessageStatus> = userRepository.renamePlayerState
     val signOutState: LiveData<MessageStatus> = userRepository.signOutState
+    val updateUserState: LiveData<MessageStatus> = userRepository.updateUserState
 
     val userId: LiveData<String> = Transformations.map(currentUser) { user -> user.id }
     val username: LiveData<String> = Transformations.map(currentUser) { user -> user.username }

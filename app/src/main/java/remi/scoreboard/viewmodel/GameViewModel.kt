@@ -8,12 +8,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import remi.scoreboard.data.Game
+import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.repository.GameRepository
 import kotlin.coroutines.CoroutineContext
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: GameRepository = GameRepository()
-    val allGames: LiveData<List<Game>> = repository.allGames
+    private val gameRepository: GameRepository = GameRepository()
+    val allGames: LiveData<List<Game>> = gameRepository.allGames
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -21,20 +22,20 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val scope = CoroutineScope(coroutineContext)
 
-//    fun gameById(gid: Int) = repository.gameById(gid)
+    val updateGameListState: LiveData<MessageStatus> = gameRepository.updateGameListState
 
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()
     }
 
-    fun insert(game: Game) = scope.launch(Dispatchers.IO) { repository.insert(game) }
+    fun insert(game: Game) = scope.launch(Dispatchers.IO) { gameRepository.insert(game) }
 
-    fun insert(gameList: List<Game>) = scope.launch(Dispatchers.IO) { repository.insert(gameList) }
+    fun insert(gameList: List<Game>) = scope.launch(Dispatchers.IO) { gameRepository.insert(gameList) }
 
-    fun deleteAll() = scope.launch(Dispatchers.IO) { repository.deleteAll() }
+    fun deleteAll() = scope.launch(Dispatchers.IO) { gameRepository.deleteAll() }
 
     fun updateGameList() {
-        scope.launch { repository.updateGameList() }
+        scope.launch { gameRepository.updateGameList() }
     }
 }
