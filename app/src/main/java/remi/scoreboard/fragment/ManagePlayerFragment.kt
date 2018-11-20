@@ -51,6 +51,8 @@ class ManagePlayerFragment : Fragment() {
             activity?.invalidateOptionsMenu()
             fastAdapter.setNewList(user.playerList.map { ManagePlayerItem(it) })
         })
+
+        userViewModel.updateUser()
     }
 
     private fun showError(ms: MessageStatus) {

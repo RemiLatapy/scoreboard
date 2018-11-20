@@ -39,6 +39,8 @@ class ChoosePlayerFragment : Fragment() {
             }
         })
 
+        userViewModel.updateUser()
+
         fastAdapter = getFastAdapter()
         selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
     }
