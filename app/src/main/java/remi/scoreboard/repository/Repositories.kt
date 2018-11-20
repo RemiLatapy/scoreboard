@@ -9,6 +9,9 @@ import io.realm.exceptions.RealmException
 import io.realm.exceptions.RealmMigrationNeededException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import remi.scoreboard.dao.realm.GameDao
+import remi.scoreboard.dao.realm.MatchDao
+import remi.scoreboard.dao.realm.UserDao
 import remi.scoreboard.data.*
 
 
