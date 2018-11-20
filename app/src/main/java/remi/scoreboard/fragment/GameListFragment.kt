@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,8 @@ class GameListFragment : Fragment() {
         fastAdapter.setHasStableIds(true)
         fastAdapter.itemFilter.withFilterPredicate { item, constraint ->
             runBlocking {
-                async(Dispatchers.Main) { // Need to run on UI thread to access game (live realm object)
+                async(Dispatchers.Main) {
+                    // Need to run on UI thread to access game (live realm object)
                     item.game.name.contains(constraint ?: "", true)
                 }.await()
             }
@@ -68,6 +70,17 @@ class GameListFragment : Fragment() {
 
         binding.recycler.adapter = fastAdapter
         binding.recycler.itemAnimator = null
+        // https://stackoverflow.com/a/34012893/9994620
+        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val topRowVerticalPosition =
+                    if (recyclerView.childCount == 0)
+                        0
+                    else
+                        recyclerView.getChildAt(0).top
+                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
+            }
+        })
         binding.swipeRefresh.setOnRefreshListener { gameViewModel.updateGameList() }
 
         return binding.root
@@ -78,7 +91,7 @@ class GameListFragment : Fragment() {
         (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.setOnQueryTextListener(queryTextListener)
     }
 
-    private val queryTextListener = object: SearchView.OnQueryTextListener {
+    private val queryTextListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             fastAdapter.filter(query)
             return true
