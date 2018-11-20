@@ -37,4 +37,12 @@ open class User(
 //        user.put("avatar", avatar) // TODO upload file...
         return user
     }
+
+    fun set(user: User) {
+        username = user.username
+        email = user.email
+        avatar = user.avatar
+        playerList = PlayerList()
+        playerList.addAll(user.playerList)
+    }
 }

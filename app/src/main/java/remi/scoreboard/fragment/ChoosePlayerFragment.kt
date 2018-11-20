@@ -54,7 +54,7 @@ class ChoosePlayerFragment : Fragment() {
             }
         })
 
-        userViewModel.updateUser()
+        userViewModel.refreshUser()
 
         fastAdapter = getFastAdapter()
         selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
@@ -87,7 +87,7 @@ class ChoosePlayerFragment : Fragment() {
         binding.managePlayerListener = View.OnClickListener { startManagePlayerFragment() }
         binding.recycler.adapter = fastAdapter
         binding.recycler.itemAnimator = null
-        binding.swipeRefresh.setOnRefreshListener { userViewModel.updateUser() }
+        binding.swipeRefresh.setOnRefreshListener { userViewModel.refreshUser() }
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         return binding.root

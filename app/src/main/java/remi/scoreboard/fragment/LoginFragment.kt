@@ -47,7 +47,7 @@ class LoginFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(LoginSignupViewModel::class.java)
 
-        viewModel.loginState.observe(this, Observer { cb ->
+        viewModel.logInState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
                     viewModel.updateGameList()

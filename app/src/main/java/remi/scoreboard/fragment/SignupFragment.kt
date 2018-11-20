@@ -36,21 +36,7 @@ class SignupFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(LoginSignupViewModel::class.java)
 
-//        // Observe current user changes (aka callback from create user flow)
-//        viewModel.currentUser.observe(this, Observer { resUser ->
-//            Log.d("LOGIN", "current user is now: ${resUser?.toString()}")
-//
-//            if (resUser.status == Status.ERROR) {
-//                progressBar.visibility = View.INVISIBLE
-//                Log.d("LOGIN", "error while creating user")
-//            } else if (resUser.status == Status.SUCCESS) {
-//                val action = SignupFragmentDirections.actionSignupToMain()
-//                findNavController().navigate(action)
-//                activity?.finish()
-//            }
-//        })
-
-        viewModel.signupState.observe(this, Observer { cb ->
+        viewModel.signUpState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
                     progressBar.visibility = View.INVISIBLE
@@ -95,7 +81,7 @@ class SignupFragment : Fragment() {
                 val username = findViewById<EditText>(R.id.txt_username).text.toString()
                 val email = findViewById<EditText>(R.id.txt_email).text.toString()
                 val password = findViewById<EditText>(R.id.txt_password).text.toString()
-                viewModel.createUser(username, email, password)
+                viewModel.signUpUser(username, email, password)
             }
         }
     }

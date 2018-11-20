@@ -27,14 +27,13 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private val scope = CoroutineScope(coroutineContext)
 
-    //    val currentUser: LiveData<User> = userRepository.loadUser(currentUserId)
     val currentUser: LiveData<User> = userRepository.currentUser
 
     val addPlayerState: LiveData<MessageStatus> = userRepository.addPlayerState
     val deleteAllPlayerState: LiveData<MessageStatus> = userRepository.deleteAllPlayerState
     val deletePlayerState: LiveData<MessageStatus> = userRepository.deletePlayerState
     val renamePlayerState: LiveData<MessageStatus> = userRepository.renamePlayerState
-    val signOutState: LiveData<MessageStatus> = userRepository.signOutState
+    val logOutState: LiveData<MessageStatus> = userRepository.logOutState
     val updateUserState: LiveData<MessageStatus> = userRepository.updateUserState
 
     val userId: LiveData<String> = Transformations.map(currentUser) { user -> user.id }
@@ -47,10 +46,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
         super.onCleared()
         parentJob.cancel()
-    }
-
-    fun createLocalUser() {
-        scope.launch(Dispatchers.IO) { userRepository.insertLocalUser() }
     }
 
     fun addPlayer(username: String, activity: FragmentActivity?) {
@@ -66,12 +61,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         scope.launch(Dispatchers.IO) { userRepository.addPlayerToCurrentUser(player) }
     }
 
-    fun deleteAllPlayer() {
-        scope.launch(Dispatchers.IO) { userRepository.deleteAllPlayerOfCurrentUser() }
+    fun deleteAllPlayers() {
+        scope.launch(Dispatchers.IO) { userRepository.deleteAllPlayersOfCurrentUser() }
     }
 
-    fun signOut() {
-        scope.launch(Dispatchers.IO) { userRepository.signOut() }
+    fun logOut() {
+        scope.launch(Dispatchers.IO) { userRepository.logOut() }
     }
 
     fun deletePlayer(playerId: String) {
@@ -82,7 +77,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         scope.launch(Dispatchers.IO) { userRepository.renamePlayerOfCurrentUser(playerId, newPlayerName) }
     }
 
-    fun updateUser() {
-        scope.launch(Dispatchers.IO) { userRepository.updateCurrentUser() }
+    fun refreshUser() {
+        scope.launch(Dispatchers.IO) { userRepository.refreshCurrentUser() }
     }
 }

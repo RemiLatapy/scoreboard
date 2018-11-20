@@ -1,40 +1,31 @@
 package remi.scoreboard.repository
 
-import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.parse.*
-import io.realm.exceptions.RealmException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.parse.ParseException
+import io.realm.exceptions.RealmPrimaryKeyConstraintException
 import remi.scoreboard.dao.realm.UserDao
 import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.Player
 import remi.scoreboard.data.Status
 import remi.scoreboard.data.User
+import remi.scoreboard.remote.parse.ParseManager
 
 class UserRepository {
 
     // callbacks
-    val signupState = MutableLiveData<MessageStatus>()
-    val loginState = MutableLiveData<MessageStatus>()
+    val signUpState = MutableLiveData<MessageStatus>()
+    val logInState = MutableLiveData<MessageStatus>()
     val resetPasswordState = MutableLiveData<MessageStatus>()
     val addPlayerState = MutableLiveData<MessageStatus>()
     val deleteAllPlayerState = MutableLiveData<MessageStatus>()
     val deletePlayerState = MutableLiveData<MessageStatus>()
     val renamePlayerState = MutableLiveData<MessageStatus>()
-    val signOutState = MutableLiveData<MessageStatus>()
+    val logOutState = MutableLiveData<MessageStatus>()
     val updateUserState = MutableLiveData<MessageStatus>()
 
-    private val currentUserId = ParseUser.getCurrentUser()?.objectId ?: "0"
+    private val currentUserId = ParseManager.currentUserId() ?: "0"
     val currentUser = UserDao.load(currentUserId)
-
-    @WorkerThread
-    suspend fun refreshCurrentUser(user: ParseUser) {
-        user.fetch()
-        UserDao.update(User(ParseUser()))
-    }
 
     @WorkerThread
     suspend fun insert(user: User) = UserDao.insert(user)
@@ -43,79 +34,16 @@ class UserRepository {
     suspend fun insertOrUpdate(user: User) = UserDao.insertOrUpdate(user)
 
     @WorkerThread
-    suspend fun createUser(user: User) {
-        signupState.postValue(MessageStatus(Status.LOADING)) // Inform UI
-        Log.d("THREAD", "createUser/Scope/repository = #${Thread.currentThread().id} // ${Thread.currentThread()}")
-
-        val parseUser = user.getParseUser() // create parse object user
-        val insertedOk = withContext<Boolean>(Dispatchers.IO) {
-            Log.d(
-                "THREAD",
-                "createUser/Scope/repository/withContext(io) = #${Thread.currentThread().id} // ${Thread.currentThread()}"
-            )
-            try {
-                parseUser.signUp()
-            } catch (e: ParseException) {
-                signupState.postValue(MessageStatus(Status.ERROR, e.message.toString())) // Inform UI
-                Log.e("LOGIN", "Signup failed: ${e.message}")
-                return@withContext false
-            }
-
-            val newUser = ParseUser.getCurrentUser() // get back parse managed user
-            newUser.acl = ParseACL(parseUser) // set ACL
-
-            newUser.saveInBackground { e ->
-                if (e != null) {
-                    signupState.postValue(MessageStatus(Status.ERROR, e.message.toString())) // Inform UI
-                    Log.e("LOGIN", "Save ACL failed: ${e.message}")
-                }
-            }
-
-            try {
-                UserDao.insert(User(newUser)) // create user in DB
-            } catch (e: RealmException) {
-                signupState.postValue(MessageStatus(Status.ERROR, e.message.toString())) // Inform UI
-                Log.e("LOGIN", "Reaml insert failed: ${e.message}")
-                return@withContext false
-            }
-            true
-        }
-
-        if (insertedOk) {
-            withContext(Dispatchers.Main) {
-                Log.d(
-                    "THREAD",
-                    "createUser/Scope/repository/withcontext(main) = #${Thread.currentThread().id} // ${Thread.currentThread()}"
-                )
-
-                val liveUser: LiveData<User> = UserDao.load(userId = parseUser.objectId)
-                if (liveUser.value != null) {
-                    signupState.postValue(MessageStatus(Status.SUCCESS)) // Inform UI
-                } else {
-                    signupState.postValue(
-                        MessageStatus(
-                            Status.ERROR,
-                            "Failed to load user with ID ${parseUser.objectId}"
-                        )
-                    ) // Inform UI
-                }
-            }
-        }
-    }
-
-    @WorkerThread
-    suspend fun loginUser(username: String, password: String) {
-        loginState.postValue(MessageStatus(Status.LOADING))
-
+    suspend fun signUpUser(user: User) {
+        signUpState.postValue(MessageStatus(Status.LOADING)) // Inform UI
         try {
-            ParseUser.logIn(username, password)
-            val playerList: List<ParseObject> = ParseQuery.getQuery<ParseObject>("player").find()
-            UserDao.insertOrUpdate(User(ParseUser.getCurrentUser(), playerList))
-            loginState.postValue(MessageStatus(Status.SUCCESS))
+            val newUser = ParseManager.signUpUser(user)
+            UserDao.insert(newUser)
+            signUpState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
-                is ParseException, is IllegalStateException -> {
-                    loginState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+                is IllegalStateException, is RealmPrimaryKeyConstraintException -> {
+                    signUpState.postValue(MessageStatus(Status.ERROR, e.message.toString())) // Inform UI
                 }
                 else -> throw e
             }
@@ -123,17 +51,44 @@ class UserRepository {
     }
 
     @WorkerThread
-    suspend fun updateCurrentUser() {
+    suspend fun loginUser(username: String, password: String) {
+        logInState.postValue(MessageStatus(Status.LOADING))
+        try {
+            val user = ParseManager.logInUser(username, password)
+            UserDao.insertOrUpdate(user)
+            logInState.postValue(MessageStatus(Status.SUCCESS))
+        } catch (e: Exception) {
+            when (e) {
+                is ParseException, is IllegalStateException -> {
+                    logInState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+                }
+                else -> throw e
+            }
+        }
+    }
+
+    @WorkerThread
+    suspend fun logOut() {
+        logOutState.postValue(MessageStatus(Status.LOADING))
+        try {
+            ParseManager.logOut()
+            logOutState.postValue(MessageStatus(Status.SUCCESS))
+        } catch (e: ParseException) {
+            logOutState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
+        }
+    }
+
+    @WorkerThread
+    suspend fun refreshCurrentUser() {
         updateUserState.postValue(MessageStatus(Status.LOADING))
         try {
-            ParseUser.getCurrentUser().fetch()
-            val players = ParseQuery.getQuery<ParseObject>("player").find()
-            UserDao.insertOrUpdate(User(ParseUser.getCurrentUser(), players))
+            val user = ParseManager.fetchCurrentUser()
+            UserDao.insertOrUpdate(user)
             updateUserState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
                 is ParseException, is IllegalArgumentException -> {
-                    loginState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
+                    logInState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
                 }
                 else -> throw e
             }
@@ -143,38 +98,21 @@ class UserRepository {
     @WorkerThread
     suspend fun resetPassword(email: String) {
         resetPasswordState.postValue(MessageStatus(Status.LOADING))
-
-        withContext(Dispatchers.IO) {
-            try {
-                ParseUser.requestPasswordReset(email)
-                resetPasswordState.postValue(MessageStatus(Status.SUCCESS, "Reset password email sent"))
-            } catch (e: ParseException) {
-                resetPasswordState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
-            }
+        try {
+            ParseManager.resetCurrentUserPassword(email)
+            resetPasswordState.postValue(MessageStatus(Status.SUCCESS, "Reset password email sent"))
+        } catch (e: ParseException) {
+            resetPasswordState.postValue(MessageStatus(Status.ERROR, e.message.toString()))
         }
     }
-
-    fun loadLocalUser(): LiveData<User> {
-        return UserDao.load("0")
-    }
-
-    @WorkerThread
-    suspend fun insertLocalUser() {
-        UserDao.insert(User(isLocalUser = true, id = "0"))
-    }
-
-    fun loadUser(currentUserId: String): LiveData<User> = UserDao.load(currentUserId)
 
     @WorkerThread
     suspend fun addPlayerToCurrentUser(player: Player) {
         addPlayerState.postValue(MessageStatus(Status.LOADING))
 
-        val parsePlayer = player.getParsePlayer()
-        parsePlayer.acl = ParseUser.getCurrentUser().acl
         try {
-            parsePlayer.save()
-            val savedPlayer = Player(parsePlayer)
-            UserDao.addPlayerToUser(savedPlayer, ParseUser.getCurrentUser().objectId)
+            val updatedUser = ParseManager.addPlayerToCurrentUser(player)
+            UserDao.update(updatedUser)
             addPlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
@@ -187,11 +125,11 @@ class UserRepository {
     }
 
     @WorkerThread
-    suspend fun deleteAllPlayerOfCurrentUser() {
+    suspend fun deleteAllPlayersOfCurrentUser() {
         deleteAllPlayerState.postValue(MessageStatus(Status.LOADING))
         try {
-            ParseQuery.getQuery<ParseObject>("player").find().forEach { it.delete() }
-            UserDao.deleteAllPlayerOfUser(ParseUser.getCurrentUser().objectId)
+            val updatedUser = ParseManager.deleteAllPlayersOfCurrentUser()
+            UserDao.update(updatedUser)
             deleteAllPlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
@@ -207,8 +145,8 @@ class UserRepository {
     suspend fun deletePlayerOfCurrentUser(playerId: String) {
         deletePlayerState.postValue(MessageStatus(Status.LOADING))
         try {
-            ParseQuery.getQuery<ParseObject>("player").get(playerId).delete()
-            UserDao.deletePlayerOfUser(playerId, ParseUser.getCurrentUser().objectId)
+            val updatedUser = ParseManager.deletePlayerOfCurrentUser(playerId)
+            UserDao.update(updatedUser)
             deletePlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
@@ -221,25 +159,11 @@ class UserRepository {
     }
 
     @WorkerThread
-    suspend fun signOut() {
-        signOutState.postValue(MessageStatus(Status.LOADING))
-        try {
-            ParseUser.logOut()
-            signOutState.postValue(MessageStatus(Status.SUCCESS))
-        } catch (e: ParseException) {
-            signOutState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
-        }
-    }
-
-    @WorkerThread
-    suspend
-    fun renamePlayerOfCurrentUser(playerId: String, newPlayerName: String) {
+    suspend fun renamePlayerOfCurrentUser(playerId: String, newPlayerName: String) {
         renamePlayerState.postValue(MessageStatus(Status.LOADING))
         try {
-            val parsePlayer = ParseQuery.getQuery<ParseObject>("player").get(playerId)
-            parsePlayer.put("username", newPlayerName)
-            parsePlayer.save()
-            UserDao.renamePlayerOfUser(playerId, newPlayerName, ParseUser.getCurrentUser().objectId)
+            val updatedUser = ParseManager.renamePlayerOfCurrentUser(playerId, newPlayerName)
+            UserDao.update(updatedUser)
             renamePlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {

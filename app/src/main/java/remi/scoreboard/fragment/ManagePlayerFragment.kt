@@ -61,7 +61,7 @@ class ManagePlayerFragment : Fragment() {
             fastAdapter.setNewList(user.playerList.map { ManagePlayerItem(it) })
         })
 
-        userViewModel.updateUser()
+        userViewModel.refreshUser()
     }
 
     override fun onCreateView(
@@ -72,7 +72,7 @@ class ManagePlayerFragment : Fragment() {
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
         binding.recycler.adapter = fastAdapter
         binding.recycler.itemAnimator = null
-        binding.swipeRefresh.setOnRefreshListener { userViewModel.updateUser() }
+        binding.swipeRefresh.setOnRefreshListener { userViewModel.refreshUser() }
 
         return binding.root
     }
@@ -163,7 +163,7 @@ class ManagePlayerFragment : Fragment() {
                         .setTitle(R.string.confirm_delete_all_player)
                         .setMessage(R.string.delete_all_player_message)
                         .setPositiveButton(R.string.action_delete) { _: DialogInterface, _: Int ->
-                            userViewModel.deleteAllPlayer()
+                            userViewModel.deleteAllPlayers()
                         }.setNegativeButton(R.string.action_cancel, null)
                         .show()
                 }
