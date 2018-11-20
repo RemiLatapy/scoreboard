@@ -27,6 +27,8 @@
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="@dimen/fragment_padding"
             android:visibility="@{playerListIsEmpty? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_card_choose_player" />
@@ -59,9 +61,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_padding"
+                android:onClick="@{managePlayerListener}"
                 android:text="@string/action_manage_player"
                 android:textColor="@color/colorPrimary"
-                android:onClick="@{managePlayerListener}"
                 android:theme="@style/Base.Widget.AppCompat.Button.Borderless" />
         </LinearLayout>
 
