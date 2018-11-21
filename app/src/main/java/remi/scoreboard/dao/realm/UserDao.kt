@@ -3,7 +3,6 @@ package remi.scoreboard.dao.realm
 import androidx.lifecycle.LiveData
 import io.realm.Realm
 import remi.scoreboard.AbsentLiveData
-import remi.scoreboard.data.Player
 import remi.scoreboard.data.User
 
 object UserDao {
@@ -31,11 +30,12 @@ object UserDao {
             }
         }
 
-    fun addPlayerToUser(player: Player, userId: String) =
+    // TODO call this in login activity after logout
+    fun deleteUser() {
         Realm.getDefaultInstance().use {
             it.executeTransaction { realm ->
-                val user = realm.where(User::class.java).equalTo("id", userId).findFirst()
-                user?.playerList?.add(player)
+                realm.delete(User::class.java)
             }
         }
+    }
 }

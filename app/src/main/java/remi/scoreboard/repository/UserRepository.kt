@@ -42,7 +42,7 @@ class UserRepository {
             signUpState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
-                is IllegalStateException, is RealmPrimaryKeyConstraintException -> {
+                is ParseException, is IllegalStateException, is RealmPrimaryKeyConstraintException -> {
                     signUpState.postValue(MessageStatus(Status.ERROR, e.message.toString())) // Inform UI
                 }
                 else -> throw e
@@ -73,8 +73,13 @@ class UserRepository {
         try {
             ParseManager.logOut()
             logOutState.postValue(MessageStatus(Status.SUCCESS))
-        } catch (e: ParseException) {
-            logOutState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
+        } catch (e: Exception) {
+            when (e) {
+                is ParseException, is IllegalStateException -> {
+                    logOutState.postValue(MessageStatus(Status.ERROR, e.message ?: ""))
+                }
+                else -> throw e
+            }
         }
     }
 
