@@ -16,26 +16,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import remi.scoreboard.R
+import remi.scoreboard.data.Game
 import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentChoosePlayerBinding
 import remi.scoreboard.fastadapter.item.ChoosePlayerItem
-import remi.scoreboard.viewmodel.UserViewModel
+import remi.scoreboard.viewmodel.ChoosePlayerViewModel
 
 class ChoosePlayerFragment : Fragment() {
 
-    private lateinit var userViewModel: UserViewModel
+    private lateinit var choosePlayerViewModel: ChoosePlayerViewModel
     private lateinit var binding: FragmentChoosePlayerBinding
     private lateinit var fastAdapter: FastItemAdapter<ChoosePlayerItem>
 
     private var listOfSelectedId: List<Long>? = null
     private var selectExtension: SelectExtension<ChoosePlayerItem>? = null
+    private lateinit var currentGame: Game
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        userViewModel.updateUserState.observe(this, Observer {
+        choosePlayerViewModel = ViewModelProviders.of(this).get(ChoosePlayerViewModel::class.java)
+        choosePlayerViewModel.updateUserState.observe(this, Observer {
             if (it.status != Status.LOADING)
                 binding.swipeRefresh.isRefreshing = false
             if (it.status == Status.ERROR)
@@ -44,8 +46,15 @@ class ChoosePlayerFragment : Fragment() {
                         Snackbar.make(view, it.message, Snackbar.LENGTH_SHORT).show()
                 }
         })
+        choosePlayerViewModel.createMatchState.observe(this, Observer {
+            if (it.status == Status.SUCCESS) {
+                val action = ChoosePlayerFragmentDirections.actionStartPlaying(it.message)
+                findNavController().navigate(action)
+                activity?.finish()
+            }
+        })
 
-        userViewModel.currentUser.observe(this, Observer { user ->
+        choosePlayerViewModel.currentUser.observe(this, Observer { user ->
             binding.playerListIsEmpty = user.playerList.isEmpty()
             activity?.invalidateOptionsMenu()
             fastAdapter.setNewList(user.playerList.map { ChoosePlayerItem(it) })
@@ -55,7 +64,14 @@ class ChoosePlayerFragment : Fragment() {
             }
         })
 
-        userViewModel.refreshUser()
+        activity?.let {
+            choosePlayerViewModel.getGameById(ChoosePlayerFragmentArgs.fromBundle(it.intent.extras).gameId)
+                .observe(this, Observer { game ->
+                    currentGame = game
+                })
+        }
+
+        choosePlayerViewModel.refreshUser()
 
         fastAdapter = getFastAdapter()
         selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
@@ -67,12 +83,14 @@ class ChoosePlayerFragment : Fragment() {
         adapter.withMultiSelect(true)
         adapter.setHasStableIds(true)
         adapter.withOnClickListener { v, _, _, _ ->
+            activity?.invalidateOptionsMenu()
             v?.findViewById<EasyFlipView>(R.id.avatar_flipview)?.flipTheView()
             true
         }
         adapter.itemFilter.withFilterPredicate { item, constraint ->
             runBlocking {
-                async(Dispatchers.Main) { // Need to run on UI thread to access player (live realm object)
+                async(Dispatchers.Main) {
+                    // Need to run on UI thread to access player (live realm object)
                     item.player.username.contains(constraint ?: "", true)
                 }.await()
             }
@@ -98,7 +116,7 @@ class ChoosePlayerFragment : Fragment() {
                 binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
             }
         })
-        binding.swipeRefresh.setOnRefreshListener { userViewModel.refreshUser() }
+        binding.swipeRefresh.setOnRefreshListener { choosePlayerViewModel.refreshUser() }
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         return binding.root
@@ -125,12 +143,21 @@ class ChoosePlayerFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
         if (binding.playerListIsEmpty == true)
             menu?.removeItem(R.id.action_search)
+        selectExtension?.selectedItems?.let {
+            if (it.size < 2) {
+                menu?.removeItem(R.id.action_start_playing)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_manage_player -> {
                 startManagePlayerFragment()
+                true
+            }
+            R.id.action_start_playing -> {
+                createMatchAndStartPlayActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -156,5 +183,11 @@ class ChoosePlayerFragment : Fragment() {
         listOfSelectedId = selectExtension?.selectedItems?.map { it.identifier }
         val action = ChoosePlayerFragmentDirections.actionManagePlayers()
         findNavController().navigate(action)
+    }
+
+    private fun createMatchAndStartPlayActivity() {
+        val playerList = selectExtension?.selectedItems?.map { it.player }
+        if (playerList != null && ::currentGame.isInitialized)
+            choosePlayerViewModel.createMatch(currentGame, playerList)
     }
 }

@@ -8,8 +8,8 @@
         android:name="remi.scoreboard.fragment.ChoosePlayerFragment"
         android:label="Players">
         <action
-            android:id="@+id/nextAction"
-            app:destination="@id/playActivity" />
+            android:id="@+id/action_start_playing"
+            app:destination="@id/play_activity" />
         <argument
             android:name="gameId"
             app:argType="string" />
@@ -18,9 +18,13 @@
             app:destination="@+id/manage_player_fragment" />
     </fragment>
     <activity
-        android:id="@+id/playActivity"
+        android:id="@+id/play_activity"
         android:name="remi.scoreboard.activity.PlayActivity"
-        android:label="PlayActivity" />
+        android:label="Play" >
+        <argument
+            android:name="matchId"
+            app:argType="string" />
+    </activity>
     <fragment
         android:id="@+id/manage_player_fragment"
         android:name="remi.scoreboard.fragment.ManagePlayerFragment"

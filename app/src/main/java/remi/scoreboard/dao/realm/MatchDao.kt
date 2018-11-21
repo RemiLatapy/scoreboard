@@ -14,15 +14,8 @@ object MatchDao {
     fun insert(match: Match) =
         Realm.getDefaultInstance().use { it.executeTransaction { realm -> realm.insert(match) } }
 
-    // TODO return only ID ?
-    fun create(match: Match): LiveRealmObject<Match> {
-        Realm.getDefaultInstance().let {
-            it.beginTransaction()
-            val realMatch: Match = it.copyToRealm(match)
-            it.commitTransaction()
-            return LiveRealmObject(realMatch)
-        }
-    }
+    fun insertOrUpdate(match: Match) =
+        Realm.getDefaultInstance().use { it.executeTransaction { realm -> realm.insertOrUpdate(match) } }
 
     fun deleteAll() =
         Realm.getDefaultInstance().use { it.executeTransaction { realm -> realm.delete(Match::class.java) } }

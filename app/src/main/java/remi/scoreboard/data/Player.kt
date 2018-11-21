@@ -14,10 +14,12 @@ open class Player(
     var avatar: String = "file:///android_asset/dafault_avatar.png"
 ) : RealmObject() {
 
-    constructor(parsePlayer: ParseObject) : this() {
-        id = parsePlayer.objectId
-        username = parsePlayer.getString("username") ?: username
-        avatar = parsePlayer.getString("avatar") ?: avatar
+    constructor(parsePlayer: ParseObject?) : this() {
+        parsePlayer?.let {
+            this.id = it.objectId
+            this.username = it.fetchIfNeeded<ParseObject>().getString("username") ?: username
+            this.avatar = it.fetchIfNeeded<ParseObject>().getString("avatar") ?: avatar
+        }
     }
 
     fun getParsePlayer(): ParseObject {

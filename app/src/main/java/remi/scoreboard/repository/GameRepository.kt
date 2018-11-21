@@ -17,6 +17,8 @@ class GameRepository {
 
     val updateGameListState = MutableLiveData<MessageStatus>()
 
+    fun getGameById(id: String): LiveData<Game> = GameDao.loadGameById(id)
+
     @WorkerThread
     suspend fun updateGameList() {
         updateGameListState.postValue(MessageStatus(Status.LOADING))
@@ -42,5 +44,4 @@ class GameRepository {
 
     @WorkerThread
     suspend fun deleteAll() = GameDao.deleteAll()
-
 }

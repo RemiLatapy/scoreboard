@@ -14,13 +14,14 @@ import kotlinx.android.parcel.Parcelize
 open class Game(
     @PrimaryKey var id: String = "-1",
     @Required var name: String = "game_default",
-    var thumbnail: String = "",
-    var type: String = ""
+    var thumbnail: String = ""
 ) : RealmObject(), Parcelable {
 
-    constructor(parse: ParseObject) : this() {
-        id = parse.objectId
-        name = parse.getString("name") ?: name
-        thumbnail = parse.getParseFile("thumbnail")?.url ?: thumbnail
+    constructor(parseGame: ParseObject?) : this() {
+        parseGame?.let {
+            this.id = parseGame.objectId
+            this.name = parseGame.getString("name") ?: name
+            this.thumbnail = parseGame.getParseFile("thumbnail")?.url ?: thumbnail
+        }
     }
 }

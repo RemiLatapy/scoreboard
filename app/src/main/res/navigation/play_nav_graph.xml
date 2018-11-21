@@ -8,5 +8,9 @@
     <fragment
         android:id="@+id/play_dest"
         android:name="remi.scoreboard.fragment.GamePlayFragment"
-        android:label="Play" />
+        android:label="Play" >
+        <argument
+            android:name="matchId"
+            app:argType="string" />
+    </fragment>
 </navigation>

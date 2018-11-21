@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import remi.scoreboard.R
 import remi.scoreboard.data.Game
+import remi.scoreboard.data.Match
 import remi.scoreboard.data.Player
 import remi.scoreboard.data.User
 
@@ -134,5 +135,24 @@ object ParseManager {
         parsePlayer.put("username", username)
         parsePlayer.save()
         return fetchCurrentUser()
+    }
+
+    // Matches
+    @WorkerThread
+    fun createMatch(match: Match): Match {
+        ensureConnection()
+
+        // Create & save player score
+        val parsePlayerScore = match.scorePlayerList.map { it.getParsePlayerScore() }.apply {
+            forEach { it.acl = ParseUser.getCurrentUser().acl }
+        }
+        ParseObject.saveAll(parsePlayerScore)
+
+        // Create & save match
+        val parseMatch = match.getParseMatchWithParsePlayerScores(parsePlayerScore)
+        parseMatch.acl = ParseUser.getCurrentUser().acl
+        parseMatch.save()
+
+        return Match(parseMatch)
     }
 }
