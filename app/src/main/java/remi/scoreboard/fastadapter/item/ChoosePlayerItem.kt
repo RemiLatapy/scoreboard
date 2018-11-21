@@ -8,7 +8,7 @@ import remi.scoreboard.data.Player
 import remi.scoreboard.databinding.ItemCardChoosePlayerBinding
 
 class ChoosePlayerItem(val player: Player) : AbstractItem<ChoosePlayerItem, ChoosePlayerItem.ViewHolder>() {
-    override fun getType() = R.id.fastadapter_player_id
+    override fun getType() = R.id.fastadapter_chooseplayer_id
 
     override fun getIdentifier() = player.id.hashCode().toLong()
 

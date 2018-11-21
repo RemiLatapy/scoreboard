@@ -41,4 +41,6 @@ class MatchRepository {
     fun addPoints(playerScore: PlayerScore, points: Int) {
         MatchDao.addPoints(playerScore, points)
     }
+
+    fun getMatchById(matchId: String): LiveData<Match> = MatchDao.loadGameWithId(matchId)
 }
