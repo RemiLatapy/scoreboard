@@ -68,11 +68,23 @@ class GamePlayFragment : Fragment() {
         }))
         touchHelper.attachToRecyclerView(binding.recycler)
 
+        binding.finishGameListener = View.OnClickListener { activity?.finish() }
+
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_gameplay, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_finish_game -> {
+                activity?.finish()
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     private fun showAddPointsDialog(playerScoreItem: PlayerScoreItem) {
