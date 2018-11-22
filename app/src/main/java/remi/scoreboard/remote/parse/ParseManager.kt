@@ -8,10 +8,7 @@ import com.parse.ParseException.OTHER_CAUSE
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import remi.scoreboard.R
-import remi.scoreboard.data.Game
-import remi.scoreboard.data.Match
-import remi.scoreboard.data.Player
-import remi.scoreboard.data.User
+import remi.scoreboard.data.*
 
 object ParseManager {
 
@@ -154,5 +151,27 @@ object ParseManager {
         parseMatch.save()
 
         return Match(parseMatch)
+    }
+
+    @WorkerThread
+    fun updateMatch(matchId: String, playerScoreList: List<PlayerScore>): Match {
+        ensureConnection()
+        playerScoreList.forEach {
+            ParseQuery.getQuery<ParseObject>("playerscore").get(it.id).apply {
+                put("score", it.score)
+                put("number", it.number)
+                save()
+            }
+        }
+        return Match(ParseQuery.getQuery<ParseObject>("match").get(matchId))
+    }
+
+    fun updateMatch(matchId: String, playerScore: PlayerScore, newScore: Int): Match {
+        ensureConnection()
+        ParseQuery.getQuery<ParseObject>("playerscore").get(playerScore.id).apply {
+            put("score", newScore)
+            save()
+        }
+        return Match(ParseQuery.getQuery<ParseObject>("match").get(matchId))
     }
 }

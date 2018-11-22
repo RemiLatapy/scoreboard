@@ -10,19 +10,22 @@ import io.realm.annotations.RealmNamingPolicy
 open class PlayerScore(
     @PrimaryKey var id: String = "-1",
     var player: Player? = Player(),
-    var score: Int = 0
+    var score: Int = 0,
+    var number: Int = 0
 ) : RealmObject() {
 
     constructor(parsePlayerScore: ParseObject) : this() {
         id = parsePlayerScore.objectId
         player = Player(parsePlayerScore.getParseObject("player"))
         score = parsePlayerScore.fetchIfNeeded<ParseObject>().getInt("score")
+        number = parsePlayerScore.fetchIfNeeded<ParseObject>().getInt("number")
     }
 
     fun getParsePlayerScore(): ParseObject {
         return ParseObject("playerscore").apply {
             player?.let { put("player", ParseObject.createWithoutData("player", it.id)) }
             put("score", score)
+            put("number", number)
         }
     }
 }

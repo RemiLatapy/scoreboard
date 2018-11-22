@@ -21,13 +21,13 @@ open class Match(
 
     constructor(game: Game, playerList: List<Player>) : this() {
         this.game = game
-        this.scorePlayerList.addAll(playerList.map { PlayerScore(player = it) })
+        this.scorePlayerList.addAll(playerList.mapIndexed { idx, player -> PlayerScore(player = player, number = idx) })
     }
 
     constructor(parseMatch: ParseObject) : this() {
         this.id = parseMatch.objectId
         this.game = Game(parseMatch.getParseObject("game")?.fetchIfNeeded<ParseObject>())
-        parseMatch.getList<ParseObject>("playerScoreList")?.map { PlayerScore(it) }?.let {
+        parseMatch.getList<ParseObject>("playerScoreList")?.map { PlayerScore(it.fetchIfNeeded<ParseObject>()) }?.let {
             this.scorePlayerList.addAll(it)
         }
         this.date = parseMatch.getDate("date") ?: Date(0)
