@@ -3,14 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+    <data>
+
+        <variable
+            name="finishGameListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:context=".activity.ActivityMain"
-        tools:listitem="@layout/item_card_playerscore" />
+        android:orientation="vertical">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:padding="@dimen/fragment_padding"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:context=".activity.PlayActivity"
+            tools:listitem="@layout/item_card_player_score" />
+
+        <Button
+            android:id="@+id/finish_match_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/fragment_padding"
+            android:layout_marginBottom="@dimen/fragment_padding"
+            android:layout_weight="0"
+            android:background="@color/colorPrimary"
+            android:onClick="@{finishGameListener}"
+            android:text="@string/finish_game_btn_text"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+    </LinearLayout>
 </layout>

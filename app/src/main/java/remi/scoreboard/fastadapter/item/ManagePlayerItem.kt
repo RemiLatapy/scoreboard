@@ -8,7 +8,7 @@ import remi.scoreboard.data.Player
 import remi.scoreboard.databinding.ItemCardManagePlayerBinding
 
 class ManagePlayerItem(val player: Player) : AbstractItem<ManagePlayerItem, ManagePlayerItem.ViewHolder>() {
-    override fun getType() = R.id.fastadapter_player_id
+    override fun getType() = R.id.fastadapter_manageplayer_id
 
     override fun getIdentifier() = player.id.hashCode().toLong()
 
