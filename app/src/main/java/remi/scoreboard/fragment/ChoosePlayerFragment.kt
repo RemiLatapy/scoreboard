@@ -59,6 +59,8 @@ class ChoosePlayerFragment : Fragment() {
             activity?.invalidateOptionsMenu()
             fastAdapter.setNewList(user.playerList.map { ChoosePlayerItem(it) })
 
+            restoreSelectionFromIdListIfNeeded()
+
             savedInstanceState?.let {
                 fastAdapter.withSavedInstanceState(it)
             }
@@ -116,7 +118,10 @@ class ChoosePlayerFragment : Fragment() {
                 binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
             }
         })
-        binding.swipeRefresh.setOnRefreshListener { choosePlayerViewModel.refreshUser() }
+        binding.swipeRefresh.setOnRefreshListener {
+            saveSelectionToIdList()
+            choosePlayerViewModel.refreshUser()
+        }
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         return binding.root
@@ -166,6 +171,10 @@ class ChoosePlayerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        restoreSelectionFromIdListIfNeeded()
+    }
+
+    private fun restoreSelectionFromIdListIfNeeded() {
         selectExtension?.let {
             listOfSelectedId?.forEach { id ->
                 it.selectByIdentifier(id, false, false)
@@ -180,9 +189,13 @@ class ChoosePlayerFragment : Fragment() {
     }
 
     private fun startManagePlayerFragment() {
-        listOfSelectedId = selectExtension?.selectedItems?.map { it.identifier }
+        saveSelectionToIdList()
         val action = ChoosePlayerFragmentDirections.actionManagePlayers()
         findNavController().navigate(action)
+    }
+
+    private fun saveSelectionToIdList() {
+        listOfSelectedId = selectExtension?.selectedItems?.map { it.identifier }
     }
 
     private fun createMatchAndStartPlayActivity() {
