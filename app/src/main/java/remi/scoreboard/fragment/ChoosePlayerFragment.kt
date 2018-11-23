@@ -28,7 +28,7 @@ class ChoosePlayerFragment : Fragment() {
     private lateinit var binding: FragmentChoosePlayerBinding
     private lateinit var fastAdapter: FastItemAdapter<ChoosePlayerItem>
 
-    private var listOfSelectedId: List<Long>? = null
+    private var selectionSaveBundle: Bundle? = null
     private var selectExtension: SelectExtension<ChoosePlayerItem>? = null
     private lateinit var currentGame: Game
 
@@ -59,9 +59,9 @@ class ChoosePlayerFragment : Fragment() {
             activity?.invalidateOptionsMenu()
             fastAdapter.setNewList(user.playerList.map { ChoosePlayerItem(it) })
 
-            restoreSelectionFromIdListIfNeeded()
+            restoreAdapterSelectionListFromBundleIfNeeded() // restore in case of background/foreground (pause/resume)
 
-            savedInstanceState?.let {
+            savedInstanceState?.let {// restore in case of destroy (rotation)
                 fastAdapter.withSavedInstanceState(it)
             }
         })
@@ -119,7 +119,7 @@ class ChoosePlayerFragment : Fragment() {
             }
         })
         binding.swipeRefresh.setOnRefreshListener {
-            saveSelectionToIdList()
+            saveAdapterSelectionListToBundle()
             choosePlayerViewModel.refreshUser()
         }
         binding.setLifecycleOwner(viewLifecycleOwner)
@@ -169,33 +169,31 @@ class ChoosePlayerFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        restoreSelectionFromIdListIfNeeded()
+    override fun onPause() {
+        super.onPause()
+        saveAdapterSelectionListToBundle()
     }
 
-    private fun restoreSelectionFromIdListIfNeeded() {
-        selectExtension?.let {
-            listOfSelectedId?.forEach { id ->
-                it.selectByIdentifier(id, false, false)
-            }
-            listOfSelectedId = null
+    private fun saveAdapterSelectionListToBundle() {
+        selectionSaveBundle = Bundle()
+        fastAdapter.saveInstanceState(selectionSaveBundle)
+    }
+
+    private fun restoreAdapterSelectionListFromBundleIfNeeded() {
+        selectionSaveBundle?.let {
+            fastAdapter.withSavedInstanceState(it)
+            selectionSaveBundle = null // Consume bundle
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        val newOutState = fastAdapter.saveInstanceState(outState)
-        super.onSaveInstanceState(newOutState)
+        super.onSaveInstanceState(outState)
+        fastAdapter.saveInstanceState(outState)
     }
 
     private fun startManagePlayerFragment() {
-        saveSelectionToIdList()
         val action = ChoosePlayerFragmentDirections.actionManagePlayers()
         findNavController().navigate(action)
-    }
-
-    private fun saveSelectionToIdList() {
-        listOfSelectedId = selectExtension?.selectedItems?.map { it.identifier }
     }
 
     private fun createMatchAndStartPlayActivity() {
