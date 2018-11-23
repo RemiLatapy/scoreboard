@@ -1,4 +1,4 @@
-package remi.scoreboard.adapter
+package remi.scoreboard.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

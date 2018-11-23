@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package remi.scoreboard
+package remi.scoreboard.util
 
 import androidx.lifecycle.LiveData
 

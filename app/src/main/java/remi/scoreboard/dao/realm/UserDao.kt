@@ -2,7 +2,7 @@ package remi.scoreboard.dao.realm
 
 import androidx.lifecycle.LiveData
 import io.realm.Realm
-import remi.scoreboard.AbsentLiveData
+import remi.scoreboard.util.AbsentLiveData
 import remi.scoreboard.data.User
 
 object UserDao {
