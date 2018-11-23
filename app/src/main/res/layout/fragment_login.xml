@@ -34,10 +34,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_username"
+            android:importantForAutofill="no"
             android:inputType="textPersonName"
             android:maxLines="1"
-            android:singleLine="true"
-            android:importantForAutofill="no" />
+            android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,12 +80,13 @@
         android:visibility="gone"
         tools:ignore="MissingConstraints" />
 
-    <TextView
+    <Button
         android:id="@+id/link_sign_up"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:gravity="end|center_vertical"
+        android:padding="@dimen/borderless_btn_padding"
         android:text="@string/link_sign_up"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"

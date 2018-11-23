@@ -64,11 +64,12 @@
                 android:text="@string/choose_player_emptyview_text"
                 android:textColor="@color/gray" />
 
-            <TextView
+            <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_padding"
                 android:onClick="@{managePlayerListener}"
+                android:padding="@dimen/borderless_btn_padding"
                 android:text="@string/action_manage_player"
                 android:textColor="@color/colorPrimary"
                 android:theme="@style/Base.Widget.AppCompat.Button.Borderless" />
