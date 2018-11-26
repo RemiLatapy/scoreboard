@@ -13,6 +13,7 @@ open class User(
     @PrimaryKey var id: String = "",
     @Required var username: String = "default_username",
     @Required var email: String = "",
+    var displayName: String = username,
     var avatar: String = "file:///android_asset/dafault_avatar.png",
     var playerList: PlayerList = PlayerList(),
     var isLocalUser: Boolean = false,
@@ -24,6 +25,7 @@ open class User(
     constructor(user: ParseUser, parsePlayerList: List<ParseObject> = ArrayList()) : this() {
         id = user.objectId
         username = user.username
+        displayName = user.getString("displayName") ?: displayName
         email = user.email
         avatar = user.getParseFile("avatar")?.url ?: avatar
         parsePlayerList.mapTo(playerList) { Player(it) }
@@ -34,6 +36,7 @@ open class User(
         user.username = username
         user.email = email
         user.setPassword(password)
+        user.put("displayName", displayName)
 //        user.put("avatar", avatar) // TODO upload file...
         return user
     }
@@ -41,6 +44,7 @@ open class User(
     fun set(user: User) {
         username = user.username
         email = user.email
+        displayName = user.displayName
         avatar = user.avatar
         playerList = PlayerList()
         playerList.addAll(user.playerList)
