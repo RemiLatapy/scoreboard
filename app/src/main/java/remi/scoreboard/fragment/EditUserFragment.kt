@@ -52,7 +52,7 @@ class EditUserFragment : Fragment() {
         }
 
 
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.setLifecycleOwner(this)
         return binding.root
     }
 

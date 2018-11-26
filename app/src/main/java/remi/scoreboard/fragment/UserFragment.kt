@@ -25,8 +25,6 @@ class UserFragment : Fragment() {
         setHasOptionsMenu(true)
 
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        viewModel.playerList.observe(this, Observer { binding.playerList = it })
-        viewModel.displayName.observe(this, Observer { binding.txtDisplayName.text = it })
         viewModel.logOutState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
@@ -48,10 +46,10 @@ class UserFragment : Fragment() {
     ): View? {
         binding = FragmentUserBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
-        binding.setLifecycleOwner(viewLifecycleOwner)
         binding.signoutListener = signoutListener
         binding.loginListener = loginListener
         binding.managePlayersListener = managePlayersListener
+        binding.setLifecycleOwner(this)
         return binding.root
     }
 

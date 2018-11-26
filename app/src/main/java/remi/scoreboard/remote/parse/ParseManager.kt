@@ -155,11 +155,10 @@ object ParseManager {
     @WorkerThread
     fun editCurrentUser(displayName: String): User {
         ensureConnection()
-        return ParseUser.getCurrentUser().run {
+        ParseUser.getCurrentUser().apply {
             put(FIELD_DISPLAY_NAME, displayName)
-            save()
-            User(this)
-        }
+        }.save()
+        return fetchCurrentUser()
     }
 
     // Matches

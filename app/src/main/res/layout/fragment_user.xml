@@ -8,17 +8,9 @@
 
         <import type="android.view.View" />
 
-        <import type="java.util.List" />
-
-        <import type="remi.scoreboard.data.Player" />
-
         <variable
             name="viewModel"
             type="remi.scoreboard.viewmodel.UserViewModel" />
-
-        <variable
-            name="playerList"
-            type="List&lt;Player&gt;" />
 
         <variable
             name="signoutListener"
@@ -133,7 +125,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
             bind:clickListener="@{managePlayersListener}"
-            bind:playerList="@{playerList}" />
+            bind:playerNumber="@{viewModel.playerList.size()}" />
 
         <View
             android:id="@+id/divider"

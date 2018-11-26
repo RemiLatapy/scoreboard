@@ -23,6 +23,7 @@ class EditUserViewModel() : ViewModel() {
 
     private val currentUser: LiveData<User> = userRepository.currentUser
     val displayName: LiveData<String> = Transformations.map(currentUser) { user -> user.displayName }
+    val avatar: LiveData<String> = Transformations.map(currentUser) { user -> user.avatar }
 
     val editUserState: LiveData<MessageStatus> = userRepository.editUserState
 
