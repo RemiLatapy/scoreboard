@@ -14,6 +14,24 @@ object ParseManager {
 
     private lateinit var connectivityManager: ConnectivityManager
 
+    const val TABLE_GAME = "Game"
+    const val TABLE_MATCH = "Match"
+    const val TABLE_PLAYER = "Player"
+    const val TABLE_PLAYERSCORE = "Playerscore"
+
+    const val FIELD_USERNAME = "username"
+    const val FIELD_SCORE = "score"
+    const val FIELD_ORDER = "order"
+    const val FIELD_NAME = "name"
+    const val FIELD_THUMBNAIL = "thumbnail"
+    const val FIELD_GAME = "game"
+    const val FIELD_PLAYERSCORE_LIST = "playerScoreList"
+    const val FIELD_MATCH = "match"
+    const val FIELD_DATE = "date"
+    const val FIELD_AVATAR = "avatar"
+    const val FIELD_PLAYER = "player"
+    const val FIELD_DISPLAY_NAME = "displayName"
+
     fun init(context: Context) {
         Parse.initialize(
             Parse.Configuration.Builder(context)
@@ -55,7 +73,7 @@ object ParseManager {
     @WorkerThread
     fun getGameList(): List<Game> {
         ensureConnection()
-        val parseGameList = ParseQuery.getQuery<ParseObject>("games").find()
+        val parseGameList = ParseQuery.getQuery<ParseObject>(TABLE_GAME).find()
         return parseGameList.map { Game(it) }
     }
 
@@ -78,7 +96,7 @@ object ParseManager {
     fun logInUser(username: String, password: String): User {
         ensureConnection()
         ParseUser.logIn(username, password)
-        val playerList: List<ParseObject> = ParseQuery.getQuery<ParseObject>("player").find()
+        val playerList: List<ParseObject> = ParseQuery.getQuery<ParseObject>(TABLE_PLAYER).find()
         return User(ParseUser.getCurrentUser(), playerList)
     }
 
@@ -86,7 +104,7 @@ object ParseManager {
     fun fetchCurrentUser(): User {
         ensureConnection()
         ParseUser.getCurrentUser().fetch()
-        val playerList: List<ParseObject> = ParseQuery.getQuery<ParseObject>("player").find()
+        val playerList: List<ParseObject> = ParseQuery.getQuery<ParseObject>(TABLE_PLAYER).find()
         return User(ParseUser.getCurrentUser(), playerList)
     }
 
@@ -108,14 +126,14 @@ object ParseManager {
     @WorkerThread
     fun deleteAllPlayersOfCurrentUser(): User {
         ensureConnection()
-        ParseQuery.getQuery<ParseObject>("player").find().forEach { it.delete() }
+        ParseQuery.getQuery<ParseObject>(TABLE_PLAYER).find().forEach { it.delete() }
         return fetchCurrentUser()
     }
 
     @WorkerThread
     fun deletePlayerOfCurrentUser(id: String): User {
         ensureConnection()
-        ParseQuery.getQuery<ParseObject>("player").get(id).delete()
+        ParseQuery.getQuery<ParseObject>(TABLE_PLAYER).get(id).delete()
         return fetchCurrentUser()
     }
 
@@ -128,8 +146,8 @@ object ParseManager {
     @WorkerThread
     fun renamePlayerOfCurrentUser(id: String, username: String): User {
         ensureConnection()
-        val parsePlayer = ParseQuery.getQuery<ParseObject>("player").get(id)
-        parsePlayer.put("username", username)
+        val parsePlayer = ParseQuery.getQuery<ParseObject>(TABLE_PLAYER).get(id)
+        parsePlayer.put(FIELD_USERNAME, username)
         parsePlayer.save()
         return fetchCurrentUser()
     }
@@ -157,21 +175,21 @@ object ParseManager {
     fun updateMatch(matchId: String, playerScoreList: List<PlayerScore>): Match {
         ensureConnection()
         playerScoreList.forEach {
-            ParseQuery.getQuery<ParseObject>("playerscore").get(it.id).apply {
-                put("score", it.score)
-                put("number", it.number)
+            ParseQuery.getQuery<ParseObject>(TABLE_PLAYERSCORE).get(it.id).apply {
+                put(FIELD_SCORE, it.score)
+                put(FIELD_ORDER, it.order)
                 save()
             }
         }
-        return Match(ParseQuery.getQuery<ParseObject>("match").get(matchId))
+        return Match(ParseQuery.getQuery<ParseObject>(TABLE_MATCH).get(matchId))
     }
 
     fun updateMatch(matchId: String, playerScore: PlayerScore, newScore: Int): Match {
         ensureConnection()
-        ParseQuery.getQuery<ParseObject>("playerscore").get(playerScore.id).apply {
-            put("score", newScore)
+        ParseQuery.getQuery<ParseObject>(TABLE_PLAYERSCORE).get(playerScore.id).apply {
+            put(FIELD_SCORE, newScore)
             save()
         }
-        return Match(ParseQuery.getQuery<ParseObject>("match").get(matchId))
+        return Match(ParseQuery.getQuery<ParseObject>(TABLE_MATCH).get(matchId))
     }
 }

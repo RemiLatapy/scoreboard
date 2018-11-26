@@ -32,7 +32,7 @@ class GamePlayViewModel(val matchId: String) : ViewModel() {
     fun updatePlayerScoreList(playerScoreList: List<PlayerScore>) {
         Realm.getDefaultInstance().use {
             val unmanagedList = playerScoreList.map { playerScore -> it.copyFromRealm(playerScore) }
-            unmanagedList.forEachIndexed { idx, it -> it.number = idx }
+            unmanagedList.forEachIndexed { idx, it -> it.order = idx }
             scope.launch(Dispatchers.IO) { matchRepository.updatePlayerScoreList(matchId, unmanagedList) }
         }
     }

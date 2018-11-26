@@ -8,8 +8,9 @@ import io.realm.annotations.RealmClass
 import io.realm.annotations.RealmNamingPolicy
 import io.realm.annotations.Required
 import kotlinx.android.parcel.Parcelize
+import remi.scoreboard.remote.parse.ParseManager
 
-@RealmClass(name = "games", fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+@RealmClass(fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 @Parcelize
 open class Game(
     @PrimaryKey var id: String = "-1",
@@ -20,8 +21,8 @@ open class Game(
     constructor(parseGame: ParseObject?) : this() {
         parseGame?.let {
             this.id = parseGame.objectId
-            this.name = parseGame.getString("name") ?: name
-            this.thumbnail = parseGame.getParseFile("thumbnail")?.url ?: thumbnail
+            this.name = parseGame.getString(ParseManager.FIELD_NAME) ?: name
+            this.thumbnail = parseGame.getParseFile(ParseManager.FIELD_THUMBNAIL)?.url ?: thumbnail
         }
     }
 }

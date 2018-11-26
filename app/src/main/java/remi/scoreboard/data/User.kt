@@ -5,10 +5,11 @@ import com.parse.ParseUser
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.*
+import remi.scoreboard.remote.parse.ParseManager
 
 typealias PlayerList = RealmList<Player>
 
-@RealmClass(name = "users", fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+@RealmClass(fieldNamingPolicy = RealmNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
 open class User(
     @PrimaryKey var id: String = "",
     @Required var username: String = "default_username",
@@ -20,14 +21,12 @@ open class User(
     @Ignore var password: String = ""
 ) : RealmObject() {
 
-//    constructor() : this(playerList = PlayerList())
-
     constructor(user: ParseUser, parsePlayerList: List<ParseObject> = ArrayList()) : this() {
         id = user.objectId
         username = user.username
-        displayName = user.getString("displayName") ?: displayName
+        displayName = user.getString(ParseManager.FIELD_DISPLAY_NAME) ?: displayName
         email = user.email
-        avatar = user.getParseFile("avatar")?.url ?: avatar
+        avatar = user.getParseFile(ParseManager.FIELD_AVATAR)?.url ?: avatar
         parsePlayerList.mapTo(playerList) { Player(it) }
     }
 
@@ -36,7 +35,7 @@ open class User(
         user.username = username
         user.email = email
         user.setPassword(password)
-        user.put("displayName", displayName)
+        user.put(ParseManager.FIELD_DISPLAY_NAME, displayName)
 //        user.put("avatar", avatar) // TODO upload file...
         return user
     }
