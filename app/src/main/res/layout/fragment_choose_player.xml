@@ -7,13 +7,9 @@
 
         <import type="android.view.View" />
 
-        <import type="remi.scoreboard.data.Player" />
-
-        <import type="java.util.List" />
-
         <variable
-            name="playerList"
-            type="List&lt;Player&gt;" />
+            name="playerListIsEmpty"
+            type="Boolean" />
 
         <variable
             name="managePlayerListener"
@@ -27,45 +23,55 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".activity.MainActivity">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="@{playerList.isEmpty ? View.GONE : View.VISIBLE}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_card_choose_player" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="@dimen/fragment_padding"
+                android:visibility="@{playerListIsEmpty? View.GONE : View.VISIBLE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_card_choose_player" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="@{playerList.isEmpty ? View.VISIBLE : View.GONE}"
+            android:visibility="@{playerListIsEmpty ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/emptyview_square_icon_size"
+                android:layout_height="@dimen/emptyview_square_icon_size"
                 android:tint="@color/gray"
                 app:srcCompat="@drawable/ic_people_outline_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="You don't have any player yet"
+                android:layout_marginTop="@dimen/small_padding"
+                android:text="@string/choose_player_emptyview_text"
                 android:textColor="@color/gray" />
 
-            <TextView
+            <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Manage players"
-                android:textColor="@color/colorPrimary"
                 android:onClick="@{managePlayerListener}"
+                android:padding="@dimen/borderless_btn_padding"
+                android:text="@string/action_manage_player"
+                android:textColor="@color/colorPrimary"
                 android:theme="@style/Base.Widget.AppCompat.Button.Borderless" />
         </LinearLayout>
 

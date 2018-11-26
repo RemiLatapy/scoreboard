@@ -13,4 +13,31 @@
         <item>Championnat</item>
         <item>Coupe</item>
     </string-array>
+
+    <string-array name="avatars">
+        <item>"file:///android_asset/avatar/circles-1.png</item>
+        <item>"file:///android_asset/avatar/circles-2.png</item>
+        <item>"file:///android_asset/avatar/circles.png</item>
+        <item>"file:///android_asset/avatar/cube-1.png</item>
+        <item>"file:///android_asset/avatar/cube.png</item>
+        <item>"file:///android_asset/avatar/flower-of-life.png</item>
+        <item>"file:///android_asset/avatar/icosahedron-1.png</item>
+        <item>"file:///android_asset/avatar/icosahedron.png</item>
+        <item>"file:///android_asset/avatar/metatron-cube-1.png</item>
+        <item>"file:///android_asset/avatar/metatron-cube.png</item>
+        <item>"file:///android_asset/avatar/octahedron-1.png</item>
+        <item>"file:///android_asset/avatar/octahedron.png</item>
+        <item>"file:///android_asset/avatar/pyramid.png</item>
+        <item>"file:///android_asset/avatar/sri-yantra-1.png</item>
+        <item>"file:///android_asset/avatar/sri-yantra.png</item>
+        <item>"file:///android_asset/avatar/star-of-david-1.png</item>
+        <item>"file:///android_asset/avatar/star-of-david.png</item>
+        <item>"file:///android_asset/avatar/tetrahedron.png</item>
+        <item>"file:///android_asset/avatar/triangle-1.png</item>
+        <item>"file:///android_asset/avatar/triangle-2.png</item>
+        <item>"file:///android_asset/avatar/triangle-3.png</item>
+        <item>"file:///android_asset/avatar/triangle-4.png</item>
+        <item>"file:///android_asset/avatar/triangle-5.png</item>
+        <item>"file:///android_asset/avatar/triangle.png</item>
+    </string-array>
 </resources>

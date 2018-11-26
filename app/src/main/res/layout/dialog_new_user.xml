@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="@dimen/dialog_big_padding"
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username"
+            android:id="@+id/txt_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/prompt_username"

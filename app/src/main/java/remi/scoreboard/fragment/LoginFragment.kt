@@ -47,7 +47,7 @@ class LoginFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(LoginSignupViewModel::class.java)
 
-        viewModel.loginState.observe(this, Observer { cb ->
+        viewModel.logInState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
                     viewModel.updateGameList()
@@ -114,10 +114,10 @@ class LoginFragment : Fragment() {
         progressBar = view.findViewById(R.id.progress)
         progressBar.visibility = View.INVISIBLE
 
-        textInputLayoutUsername = view.findViewById(R.id.textInputLayoutUsername)
-        textInputLayoutPwd = view.findViewById(R.id.textInputLayoutPwd)
-        textUsername = view.findViewById(R.id.username)
-        textPwd = view.findViewById(R.id.password)
+        textInputLayoutUsername = view.findViewById(R.id.input_layout_username)
+        textInputLayoutPwd = view.findViewById(R.id.input_layout_password)
+        textUsername = view.findViewById(R.id.txt_username)
+        textPwd = view.findViewById(R.id.txt_password)
 
         textUsername.setOnFocusChangeListener { v, hasFocus ->
             (v as? EditText)?.let {
@@ -134,8 +134,8 @@ class LoginFragment : Fragment() {
         view.run {
             findViewById<Button>(R.id.login_btn)?.setOnClickListener {
 
-                val username = findViewById<EditText>(R.id.username).text.toString()
-                val password = findViewById<EditText>(R.id.password).text.toString()
+                val username = findViewById<EditText>(R.id.txt_username).text.toString()
+                val password = findViewById<EditText>(R.id.txt_password).text.toString()
                 viewModel.loginUser(username, password)
             }
         }
@@ -170,8 +170,8 @@ class LoginFragment : Fragment() {
 
             resetPasswordDialog.setOnShowListener {
                 resetPasswordDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                    val emailLayout = dialogView.findViewById<TextInputLayout>(R.id.textInputLayoutEmail)
-                    val email = emailLayout.findViewById<TextInputEditText>(R.id.email)
+                    val emailLayout = dialogView.findViewById<TextInputLayout>(R.id.input_layout_email)
+                    val email = emailLayout.findViewById<TextInputEditText>(R.id.txt_email)
                     email.setOnFocusChangeListener { _, hasFocus -> if (hasFocus) emailLayout.error = null }
                     viewModel.resetPassword(email.text.toString())
                 }

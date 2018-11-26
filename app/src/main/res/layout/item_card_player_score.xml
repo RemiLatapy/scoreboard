@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="playerScore"
+            type="remi.scoreboard.data.PlayerScore" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="@dimen/middle_padding">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/avatar_desc"
+                app:circleImageFromUrl="@{playerScore.player.avatar}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/player_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/big_padding"
+                android:text='@{"Player " + Integer.toString(playerScore.number + 1)}'
+                android:textColor="@color/darkgray"
+                android:textSize="@dimen/player_number_text_size"
+                app:layout_constraintStart_toEndOf="@id/avatar"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Player 1" />
+
+            <TextView
+                android:id="@+id/player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/big_padding"
+                android:gravity="center_vertical"
+                android:text="@{playerScore.player.username}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/player_name_text_size"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/avatar"
+                app:layout_constraintTop_toBottomOf="@id/player_num"
+                tools:text="John Coffey" />
+
+            <TextView
+                android:id="@+id/player_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{Integer.toString(playerScore.score) + " points"}'
+                android:textColor="@color/black"
+                android:textSize="@dimen/score_text_size"
+                app:layout_constraintBottom_toBottomOf="@id/player_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="115 pts" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

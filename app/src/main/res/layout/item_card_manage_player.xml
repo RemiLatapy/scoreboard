@@ -12,93 +12,85 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        app:cardCornerRadius="4dp"
-        app:cardUseCompatPadding="true">
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="@dimen/card_margin">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="4dp">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
                 android:contentDescription="@string/avatar_desc"
                 app:circleImageFromUrl="@{player.avatar}"
-                app:layout_constraintBottom_toTopOf="@+id/btn_delete"
+                app:layout_constraintBottom_toTopOf="@id/btn_delete"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/player_name"
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/player_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="@dimen/big_padding"
                 android:gravity="center_vertical"
                 android:text="@{player.username}"
                 android:textColor="@color/colorPrimary"
-                android:textSize="30sp"
+                android:textSize="@dimen/player_name_text_size"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/avatar"
-                app:layout_constraintTop_toTopOf="@+id/avatar"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="John Coffey" />
 
             <TextView
                 android:id="@+id/match_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="TextView"
+                android:layout_marginTop="@dimen/middle_padding"
                 android:textColor="@color/gray"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/last_game_date"
-                app:layout_constraintStart_toStartOf="@+id/textView"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
+                android:textSize="@dimen/player_stats_text_size"
+                app:layout_constraintStart_toStartOf="@+id/player_name"
+                app:layout_constraintTop_toBottomOf="@+id/player_name"
                 tools:text="25 games played" />
 
             <TextView
                 android:id="@+id/last_game_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:layout_marginTop="@dimen/tiny_padding"
                 android:textColor="@color/gray"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/avatar"
-                app:layout_constraintStart_toStartOf="@+id/textView"
+                android:textSize="@dimen/player_stats_text_size"
+                app:layout_constraintStart_toStartOf="@+id/player_name"
+                app:layout_constraintTop_toBottomOf="@+id/match_num"
                 tools:text="Last game 12/06/2019" />
 
             <ImageButton
                 android:id="@+id/btn_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:background="@color/white"
-                android:tint="@color/gray"
+                android:padding="@dimen/icon_btn_padding"
+                android:tint="@color/darkred"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_edit"
+                app:layout_constraintTop_toBottomOf="@+id/last_game_date"
                 app:srcCompat="@drawable/ic_delete_black_24dp" />
 
             <ImageButton
                 android:id="@+id/btn_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:background="@color/white"
+                android:padding="@dimen/icon_btn_padding"
                 android:tint="@color/gray"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_delete"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

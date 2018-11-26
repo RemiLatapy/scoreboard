@@ -4,9 +4,17 @@
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_black_24dp"
-        android:orderInCategory="100"
+        android:orderInCategory="50"
         android:title="@string/action_search"
-        app:showAsAction="ifRoom" />
+        android:visible="true"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+    <item
+        android:id="@+id/action_start_playing"
+        android:icon="@drawable/ic_play_arrow_black_24dp"
+        android:orderInCategory="75"
+        android:title="@string/action_manage_player"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_manage_player"
         android:icon="@drawable/ic_people_outline_black_24dp"

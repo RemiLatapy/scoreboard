@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         gameViewModel.updateGameList()
 
         val userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        userViewModel.updateUser()
+        userViewModel.refreshUser()
 
         // TODO is it the right place to prepopulate DB -- (temp) disable offline mode
 //        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)

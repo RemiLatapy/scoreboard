@@ -25,7 +25,7 @@ class UserFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         viewModel.playerList.observe(this, Observer { binding.playerList = it })
-        viewModel.signOutState.observe(this, Observer { cb ->
+        viewModel.logOutState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
                     activity?.run {
@@ -53,7 +53,7 @@ class UserFragment : Fragment() {
         return binding.root
     }
 
-    private fun createSignoutListener() = View.OnClickListener { viewModel.signOut() }
+    private fun createSignoutListener() = View.OnClickListener { viewModel.logOut() }
 
     private fun createLoginListener() = View.OnClickListener {
         val action = UserFragmentDirections.actionLoginSignup()

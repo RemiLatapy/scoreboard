@@ -1,6 +1,5 @@
 package remi.scoreboard.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -20,8 +19,8 @@ class LoginSignupViewModel : ViewModel() {
     private val userRepository: UserRepository = UserRepository()
     private val gameRepository: GameRepository by lazy { GameRepository() }
 
-    val signupState: LiveData<MessageStatus> = userRepository.signupState
-    val loginState: LiveData<MessageStatus> = userRepository.loginState
+    val signUpState: LiveData<MessageStatus> = userRepository.signUpState
+    val logInState: LiveData<MessageStatus> = userRepository.logInState
     val resetPasswordState: LiveData<MessageStatus> = userRepository.resetPasswordState
 
     val updateGameListState: LiveData<MessageStatus> = gameRepository.updateGameListState
@@ -41,12 +40,10 @@ class LoginSignupViewModel : ViewModel() {
     }
 
 
-    fun createUser(username: String, email: String, password: String) {
-        Log.d("THREAD", "createUser = #${Thread.currentThread().id} // ${Thread.currentThread()}")
-        scope.launch {
-            Log.d("THREAD", "createUser/Scope = #${Thread.currentThread().id} // ${Thread.currentThread()}")
+    fun signUpUser(username: String, email: String, password: String) {
+        scope.launch(Dispatchers.IO) {
             val user = User(username = username, email = email, password = password)
-            userRepository.createUser(user)
+            userRepository.signUpUser(user)
         }
     }
 
@@ -57,7 +54,7 @@ class LoginSignupViewModel : ViewModel() {
     }
 
     fun resetPassword(email: String) {
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
             userRepository.resetPassword(email)
         }
     }
