@@ -2,13 +2,13 @@ package remi.scoreboard.fragment
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import remi.scoreboard.R
 import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentEditUserBinding
 import remi.scoreboard.viewmodel.EditUserViewModel
@@ -21,6 +21,11 @@ class EditUserFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        (activity as? AppCompatActivity)?.apply {
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
 
         viewmodel = ViewModelProviders.of(this).get(EditUserViewModel::class.java)
         viewmodel.editUserState.observe(this, Observer { cb ->
@@ -44,8 +49,6 @@ class EditUserFragment : Fragment() {
     ): View? {
         binding = FragmentEditUserBinding.inflate(inflater, container, false)
         binding.viewModel = viewmodel
-        binding.saveUserListener = saveUserClickListener
-
 
         binding.txtDisplayName.setOnFocusChangeListener { v, hasFocus ->
             (v as? EditText)?.let { if (!hasFocus) it.setText(it.text.toString().trim()) }
@@ -56,7 +59,17 @@ class EditUserFragment : Fragment() {
         return binding.root
     }
 
-    private val saveUserClickListener = View.OnClickListener {
-        viewmodel.editCurrentUser(binding.txtDisplayName.text.toString())
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_edit_user, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_save_user -> {
+                viewmodel.editCurrentUser(binding.txtDisplayName.text.toString())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

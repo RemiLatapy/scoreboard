@@ -29,8 +29,6 @@
         <activity android:name=".activity.ChoosePlayerActivity" />
         <activity android:name=".activity.ManagePlayerActivity" />
         <activity android:name=".activity.PlayActivity" />
-        <activity
-            android:name=".activity.EditUserActivity"
-            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activity.EditUserActivity" />
     </application>
 </manifest>
