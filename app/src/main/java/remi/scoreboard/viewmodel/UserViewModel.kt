@@ -38,6 +38,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     val userId: LiveData<String> = Transformations.map(currentUser) { user -> user.id }
     val username: LiveData<String> = Transformations.map(currentUser) { user -> user.username }
+    val displayName: LiveData<String> = Transformations.map(currentUser) { user -> user.displayName }
     val email: LiveData<String> = Transformations.map(currentUser) { user -> user.email }
     val avatar: LiveData<String> = Transformations.map(currentUser) { user -> user.avatar }
     val isLocal: LiveData<Boolean> = Transformations.map(currentUser) { user -> user.isLocalUser }

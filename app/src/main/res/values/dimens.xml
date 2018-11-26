@@ -19,7 +19,7 @@
     <dimen name="tiny_divider_height">1dp</dimen>
     <dimen name="borderless_btn_padding">16dp</dimen>
     <dimen name="dialog_big_padding">16dp</dimen>
-    <dimen name="signup_spinner_spacing">24dp</dimen>
+    <dimen name="spinner_spacing">24dp</dimen>
     <dimen name="player_card_padding">4dp</dimen>
     <dimen name="player_card_height">85dp</dimen>
     <dimen name="manage_playercard_height">160dp</dimen>
@@ -31,7 +31,7 @@
     <dimen name="bottom_bar_elevation">8dp</dimen>
 
     <!--text size-->
-    <dimen name="user_email_text_size">20sp</dimen>
+    <dimen name="user_details_text_size">20sp</dimen>
     <dimen name="manage_player_btn_text_size">20sp</dimen>
     <dimen name="player_name_text_size">30sp</dimen>
     <dimen name="user_name_text_size">36sp</dimen>

@@ -152,6 +152,16 @@ object ParseManager {
         return fetchCurrentUser()
     }
 
+    @WorkerThread
+    fun editCurrentUser(displayName: String): User {
+        ensureConnection()
+        return ParseUser.getCurrentUser().run {
+            put(FIELD_DISPLAY_NAME, displayName)
+            save()
+            User(this)
+        }
+    }
+
     // Matches
     @WorkerThread
     fun createMatch(match: Match): Match {
@@ -184,6 +194,7 @@ object ParseManager {
         return Match(ParseQuery.getQuery<ParseObject>(TABLE_MATCH).get(matchId))
     }
 
+    @WorkerThread
     fun updateMatch(matchId: String, playerScore: PlayerScore, newScore: Int): Match {
         ensureConnection()
         ParseQuery.getQuery<ParseObject>(TABLE_PLAYERSCORE).get(playerScore.id).apply {

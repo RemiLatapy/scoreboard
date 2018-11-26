@@ -61,8 +61,6 @@
     <string name="empty_text_stats">Played games will appear here</string>
     <string name="empty_text_add_players">Start adding your first player</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_delete">Delete</string>
     <string name="action_rename">Rename</string>
     <string name="action_manage_player">Manage players</string>
@@ -80,4 +78,7 @@
     <string name="checked_player_icon">Checked player icon</string>
     <string name="finish_game_btn_text">Finish game</string>
     <string name="action_finish_game">Finish game</string>
+    <string name="action_edit_user">Edit user</string>
+    <string name="prompt_display_name">Display name</string>
+    <string name="save_text_btn">Save</string>
 </resources>

@@ -3,14 +3,13 @@ package remi.scoreboard.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import remi.scoreboard.R
 import remi.scoreboard.activity.LoginSignupActivity
 import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentUserBinding
@@ -23,8 +22,11 @@ class UserFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         viewModel.playerList.observe(this, Observer { binding.playerList = it })
+        viewModel.displayName.observe(this, Observer { binding.txtDisplayName.text = it })
         viewModel.logOutState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
@@ -47,21 +49,38 @@ class UserFragment : Fragment() {
         binding = FragmentUserBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.setLifecycleOwner(viewLifecycleOwner)
-        binding.signoutListener = createSignoutListener()
-        binding.loginListener = createLoginListener()
-        binding.managePlayersListener = createManagePlayersListener()
+        binding.signoutListener = signoutListener
+        binding.loginListener = loginListener
+        binding.managePlayersListener = managePlayersListener
         return binding.root
     }
 
-    private fun createSignoutListener() = View.OnClickListener { viewModel.logOut() }
+    private val signoutListener = View.OnClickListener { viewModel.logOut() }
 
-    private fun createLoginListener() = View.OnClickListener {
+    private val loginListener = View.OnClickListener {
         val action = UserFragmentDirections.actionLoginSignup()
         findNavController().navigate(action)
     }
 
-    private fun createManagePlayersListener() = View.OnClickListener {
+    private val managePlayersListener = View.OnClickListener {
         val action = UserFragmentDirections.actionManagePlayers()
         findNavController().navigate(action)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_user, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_edit_user -> {
+                findNavController().navigate(UserFragmentDirections.actionEditUser())
+                true
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+    }
 }
+
