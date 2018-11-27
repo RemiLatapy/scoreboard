@@ -162,6 +162,7 @@ object ParseManager {
             if (file.exists()) {
                 val profileImageFile = ParseFile(this.objectId, file.readBytes()).apply { save() }
                 put(FIELD_AVATAR, profileImageFile)
+                file.delete()
             }
         }.save()
         return fetchCurrentUser()
