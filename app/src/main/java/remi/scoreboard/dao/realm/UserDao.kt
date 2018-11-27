@@ -16,6 +16,14 @@ object UserDao {
             LiveRealmObject(user)
     }
 
+    fun loadUnmanaged(userId: String): User = RealmManager.instance.run {
+        val user = where(User::class.java).equalTo("id", userId).findFirst()
+        return if (user != null)
+            copyFromRealm(user)
+        else
+            User()
+    }
+
     /**
      * @throws RealmException No user found with id [userId]
      */

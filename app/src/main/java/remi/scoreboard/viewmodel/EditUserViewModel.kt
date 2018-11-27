@@ -1,7 +1,6 @@
 package remi.scoreboard.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,9 +20,7 @@ class EditUserViewModel() : ViewModel() {
 
     private val scope = CoroutineScope(coroutineContext)
 
-    private val currentUser: LiveData<User> = userRepository.currentUser
-    val displayName: LiveData<String> = Transformations.map(currentUser) { user -> user.displayName }
-    val avatar: LiveData<String> = Transformations.map(currentUser) { user -> user.avatar }
+    val currentUser: User = userRepository.unmanageCurrentUser
 
     val editUserState: LiveData<MessageStatus> = userRepository.editUserState
 
@@ -32,9 +29,9 @@ class EditUserViewModel() : ViewModel() {
         parentJob.cancel()
     }
 
-    fun editCurrentUser(displayName: String) {
+    fun editCurrentUser() {
         scope.launch(Dispatchers.IO) {
-            userRepository.editCurrentUser(displayName = displayName)
+            userRepository.editCurrentUser(currentUser)
         }
     }
 

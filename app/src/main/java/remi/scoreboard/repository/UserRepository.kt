@@ -28,6 +28,7 @@ class UserRepository {
     private val currentUserId = ParseManager.currentUserId() ?: "0"
 
     val currentUser = UserDao.load(currentUserId)
+    val unmanageCurrentUser = UserDao.loadUnmanaged(currentUserId)
 
     fun getUserById(id: String) = UserDao.load(id)
 
@@ -116,8 +117,15 @@ class UserRepository {
     }
 
     @WorkerThread
-    suspend fun updateUser(user: User) {
-
+    suspend fun editCurrentUser(user: User) {
+        editUserState.postValue(MessageStatus(Status.LOADING))
+        try {
+            val updatedUser = ParseManager.editCurrentUser(user)
+            UserDao.insertOrUpdate(updatedUser)
+            editUserState.postValue(MessageStatus(Status.SUCCESS))
+        } catch (e: Exception) {
+            editUserState.postValue(MessageStatus(Status.ERROR, e.message ?: "Failed to edit user"))
+        }
     }
 
     @WorkerThread
@@ -186,18 +194,6 @@ class UserRepository {
                 }
                 else -> throw e
             }
-        }
-    }
-
-    @WorkerThread
-    suspend fun editCurrentUser(displayName: String) {
-        editUserState.postValue(MessageStatus(Status.LOADING))
-        try {
-            val updatedUser = ParseManager.editCurrentUser(displayName = displayName)
-            UserDao.insertOrUpdate(updatedUser)
-            editUserState.postValue(MessageStatus(Status.SUCCESS))
-        } catch (e: Exception) {
-            editUserState.postValue(MessageStatus(Status.ERROR, e.message ?: "Failed to edit user"))
         }
     }
 }

@@ -153,10 +153,11 @@ object ParseManager {
     }
 
     @WorkerThread
-    fun editCurrentUser(displayName: String): User {
+    fun editCurrentUser(user: User): User {
         ensureConnection()
         ParseUser.getCurrentUser().apply {
-            put(FIELD_DISPLAY_NAME, displayName)
+            put(FIELD_DISPLAY_NAME, user.displayName)
+//            put(FIELD_AVATAR, user.avatar) // TODO update image
         }.save()
         return fetchCurrentUser()
     }

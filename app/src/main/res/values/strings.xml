@@ -82,4 +82,7 @@
     <string name="prompt_display_name">Display name</string>
     <string name="action_save_user">Save</string>
     <string name="profile_image">Profile image</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="select_from_gallery">Select From Gallery</string>
+    <string name="dialog_choose_photo_source_title">Edit Profile Picture</string>
 </resources>

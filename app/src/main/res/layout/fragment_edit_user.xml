@@ -12,7 +12,7 @@
             type="remi.scoreboard.viewmodel.EditUserViewModel" />
 
         <variable
-            name="saveUserListener"
+            name="pickPhotoListener"
             type="android.view.View.OnClickListener" />
     </data>
 
@@ -22,6 +22,20 @@
         android:padding="@dimen/fragment_padding"
         tools:context=".fragment.EditUserFragment">
 
+        <ImageButton
+            android:id="@+id/profile_image_btn"
+            android:layout_width="@dimen/square_user_image_size"
+            android:layout_height="@dimen/square_user_image_size"
+            android:backgroundTint="@color/transparent"
+            android:contentDescription="@string/profile_image"
+            android:onClick="@{pickPhotoListener}"
+            app:circleImageFromUrl="@{viewModel.currentUser.avatar}"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_display_name"
             android:layout_width="0dp"
@@ -30,7 +44,7 @@
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_btn">
+            app:layout_constraintTop_toBottomOf="@id/profile_image_btn">
 
             <EditText
                 android:id="@+id/txt_display_name"
@@ -41,7 +55,7 @@
                 android:inputType="textPersonName"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="@{viewModel.displayName}" />
+                android:text="@={viewModel.currentUser.displayName}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
