@@ -6,6 +6,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 object FileUtil {
+    // TODO jpeg encode with limited res
     fun streamUriToFile(context: Context, uri: Uri, file: File) {
         context.contentResolver?.openInputStream(uri)?.use { inputStream ->
             FileOutputStream(file).use { outputStream ->

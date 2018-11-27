@@ -134,6 +134,7 @@ class EditUserFragment : Fragment() {
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 REQUEST_CODE_CAMERA -> {
+                    // TODO jpeg encode with limited res
                     viewmodel.currentUser.avatar = viewmodel.photoPath ?: viewmodel.currentUser.avatar
                     binding.invalidateAll()
                 }
