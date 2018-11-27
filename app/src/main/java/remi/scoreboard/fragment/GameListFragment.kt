@@ -60,7 +60,10 @@ class GameListFragment : Fragment() {
         gameViewModel.allGames.observe(this,
             Observer { gameList ->
                 gameList?.let {
-                    fastAdapter.setNewList(it.map { game -> GameItem(game) })
+                    fastAdapter.setNewList(it
+                        .filter { game -> !game.deleted }
+                        .sortedBy { game -> game.order }
+                        .map { game -> GameItem(game) })
                 }
             })
     }

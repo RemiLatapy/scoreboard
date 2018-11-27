@@ -23,6 +23,7 @@ object ParseManager {
     const val FIELD_USERNAME = "username"
     const val FIELD_SCORE = "score"
     const val FIELD_ORDER = "order"
+    const val FIELD_DELETED = "deleted"
     const val FIELD_NAME = "name"
     const val FIELD_THUMBNAIL = "thumbnail"
     const val FIELD_GAME = "game"
