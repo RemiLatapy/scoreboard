@@ -60,7 +60,10 @@ class ManagePlayerFragment : Fragment() {
             activity?.invalidateOptionsMenu()
             fastAdapter.setNewList(user.playerList.map { ManagePlayerItem(it) })
         })
+    }
 
+    override fun onResume() {
+        super.onResume()
         userViewModel.refreshUser()
     }
 

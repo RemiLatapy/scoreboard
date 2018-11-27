@@ -82,7 +82,7 @@ class GameListFragment : Fragment() {
 //                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
 //            }
 //        })
-        binding.swipeRefresh.setOnRefreshListener { gameViewModel.updateGameList() }
+        binding.swipeRefresh.setOnRefreshListener { gameViewModel.refreshGameList() }
 
         return binding.root
     }

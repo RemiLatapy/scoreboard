@@ -39,17 +39,19 @@ class MainActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
         bottomNav?.setupWithNavController(navController)
 
-        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
-        gameViewModel.updateGameList()
 
-        val userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-        userViewModel.refreshUser()
 
         // TODO is it the right place to prepopulate DB -- (temp) disable offline mode
 //        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
 //        val reader = InputStreamReader(assets.open("games.json"))
 //        var gameList: List<Game> = Gson().fromJson(reader, object : TypeToken<List<Game>>() {}.type)
 //        gameViewModel.insert(gameList)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ViewModelProviders.of(this).get(GameViewModel::class.java).refreshGameList()
+        ViewModelProviders.of(this).get(UserViewModel::class.java).refreshUser()
     }
 
     override fun onSupportNavigateUp(): Boolean {

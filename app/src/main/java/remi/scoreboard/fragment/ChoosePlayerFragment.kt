@@ -61,7 +61,8 @@ class ChoosePlayerFragment : Fragment() {
 
             restoreAdapterSelectionListFromBundleIfNeeded() // restore in case of background/foreground (pause/resume)
 
-            savedInstanceState?.let {// restore in case of destroy (rotation)
+            savedInstanceState?.let {
+                // restore in case of destroy (rotation)
                 fastAdapter.withSavedInstanceState(it)
             }
         })
@@ -73,10 +74,13 @@ class ChoosePlayerFragment : Fragment() {
                 })
         }
 
-        choosePlayerViewModel.refreshUser()
-
         fastAdapter = getFastAdapter()
         selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        choosePlayerViewModel.refreshUser()
     }
 
     private fun getFastAdapter(): FastItemAdapter<ChoosePlayerItem> {
