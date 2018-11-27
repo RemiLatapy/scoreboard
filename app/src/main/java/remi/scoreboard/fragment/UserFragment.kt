@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import remi.scoreboard.R
 import remi.scoreboard.activity.LoginSignupActivity
 import remi.scoreboard.data.Status
@@ -25,6 +26,14 @@ class UserFragment : Fragment() {
         setHasOptionsMenu(true)
 
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+        viewModel.updateUserState.observe(this, Observer {
+            binding.swipeRefresh.isRefreshing = it.status == Status.LOADING
+            if (it.status == Status.ERROR)
+                view?.let { view ->
+                    if (it.message.isNotEmpty())
+                        Snackbar.make(view, it.message, Snackbar.LENGTH_SHORT).show()
+                }
+        })
         viewModel.logOutState.observe(this, Observer { cb ->
             when (cb.status) {
                 Status.SUCCESS -> {
@@ -49,6 +58,9 @@ class UserFragment : Fragment() {
         binding.signoutListener = signoutListener
         binding.loginListener = loginListener
         binding.managePlayersListener = managePlayersListener
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshUser()
+        }
         binding.setLifecycleOwner(this)
         return binding.root
     }
