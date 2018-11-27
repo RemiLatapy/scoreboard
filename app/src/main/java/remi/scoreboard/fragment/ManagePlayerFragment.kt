@@ -103,7 +103,8 @@ class ManagePlayerFragment : Fragment() {
             ) {
                 activity?.let {
                     AlertDialog.Builder(it)
-                        .setTitle(getString(R.string.confirm_delete_player_format, playerItem.player.username))
+                        .setTitle(getString(R.string.confirm_delete_player_title))
+                        .setMessage(getString(R.string.confirm_delete_player_body, playerItem.player.username))
                         .setPositiveButton(R.string.action_delete) { _: DialogInterface, _: Int ->
                             userViewModel.deletePlayer(playerItem.player.id)
                         }.setNegativeButton(R.string.action_cancel, null)
