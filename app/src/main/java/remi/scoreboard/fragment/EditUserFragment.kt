@@ -82,6 +82,12 @@ class EditUserFragment : Fragment() {
                 null,
                 false
             )
+            
+            val dialog: AlertDialog = AlertDialog.Builder(activity).run {
+                setView(bindingDialog.root)
+                setTitle(R.string.dialog_choose_photo_source_title)
+                show()
+            }
 
             bindingDialog.takePictureListener = View.OnClickListener {
 
@@ -106,6 +112,7 @@ class EditUserFragment : Fragment() {
                             viewmodel.photoPath = photoFile.absolutePath
                             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                             startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA)
+                            dialog.dismiss()
                         }
                     }
                 }
@@ -117,12 +124,7 @@ class EditUserFragment : Fragment() {
                     type = "image/*"
                 }
                 startActivityForResult(intent, REQUEST_CODE_GALERY)
-            }
-
-            AlertDialog.Builder(activity).apply {
-                setView(bindingDialog.root)
-                setTitle(R.string.dialog_choose_photo_source_title)
-                show()
+                dialog.dismiss()
             }
         }
     }
