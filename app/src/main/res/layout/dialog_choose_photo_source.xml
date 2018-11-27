@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="takePictureListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="selectFromGalleryListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dialog_big_padding"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{takePictureListener}"
+            android:paddingHorizontal="@dimen/dialog_title_padding"
+            android:paddingVertical="@dimen/dialog_big_padding"
+            android:text="@string/take_picture"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="@{selectFromGalleryListener}"
+            android:paddingHorizontal="@dimen/dialog_title_padding"
+            android:paddingVertical="@dimen/dialog_big_padding"
+            android:text="@string/select_from_gallery"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</layout>

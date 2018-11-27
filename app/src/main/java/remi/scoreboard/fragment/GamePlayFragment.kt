@@ -35,7 +35,7 @@ class GamePlayFragment : Fragment() {
             viewmodel.currentMatch.observe(this, Observer { match ->
                 fastAdapter.setNewList(match.scorePlayerList
                     .map { playerScore -> PlayerScoreItem(playerScore) }
-                    .sortedBy { it.playerScore.number })
+                    .sortedBy { it.playerScore.order })
             })
         }
 

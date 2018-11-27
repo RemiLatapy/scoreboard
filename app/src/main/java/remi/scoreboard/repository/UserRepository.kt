@@ -21,11 +21,16 @@ class UserRepository {
     val deleteAllPlayerState = MutableLiveData<MessageStatus>()
     val deletePlayerState = MutableLiveData<MessageStatus>()
     val renamePlayerState = MutableLiveData<MessageStatus>()
+    val editUserState = MutableLiveData<MessageStatus>()
     val logOutState = MutableLiveData<MessageStatus>()
     val updateUserState = MutableLiveData<MessageStatus>()
 
     private val currentUserId = ParseManager.currentUserId() ?: "0"
+
     val currentUser = UserDao.load(currentUserId)
+    val unmanageCurrentUser = UserDao.loadUnmanaged(currentUserId)
+
+    fun getUserById(id: String) = UserDao.load(id)
 
     @WorkerThread
     suspend fun insert(user: User) = UserDao.insert(user)
@@ -112,12 +117,24 @@ class UserRepository {
     }
 
     @WorkerThread
+    suspend fun editCurrentUser(user: User) {
+        editUserState.postValue(MessageStatus(Status.LOADING))
+        try {
+            val updatedUser = ParseManager.editCurrentUser(user)
+            UserDao.insertOrUpdate(updatedUser)
+            editUserState.postValue(MessageStatus(Status.SUCCESS))
+        } catch (e: Exception) {
+            editUserState.postValue(MessageStatus(Status.ERROR, e.message ?: "Failed to edit user"))
+        }
+    }
+
+    @WorkerThread
     suspend fun addPlayerToCurrentUser(player: Player) {
         addPlayerState.postValue(MessageStatus(Status.LOADING))
 
         try {
             val updatedUser = ParseManager.addPlayerToCurrentUser(player)
-            UserDao.update(updatedUser)
+            UserDao.insertOrUpdate(updatedUser)
             addPlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
@@ -134,7 +151,7 @@ class UserRepository {
         deleteAllPlayerState.postValue(MessageStatus(Status.LOADING))
         try {
             val updatedUser = ParseManager.deleteAllPlayersOfCurrentUser()
-            UserDao.update(updatedUser)
+            UserDao.insertOrUpdate(updatedUser)
             deleteAllPlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
@@ -151,7 +168,7 @@ class UserRepository {
         deletePlayerState.postValue(MessageStatus(Status.LOADING))
         try {
             val updatedUser = ParseManager.deletePlayerOfCurrentUser(playerId)
-            UserDao.update(updatedUser)
+            UserDao.insertOrUpdate(updatedUser)
             deletePlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {
@@ -168,7 +185,7 @@ class UserRepository {
         renamePlayerState.postValue(MessageStatus(Status.LOADING))
         try {
             val updatedUser = ParseManager.renamePlayerOfCurrentUser(playerId, newPlayerName)
-            UserDao.update(updatedUser)
+            UserDao.insertOrUpdate(updatedUser)
             renamePlayerState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             when (e) {

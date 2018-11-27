@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/edit_user_nav_graph"
+    android:label="Edit account"
+    app:startDestination="@id/edit_user_dest">
+
+    <fragment
+        android:id="@+id/edit_user_dest"
+        android:name="remi.scoreboard.fragment.EditUserFragment"
+        android:label="Edit account" />
+</navigation>
