@@ -14,6 +14,8 @@ import kotlin.coroutines.CoroutineContext
 class EditUserViewModel() : ViewModel() {
     private val userRepository = UserRepository()
 
+    var photoPath: String? = null
+
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Main

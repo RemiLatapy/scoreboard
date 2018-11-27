@@ -5,12 +5,12 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,15 +22,16 @@ import remi.scoreboard.databinding.FragmentEditUserBinding
 import remi.scoreboard.util.FileUtil
 import remi.scoreboard.viewmodel.EditUserViewModel
 import java.io.File
-import java.util.*
+import java.io.IOException
 
 
 class EditUserFragment : Fragment() {
 
+    private val REQUEST_CODE_CAMERA = 0
+    private val REQUEST_CODE_GALERY = 1
+
     private lateinit var viewmodel: EditUserViewModel
     private lateinit var binding: FragmentEditUserBinding
-
-    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,13 +69,12 @@ class EditUserFragment : Fragment() {
             (v as? EditText)?.let { if (!hasFocus) it.setText(it.text.toString().trim()) }
         }
 
-
         binding.setLifecycleOwner(this)
         return binding.root
     }
 
     private fun showPickPhotoDialog() {
-        activity?.let { activity ->
+        activity?.also { activity ->
 
             val bindingDialog = DataBindingUtil.inflate<DialogChoosePhotoSourceBinding>(
                 layoutInflater,
@@ -84,14 +84,31 @@ class EditUserFragment : Fragment() {
             )
 
             bindingDialog.takePictureListener = View.OnClickListener {
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val photo = File(Environment.getExternalStorageDirectory(), "profile_${Date().time}.jpg")
-                intent.putExtra(
-                    MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(photo)
-                )
-                imageUri = Uri.fromFile(photo)
-                startActivityForResult(intent, 0)
+
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                    // Ensure that there's a camera activity to handle the intent
+                    takePictureIntent.resolveActivity(activity.packageManager)?.also {
+                        // Create the File where the photo should go
+                        val photoFile: File? = try {
+                            File.createTempFile("profile_photo", null, activity.cacheDir)
+                        } catch (ex: IOException) {
+                            // Error occurred while creating the File
+                            // TODO error
+                            null
+                        }
+                        // Continue only if the File was successfully created
+                        photoFile?.also { file ->
+                            val photoURI: Uri = FileProvider.getUriForFile(
+                                activity,
+                                "com.remi.scoreboard.fileprovider",
+                                file
+                            )
+                            viewmodel.photoPath = photoFile.absolutePath
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                            startActivityForResult(takePictureIntent, REQUEST_CODE_CAMERA)
+                        }
+                    }
+                }
             }
 
             bindingDialog.selectFromGalleryListener = View.OnClickListener {
@@ -99,7 +116,7 @@ class EditUserFragment : Fragment() {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     type = "image/*"
                 }
-                startActivityForResult(intent, 1)
+                startActivityForResult(intent, REQUEST_CODE_GALERY)
             }
 
             AlertDialog.Builder(activity).apply {
@@ -114,14 +131,25 @@ class EditUserFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             when (requestCode) {
-                0 -> viewmodel.currentUser.avatar = imageUri?.path ?: viewmodel.currentUser.avatar
-                1 -> {
-                    data?.data?.let { uri ->
-                        context?.let { ctx ->
-                            val file = File.createTempFile("profile_photo", null, ctx.cacheDir)
-                            FileUtil.streamUriToFile(ctx, uri, file)
-                            viewmodel.currentUser.avatar = file.absolutePath
-                            binding.invalidateAll()
+                REQUEST_CODE_CAMERA -> {
+                    viewmodel.currentUser.avatar = viewmodel.photoPath ?: viewmodel.currentUser.avatar
+                    binding.invalidateAll()
+                }
+                REQUEST_CODE_GALERY -> {
+                    data?.data?.also { uri ->
+                        context?.also { ctx ->
+                            val file = try {
+                                File.createTempFile("profile_photo", null, ctx.cacheDir)
+                            } catch (ex: IOException) {
+                                // Error occurred while creating the File
+                                // TODO error
+                                null
+                            }
+                            file?.also {
+                                FileUtil.streamUriToFile(ctx, uri, file)
+                                viewmodel.currentUser.avatar = file.absolutePath
+                                binding.invalidateAll()
+                            }
                         }
                     }
                 }
