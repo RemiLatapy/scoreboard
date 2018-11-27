@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import kotlinx.coroutines.Dispatchers
@@ -73,16 +72,16 @@ class GameListFragment : Fragment() {
 
         binding.recycler.adapter = fastAdapter
         // https://stackoverflow.com/a/34012893/9994620
-        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val topRowVerticalPosition =
-                    if (recyclerView.childCount == 0)
-                        0
-                    else
-                        recyclerView.getChildAt(0).top
-                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
-            }
-        })
+//        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                val topRowVerticalPosition =
+//                    if (recyclerView.childCount == 0)
+//                        0
+//                    else
+//                        recyclerView.getChildAt(0).top
+//                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
+//            }
+//        })
         binding.swipeRefresh.setOnRefreshListener { gameViewModel.updateGameList() }
 
         return binding.root
