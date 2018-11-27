@@ -82,7 +82,7 @@ class EditUserFragment : Fragment() {
                 null,
                 false
             )
-            
+
             val dialog: AlertDialog = AlertDialog.Builder(activity).run {
                 setView(bindingDialog.root)
                 setTitle(R.string.dialog_choose_photo_source_title)

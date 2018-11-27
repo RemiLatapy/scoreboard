@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import remi.scoreboard.R
 import remi.scoreboard.data.*
+import java.io.File
 
 object ParseManager {
 
@@ -157,7 +158,11 @@ object ParseManager {
         ensureConnection()
         ParseUser.getCurrentUser().apply {
             put(FIELD_DISPLAY_NAME, user.displayName)
-//            put(FIELD_AVATAR, user.avatar) // TODO update image
+            val file = File(user.avatar)
+            if (file.exists()) {
+                val profileImageFile = ParseFile(this.objectId, file.readBytes()).apply { save() }
+                put(FIELD_AVATAR, profileImageFile)
+            }
         }.save()
         return fetchCurrentUser()
     }
