@@ -95,8 +95,12 @@ class ChoosePlayerFragment : Fragment() {
         adapter.withMultiSelect(true)
         adapter.setHasStableIds(true)
         adapter.withOnClickListener { v, _, _, _ ->
-            activity?.invalidateOptionsMenu()
             v?.findViewById<EasyFlipView>(R.id.avatar_flipview)?.flipTheView()
+
+            selectExtension?.selectedItems?.let {
+                binding.startBtn.isEnabled = it.size >= 2 // TODO get min number of player to start from game
+            }
+
             true
         }
         adapter.itemFilter.withFilterPredicate { item, constraint ->
@@ -152,6 +156,7 @@ class ChoosePlayerFragment : Fragment() {
             saveAdapterSelectionListToBundle()
             choosePlayerViewModel.refreshUser()
         }
+        binding.startBtn.setOnClickListener { createMatchAndStartPlayActivity() }
         binding.setLifecycleOwner(this)
 
         return binding.root
@@ -178,21 +183,12 @@ class ChoosePlayerFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
         if (binding.playerListIsEmpty == true)
             menu?.removeItem(R.id.action_search)
-        selectExtension?.selectedItems?.let {
-            if (it.size < 2) {
-                menu?.removeItem(R.id.action_start_playing)
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_manage_player -> {
                 startManagePlayerFragment()
-                true
-            }
-            R.id.action_start_playing -> {
-                createMatchAndStartPlayActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
