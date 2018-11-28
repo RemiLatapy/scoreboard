@@ -20,10 +20,6 @@ object MatchDao {
                 LiveRealmObject(match)
         }
 
-    // TODO move to PlayerScore dao
-    fun loadPlayerScoreWithIdStartingBy(idStarting: String): LiveData<List<PlayerScore>> =
-        RealmManager.instance.run { where(PlayerScore::class.java).contains("id", idStarting).findAll().asLiveData() }
-
     // WRITE
     fun insert(match: Match) =
         Realm.getDefaultInstance().use { it.executeTransaction { realm -> realm.insert(match) } }
@@ -51,15 +47,4 @@ object MatchDao {
                 )
             }
         }
-
-    // TODO move to PlayerScore dao
-    fun setScore(playerScore: PlayerScore, score: Int) =
-        Realm.getDefaultInstance().use { it.executeTransaction { playerScore.score = score } }
-
-    // TODO move to PlayerScore dao
-    fun updatePlayerScore(playerScoreList: List<PlayerScore>) = Realm.getDefaultInstance().use {
-        it.executeTransaction { realm ->
-            realm.insertOrUpdate(playerScoreList)
-        }
-    }
 }

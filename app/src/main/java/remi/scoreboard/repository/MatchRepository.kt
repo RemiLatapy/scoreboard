@@ -17,9 +17,6 @@ class MatchRepository {
 
     val allMatches: LiveData<List<Match>> = MatchDao.loadAll()
 
-    val tempMatch: LiveData<Match> = MatchDao.loadGameWithId("-1")
-    val tempPlayerScoreList: LiveData<List<PlayerScore>> = MatchDao.loadPlayerScoreWithIdStartingBy("temp_")
-
     @WorkerThread
     suspend fun insert(match: Match) = MatchDao.insert(match)
 
@@ -76,25 +73,6 @@ class MatchRepository {
         try {
             val newMatch = ParseManager.updateMatch(matchId, playerScoreList)
             MatchDao.insertOrUpdate(newMatch)
-        } catch (e: Exception) {
-            throw e // TODO handling error
-        }
-    }
-
-    // TODO move to PlayerScore repository
-    @WorkerThread
-    suspend fun updateLocalPlayerScoreList(playerScoreList: List<PlayerScore>) {
-        try {
-            MatchDao.updatePlayerScore(playerScoreList)
-        } catch (e: Exception) {
-            throw e // TODO handling error
-        }
-    }
-
-    // TODO move to PlayerScore repository
-    fun setLocalScore(playerScore: PlayerScore, score: Int) {
-        try {
-            MatchDao.setScore(playerScore, score)
         } catch (e: Exception) {
             throw e // TODO handling error
         }

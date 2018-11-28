@@ -8,11 +8,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import remi.scoreboard.dao.realm.RealmManager
 import remi.scoreboard.data.PlayerScore
-import remi.scoreboard.repository.MatchRepository
+import remi.scoreboard.repository.PlayerScoreRepository
 import kotlin.coroutines.CoroutineContext
 
 class GamePlayViewModel : ViewModel() {
-    private val matchRepository = MatchRepository()
+    private val playerScoreRepository = PlayerScoreRepository()
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -20,7 +20,7 @@ class GamePlayViewModel : ViewModel() {
 
     private val scope = CoroutineScope(coroutineContext)
 
-    val currentPlayerScoreList: LiveData<List<PlayerScore>> = matchRepository.tempPlayerScoreList
+    val currentPlayerScoreList: LiveData<List<PlayerScore>> = playerScoreRepository.tempPlayerScoreList
 
     override fun onCleared() {
         super.onCleared()
@@ -34,13 +34,13 @@ class GamePlayViewModel : ViewModel() {
                 order = idx
             }
         }
-        scope.launch(Dispatchers.IO) { matchRepository.updateLocalPlayerScoreList(unmanagedList) }
+        scope.launch(Dispatchers.IO) { playerScoreRepository.updateLocalPlayerScoreList(unmanagedList) }
     }
 
     fun addPoints(playerScore: PlayerScore, points: Int) {
         // Main thread needed to edit playerScore
         scope.launch(Dispatchers.Main) {
-            matchRepository.setLocalScore(playerScore, playerScore.score + points)
+            playerScoreRepository.setLocalScore(playerScore, playerScore.score + points)
         }
     }
 
