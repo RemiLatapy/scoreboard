@@ -8,8 +8,8 @@ import remi.scoreboard.data.PlayerScore
 object PlayerScoreDao {
 
     // READ
-    fun loadPlayerScoreWithIdStartingBy(idStarting: String): LiveData<List<PlayerScore>> =
-        RealmManager.instance.run { where(PlayerScore::class.java).contains("id", idStarting).findAll().asLiveData() }
+    fun loadPlayerScoreWithIdStartingBy(idStart: String): LiveData<List<PlayerScore>> =
+        RealmManager.instance.run { where(PlayerScore::class.java).contains("id", idStart).findAll().asLiveData() }
 
     // WRITE
     fun setScore(playerScore: PlayerScore, score: Int) =
@@ -32,4 +32,11 @@ object PlayerScoreDao {
             }
         }
     }
+
+    fun deletePlayerScoreStartingId(idStart: String) =
+        Realm.getDefaultInstance().use {
+            it.executeTransaction { realm ->
+                realm.where(PlayerScore::class.java).contains("id", idStart).findAll().deleteAllFromRealm()
+            }
+        }
 }

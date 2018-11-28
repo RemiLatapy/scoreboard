@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import remi.scoreboard.dao.realm.MatchDao
+import remi.scoreboard.dao.realm.PlayerScoreDao
 import remi.scoreboard.data.Match
 import remi.scoreboard.data.MessageStatus
 import remi.scoreboard.data.PlayerScore
@@ -14,6 +15,7 @@ class MatchRepository {
 
     val createMatchState = MutableLiveData<MessageStatus>()
     val createLocalMatchState = MutableLiveData<MessageStatus>()
+    val saveLocalMatchState = MutableLiveData<MessageStatus>()
 
     val allMatches: LiveData<List<Match>> = MatchDao.loadAll()
 
@@ -75,6 +77,34 @@ class MatchRepository {
             MatchDao.insertOrUpdate(newMatch)
         } catch (e: Exception) {
             throw e // TODO handling error
+        }
+    }
+
+    @WorkerThread
+    suspend fun deleteLocalMatch() {
+        try {
+            MatchDao.deleteMatchId("-1")
+            PlayerScoreDao.deletePlayerScoreStartingId("temp_")
+        } catch (e: Exception) {
+            throw e // TODO handling error
+        }
+    }
+
+    @WorkerThread
+    suspend fun saveLocalMatch() {
+        saveLocalMatchState.postValue(MessageStatus(Status.LOADING))
+        try {
+            var match = MatchDao.getUnmanagedMatchById("-1")
+            match = ParseManager.createMatch(match)
+            MatchDao.insertOrUpdate(match)
+            saveLocalMatchState.postValue(MessageStatus(Status.SUCCESS))
+        } catch (e: Exception) {
+            saveLocalMatchState.postValue(
+                MessageStatus(
+                    Status.ERROR,
+                    e.message ?: "Something went wrom while saving game"
+                )
+            )
         }
     }
 }

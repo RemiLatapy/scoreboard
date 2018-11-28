@@ -5,39 +5,71 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="remi.scoreboard.data.Status" />
+
+        <variable
+            name="viewmodel"
+            type="remi.scoreboard.viewmodel.GamePlayViewModel" />
+
         <variable
             name="finishGameListener"
             type="android.view.View.OnClickListener" />
     </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:padding="@dimen/fragment_padding"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:context=".activity.PlayActivity"
-            tools:listitem="@layout/item_card_player_score" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/finish_match_btn"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:padding="@dimen/fragment_padding"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:context=".activity.PlayActivity"
+                tools:listitem="@layout/item_card_player_score" />
+
+            <Button
+                android:id="@+id/finish_match_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/fragment_padding"
+                android:layout_marginBottom="@dimen/fragment_padding"
+                android:layout_weight="0"
+                android:background="@color/colorPrimary"
+                android:onClick="@{finishGameListener}"
+                android:text="@string/finish_game_btn_text"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/fragment_padding"
-            android:layout_marginBottom="@dimen/fragment_padding"
-            android:layout_weight="0"
-            android:background="@color/colorPrimary"
-            android:onClick="@{finishGameListener}"
-            android:text="@string/finish_game_btn_text"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:layout_height="match_parent"
+            android:background="@color/alpha30"
+            android:clickable="true"
+            android:visibility="@{viewmodel.saveLocalMatchStateStatus == Status.LOADING ? View.VISIBLE : View.GONE}">
 
-    </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/spinner_spacing"
+                android:indeterminate="true"
+                android:visibility="visible" />
+
+        </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>

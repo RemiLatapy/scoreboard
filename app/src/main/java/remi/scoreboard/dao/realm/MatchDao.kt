@@ -20,6 +20,12 @@ object MatchDao {
                 LiveRealmObject(match)
         }
 
+    fun getUnmanagedMatchById(id: String): Match =
+        Realm.getDefaultInstance().use {
+            val match = it.where(Match::class.java).equalTo("id", id).findFirst()
+            it.copyFromRealm(match!!)
+        }
+
     // WRITE
     fun insert(match: Match) =
         Realm.getDefaultInstance().use { it.executeTransaction { realm -> realm.insert(match) } }
@@ -47,4 +53,12 @@ object MatchDao {
                 )
             }
         }
+
+    fun deleteMatchId(id: String) {
+        Realm.getDefaultInstance().use {
+            it.executeTransaction { realm ->
+                realm.where(Match::class.java).equalTo("id", id).findFirst()?.deleteFromRealm()
+            }
+        }
+    }
 }
