@@ -2,25 +2,27 @@ package remi.scoreboard.dao.realm
 
 import androidx.lifecycle.LiveData
 import io.realm.Realm
-import io.realm.exceptions.RealmException
 import remi.scoreboard.data.Match
 import remi.scoreboard.data.PlayerScore
+import remi.scoreboard.util.AbsentLiveData
 
 object MatchDao {
     // READ
     fun loadAll(): LiveData<List<Match>> =
         RealmManager.instance.run { where(Match::class.java).findAll().asLiveData() }
 
-    /**
-     * @throws RealmException no match found
-     */
     fun loadGameWithId(id: String): LiveData<Match> =
         RealmManager.instance.run {
             val match = where(Match::class.java).equalTo("id", id).findFirst()
-                ?: throw RealmException("No match object found with ID $id")
-
-            LiveRealmObject(match)
+            if (match == null)
+                AbsentLiveData.create()
+            else
+                LiveRealmObject(match)
         }
+
+    // TODO move to PlayerScore dao
+    fun loadPlayerScoreWithIdStartingBy(idStarting: String): LiveData<List<PlayerScore>> =
+        RealmManager.instance.run { where(PlayerScore::class.java).contains("id", idStarting).findAll().asLiveData() }
 
     // WRITE
     fun insert(match: Match) =
@@ -50,8 +52,14 @@ object MatchDao {
             }
         }
 
-    fun addPoints(playerScore: PlayerScore, points: Int) =
-        Realm.getDefaultInstance().use { it.executeTransaction { playerScore.score += points } }
+    // TODO move to PlayerScore dao
+    fun setScore(playerScore: PlayerScore, score: Int) =
+        Realm.getDefaultInstance().use { it.executeTransaction { playerScore.score = score } }
 
-
+    // TODO move to PlayerScore dao
+    fun updatePlayerScore(playerScoreList: List<PlayerScore>) = Realm.getDefaultInstance().use {
+        it.executeTransaction { realm ->
+            realm.insertOrUpdate(playerScoreList)
+        }
+    }
 }

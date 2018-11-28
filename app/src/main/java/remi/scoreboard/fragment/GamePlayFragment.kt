@@ -28,16 +28,12 @@ class GamePlayFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        activity?.let { activity ->
-            val matchId = GamePlayFragmentArgs.fromBundle(activity.intent.extras).matchId
-            viewmodel = ViewModelProviders.of(this, GamePlayViewModel.GamePlayViewModelFactory(matchId))
-                .get(GamePlayViewModel::class.java)
-            viewmodel.currentMatch.observe(this, Observer { match ->
-                fastAdapter.setNewList(match.scorePlayerList
-                    .map { playerScore -> PlayerScoreItem(playerScore) }
-                    .sortedBy { it.playerScore.order })
-            })
-        }
+        viewmodel = ViewModelProviders.of(this).get(GamePlayViewModel::class.java)
+        viewmodel.currentPlayerScoreList.observe(this, Observer { playerScoreList ->
+            fastAdapter.setNewList(playerScoreList
+                .map { playerScore -> PlayerScoreItem(playerScore) }
+                .sortedBy { it.playerScore.order })
+        })
 
         fastAdapter = getFastAdapter()
     }
@@ -62,7 +58,7 @@ class GamePlayFragment : Fragment() {
             }
 
             override fun itemTouchDropped(oldPosition: Int, newPosition: Int) {
-                viewmodel.updatePlayerScoreList(fastAdapter.adapterItems.map { it.playerScore })
+                viewmodel.reorderPlayerScoreList(fastAdapter.adapterItems.map { it.playerScore })
             }
 
         }))

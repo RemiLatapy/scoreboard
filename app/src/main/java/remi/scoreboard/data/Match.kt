@@ -16,7 +16,7 @@ typealias PlayerScoreList = RealmList<PlayerScore>
 open class Match(
     @PrimaryKey var id: String = "-1",
     var game: Game? = Game(),
-    var scorePlayerList: PlayerScoreList = PlayerScoreList(),
+    var scorePlayerList: PlayerScoreList = PlayerScoreList(), // TODO rename field... playerScoreList
     @Required var date: Date = Date()
 ) : RealmObject() {
 

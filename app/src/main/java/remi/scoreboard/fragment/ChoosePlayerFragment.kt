@@ -52,9 +52,9 @@ class ChoosePlayerFragment : Fragment() {
                         Snackbar.make(view, it.message, Snackbar.LENGTH_SHORT).show()
                 }
         })
-        choosePlayerViewModel.createMatchState.observe(this, Observer {
+        choosePlayerViewModel.createLocalMatchState.observe(this, Observer {
             if (it.status == Status.SUCCESS) {
-                val action = ChoosePlayerFragmentDirections.actionStartPlaying(it.message)
+                val action = ChoosePlayerFragmentDirections.actionStartPlaying()
                 findNavController().navigate(action)
                 activity?.finish()
             }
@@ -229,6 +229,6 @@ class ChoosePlayerFragment : Fragment() {
     private fun createMatchAndStartPlayActivity() {
         val playerList = selectExtension?.selectedItems?.map { it.player }
         if (playerList != null && ::currentGame.isInitialized)
-            choosePlayerViewModel.createMatch(currentGame, playerList)
+            choosePlayerViewModel.createLocalMatch(currentGame, playerList)
     }
 }

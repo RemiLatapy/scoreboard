@@ -3,8 +3,6 @@ package remi.scoreboard.repository
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.parse.ParseException
-import io.realm.exceptions.RealmException
 import remi.scoreboard.dao.realm.MatchDao
 import remi.scoreboard.data.Match
 import remi.scoreboard.data.MessageStatus
@@ -15,8 +13,12 @@ import remi.scoreboard.remote.parse.ParseManager
 class MatchRepository {
 
     val createMatchState = MutableLiveData<MessageStatus>()
+    val createLocalMatchState = MutableLiveData<MessageStatus>()
 
     val allMatches: LiveData<List<Match>> = MatchDao.loadAll()
+
+    val tempMatch: LiveData<Match> = MatchDao.loadGameWithId("-1")
+    val tempPlayerScoreList: LiveData<List<PlayerScore>> = MatchDao.loadPlayerScoreWithIdStartingBy("temp_")
 
     @WorkerThread
     suspend fun insert(match: Match) = MatchDao.insert(match)
@@ -30,11 +32,24 @@ class MatchRepository {
             // TODO improve MessageStatus to pass data (or find another way)
             createMatchState.postValue(MessageStatus(Status.SUCCESS, newMatch.id))
         } catch (e: Exception) {
-            when (e) {
-                is ParseException, is RealmException ->
-                    createMatchState.postValue(MessageStatus(Status.ERROR, e.message ?: "Match creation failed"))
-                else -> throw e
+            createMatchState.postValue(MessageStatus(Status.ERROR, e.message ?: "Match creation failed"))
+        }
+    }
+
+    @WorkerThread
+    suspend fun createLocal(match: Match) {
+        createLocalMatchState.postValue(MessageStatus(Status.LOADING))
+        try {
+            // TODO find better way.. pb = how & where to set temp/local id to playerScore
+            match.scorePlayerList.forEach { playerScore ->
+                playerScore.player?.let { player ->
+                    playerScore.id = "temp_" + player.id
+                }
             }
+            MatchDao.insertOrUpdate(match)
+            createLocalMatchState.postValue(MessageStatus(Status.SUCCESS))
+        } catch (e: Exception) {
+            createLocalMatchState.postValue(MessageStatus(Status.ERROR, e.message ?: "Match creation failed"))
         }
     }
 
@@ -61,6 +76,25 @@ class MatchRepository {
         try {
             val newMatch = ParseManager.updateMatch(matchId, playerScoreList)
             MatchDao.insertOrUpdate(newMatch)
+        } catch (e: Exception) {
+            throw e // TODO handling error
+        }
+    }
+
+    // TODO move to PlayerScore repository
+    @WorkerThread
+    suspend fun updateLocalPlayerScoreList(playerScoreList: List<PlayerScore>) {
+        try {
+            MatchDao.updatePlayerScore(playerScoreList)
+        } catch (e: Exception) {
+            throw e // TODO handling error
+        }
+    }
+
+    // TODO move to PlayerScore repository
+    fun setLocalScore(playerScore: PlayerScore, score: Int) {
+        try {
+            MatchDao.setScore(playerScore, score)
         } catch (e: Exception) {
             throw e // TODO handling error
         }
