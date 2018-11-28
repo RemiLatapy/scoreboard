@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:showIn="@layout/fragment_choose_player">
+
+        <ImageView
+            android:layout_width="@dimen/emptyview_square_icon_size"
+            android:layout_height="@dimen/emptyview_square_icon_size"
+            android:tint="@color/gray"
+            app:srcCompat="@drawable/ic_search_black_24dp" />
+
+        <TextView
+            android:id="@+id/empty_search_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_padding"
+            android:paddingHorizontal="@dimen/fragment_padding"
+            android:textColor="@color/gray" />
+    </LinearLayout>
+</layout>

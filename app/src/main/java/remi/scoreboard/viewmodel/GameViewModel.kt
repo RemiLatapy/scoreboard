@@ -29,7 +29,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         parentJob.cancel()
     }
 
-    fun updateGameList() {
+    fun refreshGameList() {
         scope.launch(Dispatchers.IO) { gameRepository.updateGameList() }
     }
 }

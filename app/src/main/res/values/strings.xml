@@ -65,7 +65,7 @@
     <string name="action_rename">Rename</string>
     <string name="action_manage_player">Manage players</string>
     <string name="action_cancel">Cancel</string>
-    <string name="confirm_delete_player_format">Delete player %s?</string>
+    <string name="confirm_delete_player_title">Delete player</string>
     <string name="confirm_delete_all_player">Delete all players?</string>
     <string name="delete_all_player_message">You are about to delete all players from your account.</string>
     <string name="choose_player_emptyview_text">You don\'t have any player yet</string>
@@ -85,4 +85,7 @@
     <string name="take_picture">Take Picture</string>
     <string name="select_from_gallery">Select From Gallery</string>
     <string name="dialog_choose_photo_source_title">Edit Profile Picture</string>
+    <string name="confirm_delete_player_body">Delete player %s from your account?</string>
+    <string name="player_empty_search_text">No player matching\u0020</string>
+    <string name="game_empty_search_text">No game matching\u0020</string>
 </resources>

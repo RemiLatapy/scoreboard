@@ -12,6 +12,10 @@
             type="Boolean" />
 
         <variable
+            name="searchIsEmpty"
+            type="Boolean" />
+
+        <variable
             name="managePlayerListener"
             type="android.view.View.OnClickListener" />
 
@@ -74,6 +78,11 @@
                 android:textColor="@color/colorPrimary"
                 android:theme="@style/Base.Widget.AppCompat.Button.Borderless" />
         </LinearLayout>
+
+        <include
+            android:id="@+id/included_empty_search_view"
+            layout="@layout/empty_search_view"
+            android:visibility="@{searchIsEmpty &amp;&amp; !playerListIsEmpty ? View.VISIBLE : View.GONE}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
