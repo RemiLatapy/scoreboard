@@ -86,4 +86,6 @@
     <string name="select_from_gallery">Select From Gallery</string>
     <string name="dialog_choose_photo_source_title">Edit Profile Picture</string>
     <string name="confirm_delete_player_body">Delete player %s from your account?</string>
+    <string name="player_empty_search_text">No player matching\u0020</string>
+    <string name="game_empty_search_text">No game matching\u0020</string>
 </resources>

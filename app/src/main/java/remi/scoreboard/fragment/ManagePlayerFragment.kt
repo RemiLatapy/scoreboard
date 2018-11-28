@@ -1,8 +1,14 @@
 package remi.scoreboard.fragment
 
 import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.*
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -13,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
+import com.mikepenz.fastadapter.listeners.ItemFilterListener
 import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import kotlinx.android.synthetic.main.item_card_manage_player.view.*
 import kotlinx.coroutines.Dispatchers
@@ -137,6 +144,26 @@ class ManagePlayerFragment : Fragment() {
                 }.await()
             }
         }
+        adapter.itemFilter.withItemFilterListener(object : ItemFilterListener<ManagePlayerItem> {
+            override fun onReset() {
+                binding.searchIsEmpty = false
+            }
+
+            override fun itemsFiltered(constraint: CharSequence?, results: MutableList<ManagePlayerItem>?) {
+                results?.also {
+                    binding.searchIsEmpty = it.size == 0
+                    if (it.size == 0) {
+                        val builder = SpannableStringBuilder()
+                        val txt = getString(R.string.player_empty_search_text)
+                        builder.append(txt)
+                        val txtSpan = SpannableString(constraint)
+                        txtSpan.setSpan(StyleSpan(Typeface.BOLD), 0, txtSpan.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                        builder.append(txtSpan)
+                        binding.includedEmptySearchView.emptySearchText.setText(builder, TextView.BufferType.SPANNABLE)
+                    }
+                }
+            }
+        })
         return adapter
     }
 
