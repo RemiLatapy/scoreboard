@@ -13,52 +13,58 @@
             type="Boolean" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".activity.MainActivity">
+        android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:padding="@dimen/fragment_padding"
-            android:visibility="@{displayEmptyView ? View.GONE : View.VISIBLE}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".activity.ActivityMain"
-            tools:listitem="@layout/item_card_match" />
+            android:layout_height="match_parent"
+            tools:context=".activity.MainActivity">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="@{displayEmptyView ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:padding="@dimen/fragment_padding"
+                android:visibility="@{displayEmptyView ? View.GONE : View.VISIBLE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:context=".activity.ActivityMain"
+                tools:listitem="@layout/item_card_match" />
 
-            <ImageView
-                android:layout_width="@dimen/emptyview_square_icon_size"
-                android:layout_height="@dimen/emptyview_square_icon_size"
-                android:tint="@color/gray"
-                app:srcCompat="@drawable/ic_poll_black_24dp" />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_padding"
-                android:text="@string/empty_text_stats"
-                android:textColor="@color/gray" />
-        </LinearLayout>
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="@{displayEmptyView ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:layout_width="@dimen/emptyview_square_icon_size"
+                    android:layout_height="@dimen/emptyview_square_icon_size"
+                    android:tint="@color/gray"
+                    app:srcCompat="@drawable/ic_poll_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_padding"
+                    android:text="@string/empty_text_stats"
+                    android:textColor="@color/gray" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

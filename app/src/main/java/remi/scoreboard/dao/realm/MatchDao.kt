@@ -33,6 +33,9 @@ object MatchDao {
     fun insertOrUpdate(match: Match) =
         Realm.getDefaultInstance().use { it.executeTransaction { realm -> realm.insertOrUpdate(match) } }
 
+    fun insertOrUpdate(matchList: List<Match>) =
+        Realm.getDefaultInstance().use { it.executeTransaction { realm -> realm.insertOrUpdate(matchList) } }
+
     fun deleteAll() =
         Realm.getDefaultInstance().use { it.executeTransaction { realm -> realm.delete(Match::class.java) } }
 

@@ -171,6 +171,13 @@ object ParseManager {
 
     // Matches
     @WorkerThread
+    fun getMatchList(): List<Match> {
+        ensureConnection()
+        val matchList: List<ParseObject> = ParseQuery.getQuery<ParseObject>(TABLE_MATCH).find()
+        return matchList.map { Match(it) }
+    }
+
+    @WorkerThread
     fun createMatch(match: Match): Match {
         ensureConnection()
 
