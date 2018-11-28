@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import remi.scoreboard.dao.realm.RealmManager
 import remi.scoreboard.data.PlayerScore
 import remi.scoreboard.repository.PlayerScoreRepository
 import kotlin.coroutines.CoroutineContext
@@ -28,17 +27,14 @@ class GamePlayViewModel : ViewModel() {
     }
 
     fun reorderPlayerScoreList(playerScoreList: List<PlayerScore>) {
-        // TODO no realm here
-        val unmanagedList = playerScoreList.mapIndexed { idx, playerScore ->
-            RealmManager.instance.copyFromRealm(playerScore).apply {
-                order = idx
-            }
+        scope.launch(Dispatchers.Main) {
+            playerScoreRepository.setLocalOrder(
+                playerScoreList,
+                playerScoreList.mapIndexed { idx, _ -> idx })
         }
-        scope.launch(Dispatchers.IO) { playerScoreRepository.updateLocalPlayerScoreList(unmanagedList) }
     }
 
     fun addPoints(playerScore: PlayerScore, points: Int) {
-        // Main thread needed to edit playerScore
         scope.launch(Dispatchers.Main) {
             playerScoreRepository.setLocalScore(playerScore, playerScore.score + points)
         }

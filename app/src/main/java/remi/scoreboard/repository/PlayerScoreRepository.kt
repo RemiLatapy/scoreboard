@@ -25,4 +25,12 @@ class PlayerScoreRepository {
             throw e // TODO handling error
         }
     }
+
+    fun setLocalOrder(playerScoreList: List<PlayerScore>, orderList: List<Int>) {
+        try {
+            PlayerScoreDao.setOrder(playerScoreList, orderList)
+        } catch (e: Exception) {
+            throw e // TODO handling error
+        }
+    }
 }
