@@ -118,7 +118,7 @@ class MatchRepository {
         refreshMatchListState.postValue(MessageStatus(Status.LOADING))
         try {
             val matchList = ParseManager.getMatchList()
-            MatchDao.insertOrUpdate(matchList)
+            MatchDao.replaceAll(matchList)
             refreshMatchListState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
             refreshMatchListState.postValue(
