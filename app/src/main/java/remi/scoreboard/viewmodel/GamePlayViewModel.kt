@@ -59,10 +59,9 @@ class GamePlayViewModel : ViewModel() {
         }
     }
 
-    fun saveAndDeleteLocalMatch() {
+    fun saveLocalMatch() {
         scope.launch(Dispatchers.IO) {
             matchRepository.saveLocalMatch()
-            matchRepository.deleteLocalMatch()
         }
     }
 
@@ -73,7 +72,7 @@ class GamePlayViewModel : ViewModel() {
                 setMessage(act.getString(R.string.discard_finish_dialog_message))
                 setPositiveButton(act.getString(R.string.finish)) { _, _ ->
                     MainActivity.fragmentDest = R.id.stats_dest
-                    saveAndDeleteLocalMatch()
+                    saveLocalMatch()
                 }
                 setNeutralButton(act.getString(R.string.cancel), null)
                 setNegativeButton(act.getString(R.string.discard)) { _, _ ->
@@ -92,7 +91,7 @@ class GamePlayViewModel : ViewModel() {
                 setMessage(act.getString(R.string.finish_game_dialog_message))
                 setPositiveButton(act.getString(R.string.finish)) { _, _ ->
                     MainActivity.fragmentDest = R.id.stats_dest
-                    saveAndDeleteLocalMatch() }
+                    saveLocalMatch() }
                 setNegativeButton(act.getString(R.string.cancel), null)
                 show()
             }

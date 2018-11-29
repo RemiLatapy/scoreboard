@@ -19,6 +19,7 @@ class MatchRepository {
     val deleteLocalMatchState = MutableLiveData<MessageStatus>()
 
     val allMatches: LiveData<List<Match>> = MatchDao.loadAll()
+    val tempMatch: LiveData<Match> = MatchDao.loadGameWithId("-1")
 
     @WorkerThread
     suspend fun insert(match: Match) = MatchDao.insert(match)

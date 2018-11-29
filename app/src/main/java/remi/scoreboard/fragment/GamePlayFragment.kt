@@ -40,6 +40,8 @@ class GamePlayFragment : Fragment() {
                     .sortedBy { it.playerScore.order })
             })
             viewmodel.saveLocalMatchState.observe(this, Observer {
+                if (it.status == Status.SUCCESS)
+                    viewmodel.deleteLocalMatch()
                 if (it.status == Status.ERROR)
                     view?.let { view ->
                         if (it.message.isNotEmpty())
