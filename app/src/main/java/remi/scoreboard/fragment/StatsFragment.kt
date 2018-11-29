@@ -39,11 +39,14 @@ class StatsFragment : Fragment() {
         viewModel.allMatchs.observe(this, Observer { matchList ->
             binding.displayEmptyView = matchList.isEmpty()
             matchList?.let {
-                fastAdapter.setNewList(it.map { match ->
-                    MatchItem(match).apply {
-                        formatedDate = DateFormat.getDateFormat(context).format(match.date)
+                fastAdapter.setNewList(it
+                    .map { match ->
+                        MatchItem(match).apply {
+                            formatedDate = DateFormat.getDateFormat(context).format(match.date)
+                        }
                     }
-                })
+                    .sortedByDescending { item -> item.match.date }
+                )
             }
         })
 
