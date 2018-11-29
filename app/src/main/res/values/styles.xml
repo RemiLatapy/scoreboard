@@ -11,4 +11,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.MatchCard">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AppTheme.MatchCard.FirstPlayerRow">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">@dimen/match_first_row_player_size</item>
+    </style>
+
+
 </resources>

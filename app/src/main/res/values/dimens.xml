@@ -26,9 +26,14 @@
     <dimen name="icon_btn_padding">8dp</dimen>
     <dimen name="square_icon_manage_players_btn">50dp</dimen>
     <dimen name="small_square_icon_size">35dp</dimen>
+    <dimen name="dialog_title_padding">24dp</dimen>
+    <dimen name="bottom_btn_layout_height">65dp</dimen>
+    <dimen name="big_spinner_size">125dp</dimen>
+    <dimen name="small_game_thumbnail">44dp</dimen>
 
     <!--elevation-->
     <dimen name="bottom_bar_elevation">8dp</dimen>
+    <dimen name="above_all_elevation">100dp</dimen>
 
     <!--text size-->
     <dimen name="user_details_text_size">20sp</dimen>
@@ -40,10 +45,8 @@
     <dimen name="manage_player_btn_subtext_size">18sp</dimen>
     <dimen name="score_text_size">20sp</dimen>
     <dimen name="player_number_text_size">14sp</dimen>
-    <dimen name="dialog_title_padding">24dp</dimen>
-    <dimen name="bottom_btn_layout_height">65dp</dimen>
-    <dimen name="above_all_elevation">100dp</dimen>
-    <dimen name="big_spinner_size">125dp</dimen>
-    <dimen name="small_game_thumbnail">44dp</dimen>
+    <dimen name="match_first_row_player_size">20sp</dimen>
+    <dimen name="rank_text_size">50dp</dimen>
+
 
 </resources>
