@@ -16,6 +16,7 @@ class MatchRepository {
     val createMatchState = MutableLiveData<MessageStatus>()
     val createLocalMatchState = MutableLiveData<MessageStatus>()
     val saveLocalMatchState = MutableLiveData<MessageStatus>()
+    val deleteLocalMatchState = MutableLiveData<MessageStatus>()
 
     val allMatches: LiveData<List<Match>> = MatchDao.loadAll()
 
@@ -82,11 +83,13 @@ class MatchRepository {
 
     @WorkerThread
     suspend fun deleteLocalMatch() {
+        deleteLocalMatchState.postValue(MessageStatus(Status.LOADING))
         try {
             MatchDao.deleteMatchId("-1")
             PlayerScoreDao.deletePlayerScoreStartingId("temp_")
+            deleteLocalMatchState.postValue(MessageStatus(Status.SUCCESS))
         } catch (e: Exception) {
-            throw e // TODO handling error
+            deleteLocalMatchState.postValue(MessageStatus(Status.ERROR, "Something went wrong while deleting game"))
         }
     }
 
@@ -102,7 +105,7 @@ class MatchRepository {
             saveLocalMatchState.postValue(
                 MessageStatus(
                     Status.ERROR,
-                    e.message ?: "Something went wrom while saving game"
+                    e.message ?: "Something went wrong while saving game"
                 )
             )
         }
