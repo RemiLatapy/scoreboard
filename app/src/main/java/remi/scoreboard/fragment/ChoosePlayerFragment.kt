@@ -81,7 +81,6 @@ class ChoosePlayerFragment : Fragment() {
         }
 
         fastAdapter = getFastAdapter()
-        selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
     }
 
     override fun onResume() {
@@ -92,15 +91,9 @@ class ChoosePlayerFragment : Fragment() {
     private fun getFastAdapter(): FastItemAdapter<ChoosePlayerItem> {
         val adapter: FastItemAdapter<ChoosePlayerItem> = FastItemAdapter()
         adapter.withSelectable(true)
-        adapter.withMultiSelect(true)
         adapter.setHasStableIds(true)
         adapter.withOnClickListener { v, _, _, _ ->
             v?.findViewById<EasyFlipView>(R.id.avatar_flipview)?.flipTheView()
-
-            selectExtension?.selectedItems?.let {
-                binding.startBtn.isEnabled = it.size >= 2 // TODO get min number of player to start from game
-            }
-
             true
         }
         adapter.itemFilter.withFilterPredicate { item, constraint ->
@@ -131,6 +124,16 @@ class ChoosePlayerFragment : Fragment() {
                 }
             }
         })
+
+        // TODO use selectExtension to manage animation
+        selectExtension = adapter.getExtension(SelectExtension::class.java)
+        selectExtension?.withMultiSelect(true)
+        selectExtension?.withSelectionListener { item, selected ->
+            selectExtension?.selectedItems?.let {
+                binding.startBtn.isEnabled = it.size >= 2 // TODO get min number of player to start from game
+            }
+        }
+
         return adapter
     }
 
@@ -157,6 +160,9 @@ class ChoosePlayerFragment : Fragment() {
             choosePlayerViewModel.refreshUser()
         }
         binding.startBtn.setOnClickListener { createMatchAndStartPlayActivity() }
+        selectExtension?.selectedItems?.let {
+            binding.startBtn.isEnabled = it.size >= 2 // TODO get min number of player to start from game
+        }
         binding.setLifecycleOwner(this)
 
         return binding.root
