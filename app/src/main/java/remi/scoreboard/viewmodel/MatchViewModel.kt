@@ -14,7 +14,6 @@ class MatchViewModel(application: Application) : AndroidViewModel(application) {
     private val matchRepository = MatchRepository()
 
     val allMatchs = matchRepository.allMatches
-    val tempMatch = matchRepository.tempMatch
     val refreshMatchListState = matchRepository.refreshMatchListState
 
     private var parentJob = Job()

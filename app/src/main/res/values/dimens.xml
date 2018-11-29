@@ -44,5 +44,6 @@
     <dimen name="bottom_btn_layout_height">65dp</dimen>
     <dimen name="above_all_elevation">100dp</dimen>
     <dimen name="big_spinner_size">125dp</dimen>
+    <dimen name="small_game_thumbnail">44dp</dimen>
 
 </resources>

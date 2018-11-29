@@ -9,6 +9,8 @@ import remi.scoreboard.databinding.ItemCardMatchBinding
 
 class MatchItem(val match: Match) : AbstractItem<MatchItem, MatchItem.ViewHolder>() {
 
+    var formatedDate: String = ""
+
     override fun getType() = R.id.fastadapter_match_id
 
     override fun getIdentifier() = match.id.hashCode().toLong()
@@ -25,6 +27,8 @@ class MatchItem(val match: Match) : AbstractItem<MatchItem, MatchItem.ViewHolder
         override fun unbindView(item: MatchItem) {
             binding.apply {
                 match = null
+                playerList = null
+                textDate.text = null
                 executePendingBindings()
             }
         }
@@ -32,6 +36,8 @@ class MatchItem(val match: Match) : AbstractItem<MatchItem, MatchItem.ViewHolder
         override fun bindView(item: MatchItem, payloads: MutableList<Any>) {
             binding.apply {
                 match = item.match
+                playerList = item.match.scorePlayerList.sortedByDescending { it.score }
+                textDate.text = formatedDate
                 executePendingBindings()
             }
         }

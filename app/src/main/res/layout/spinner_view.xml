@@ -6,6 +6,7 @@
     android:background="@color/alpha30"
     android:clickable="true"
     android:elevation="@dimen/above_all_elevation"
+    android:visibility="gone"
     tools:visibility="visible">
 
     <ProgressBar

@@ -30,8 +30,8 @@ open class Match(
         this.game = Game(parseMatch.getParseObject(ParseManager.FIELD_GAME)?.fetchIfNeeded<ParseObject>())
         parseMatch.getList<ParseObject>(ParseManager.FIELD_PLAYERSCORE_LIST)
             ?.map { PlayerScore(it.fetchIfNeeded<ParseObject>()) }?.let {
-            this.scorePlayerList.addAll(it)
-        }
+                this.scorePlayerList.addAll(it)
+            }
         this.date = parseMatch.getDate(ParseManager.FIELD_DATE) ?: Date(0)
     }
 
@@ -42,5 +42,4 @@ open class Match(
             addAllUnique(ParseManager.FIELD_PLAYERSCORE_LIST, parsePlayerScore)
         }
     }
-
 }

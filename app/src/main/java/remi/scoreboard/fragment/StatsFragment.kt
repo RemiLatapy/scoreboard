@@ -1,6 +1,7 @@
 package remi.scoreboard.fragment
 
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,8 @@ class StatsFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(MatchViewModel::class.java)
 
         viewModel.refreshMatchListState.observe(this, Observer {
-            binding.swipeRefresh.isRefreshing = it.status == Status.LOADING
+            if (it.status != Status.LOADING)
+                binding.swipeRefresh.isRefreshing = false
             if (it.status == Status.ERROR)
                 view?.let { view ->
                     if (it.message.isNotEmpty())
@@ -36,7 +38,13 @@ class StatsFragment : Fragment() {
 
         viewModel.allMatchs.observe(this, Observer { matchList ->
             binding.displayEmptyView = matchList.isEmpty()
-            matchList?.let { fastAdapter.setNewList(it.map { match -> MatchItem(match) }) }
+            matchList?.let {
+                fastAdapter.setNewList(it.map { match ->
+                    MatchItem(match).apply {
+                        formatedDate = DateFormat.getDateFormat(context).format(match.date)
+                    }
+                })
+            }
         })
 
         fastAdapter = getFastAdapter()

@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
                     setTitle("Game in progress")
                     setMessage("Last game was not properly ended, do you want to continue or finish it?")
                     setPositiveButton("Continue") { _, _ ->
+                        viewmodel.refreshUser() // TODO start activity on refresh finish
                         startActivity(Intent(context, PlayActivity::class.java))
                     }
                     setNegativeButton("Finish") { _, _ ->
