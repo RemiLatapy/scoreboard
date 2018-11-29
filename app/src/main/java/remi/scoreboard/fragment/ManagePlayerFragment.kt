@@ -169,7 +169,10 @@ class ManagePlayerFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_manage_player, menu)
-        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.setOnQueryTextListener(queryTextListener)
+        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.apply {
+            setOnQueryTextListener(queryTextListener)
+            maxWidth = Integer.MAX_VALUE
+        }
     }
 
     private val queryTextListener = object : SearchView.OnQueryTextListener {
