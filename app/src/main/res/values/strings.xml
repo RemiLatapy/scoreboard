@@ -88,4 +88,12 @@
     <string name="confirm_delete_player_body">Delete player %s from your account?</string>
     <string name="player_empty_search_text">No player matching\u0020</string>
     <string name="game_empty_search_text">No game matching\u0020</string>
+    <string name="start">start</string>
+    <string name="finish">finish</string>
+    <string name="exit">Exit</string>
+    <string name="discard_finish_dialog_message">Discard or finish game?</string>
+    <string name="cancel">cancel</string>
+    <string name="discard">discard</string>
+    <string name="finish_game_dialog_title">Finish game</string>
+    <string name="finish_game_dialog_message">You are about to end the game.</string>
 </resources>

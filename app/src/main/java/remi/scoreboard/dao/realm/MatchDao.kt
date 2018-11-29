@@ -2,24 +2,28 @@ package remi.scoreboard.dao.realm
 
 import androidx.lifecycle.LiveData
 import io.realm.Realm
-import io.realm.exceptions.RealmException
 import remi.scoreboard.data.Match
 import remi.scoreboard.data.PlayerScore
+import remi.scoreboard.util.AbsentLiveData
 
 object MatchDao {
     // READ
     fun loadAll(): LiveData<List<Match>> =
         RealmManager.instance.run { where(Match::class.java).findAll().asLiveData() }
 
-    /**
-     * @throws RealmException no match found
-     */
     fun loadGameWithId(id: String): LiveData<Match> =
         RealmManager.instance.run {
             val match = where(Match::class.java).equalTo("id", id).findFirst()
-                ?: throw RealmException("No match object found with ID $id")
+            if (match == null)
+                AbsentLiveData.create()
+            else
+                LiveRealmObject(match)
+        }
 
-            LiveRealmObject(match)
+    fun getUnmanagedMatchById(id: String): Match =
+        Realm.getDefaultInstance().use {
+            val match = it.where(Match::class.java).equalTo("id", id).findFirst()
+            it.copyFromRealm(match!!)
         }
 
     // WRITE
@@ -50,8 +54,11 @@ object MatchDao {
             }
         }
 
-    fun addPoints(playerScore: PlayerScore, points: Int) =
-        Realm.getDefaultInstance().use { it.executeTransaction { playerScore.score += points } }
-
-
+    fun deleteMatchId(id: String) {
+        Realm.getDefaultInstance().use {
+            it.executeTransaction { realm ->
+                realm.where(Match::class.java).equalTo("id", id).findFirst()?.deleteFromRealm()
+            }
+        }
+    }
 }

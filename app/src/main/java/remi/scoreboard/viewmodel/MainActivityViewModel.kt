@@ -1,19 +1,18 @@
 package remi.scoreboard.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import remi.scoreboard.data.Match
 import remi.scoreboard.repository.MatchRepository
+import remi.scoreboard.repository.UserRepository
 import kotlin.coroutines.CoroutineContext
 
-class MatchViewModel(application: Application) : AndroidViewModel(application) {
+class MainActivityViewModel() : ViewModel() {
     private val matchRepository = MatchRepository()
+    private val userRepository = UserRepository()
 
-    val allMatchs = matchRepository.allMatches
     val tempMatch = matchRepository.tempMatch
 
     private var parentJob = Job()
@@ -27,5 +26,11 @@ class MatchViewModel(application: Application) : AndroidViewModel(application) {
         parentJob.cancel()
     }
 
-    fun insert(match: Match) = scope.launch(Dispatchers.IO) { matchRepository.insert(match) }
+    fun saveAndDeleteTempMatch() {
+        scope.launch(Dispatchers.IO) {
+            userRepository.refreshCurrentUser() // Need to fetch user to get it ACL
+            matchRepository.saveLocalMatch()
+            matchRepository.deleteLocalMatch()
+        }
+    }
 }

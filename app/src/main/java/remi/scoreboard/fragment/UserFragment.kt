@@ -27,7 +27,8 @@ class UserFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
         viewModel.updateUserState.observe(this, Observer {
-            binding.swipeRefresh.isRefreshing = it.status == Status.LOADING
+            if (it.status != Status.LOADING)
+                binding.swipeRefresh.isRefreshing = false
             if (it.status == Status.ERROR)
                 view?.let { view ->
                     if (it.message.isNotEmpty())
@@ -47,6 +48,11 @@ class UserFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshUser()
     }
 
     override fun onCreateView(

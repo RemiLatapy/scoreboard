@@ -8,9 +8,18 @@
     <fragment
         android:id="@+id/play_dest"
         android:name="remi.scoreboard.fragment.GamePlayFragment"
-        android:label="Play" >
-        <argument
-            android:name="matchId"
-            app:argType="string" />
+        android:label="Play">
+        <action
+            android:id="@+id/actionBackMain"
+            app:destination="@id/mainActivity" />
     </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="remi.scoreboard.activity.MainActivity"
+        android:label="MainActivity">
+        <argument
+            android:name="fragment"
+            android:defaultValue="@id/game_list_dest"
+            app:argType="reference" />
+    </activity>
 </navigation>

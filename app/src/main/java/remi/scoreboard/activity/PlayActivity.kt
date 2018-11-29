@@ -3,12 +3,13 @@ package remi.scoreboard.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.navigation.Navigation
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import kotlinx.android.synthetic.main.activity_play.*
 import remi.scoreboard.R
+import remi.scoreboard.viewmodel.GamePlayViewModel
 
 class PlayActivity : AppCompatActivity() {
 
@@ -25,9 +26,7 @@ class PlayActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, actionBarConfig)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        if (!Navigation.findNavController(this, R.id.nav_host_fragment_play).navigateUp())
-            onBackPressed()
-        return true
+    override fun onBackPressed() {
+        ViewModelProviders.of(this).get(GamePlayViewModel::class.java).showConfirmExitDialog(this)
     }
 }
