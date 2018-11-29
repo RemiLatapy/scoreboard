@@ -72,7 +72,7 @@ class GamePlayFragment : Fragment() {
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = FragmentGamePlayBinding.inflate(inflater, container, false)
+        binding = FragmentGamePlayBinding.inflate(inflater, container, false)
         binding.recycler.adapter = fastAdapter
 
         val touchHelper = ItemTouchHelper(SimpleDragCallback(object : ItemTouchCallback {

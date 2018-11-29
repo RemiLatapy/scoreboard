@@ -54,24 +54,10 @@
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/alpha30"
-            android:clickable="true"
-            android:visibility="@{viewmodel.saveLocalMatchStateStatus == Status.LOADING ? View.VISIBLE : View.GONE}"
-            tools:visibility="gone">
+        <include
+            layout="@layout/spinner_view"
+            android:visibility="@{viewmodel.saveLocalMatchStateStatus == Status.LOADING ? View.VISIBLE : View.GONE}" />
 
-            <ProgressBar
-                android:id="@+id/progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/spinner_spacing"
-                android:indeterminate="true"
-                android:visibility="visible" />
-
-        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

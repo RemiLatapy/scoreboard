@@ -14,7 +14,7 @@ class MatchViewModel(application: Application) : AndroidViewModel(application) {
     private val matchRepository = MatchRepository()
 
     val allMatchs = matchRepository.allMatches
-    val tempMatch = matchRepository.tempMatch
+    val refreshMatchListState = matchRepository.refreshMatchListState
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
@@ -28,4 +28,8 @@ class MatchViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun insert(match: Match) = scope.launch(Dispatchers.IO) { matchRepository.insert(match) }
+
+    fun refreshMatchList() {
+        scope.launch(Dispatchers.IO) { matchRepository.refreshMatchList() }
+    }
 }

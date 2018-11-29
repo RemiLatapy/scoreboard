@@ -17,6 +17,7 @@ class MatchRepository {
     val createLocalMatchState = MutableLiveData<MessageStatus>()
     val saveLocalMatchState = MutableLiveData<MessageStatus>()
     val deleteLocalMatchState = MutableLiveData<MessageStatus>()
+    val refreshMatchListState = MutableLiveData<MessageStatus>()
 
     val allMatches: LiveData<List<Match>> = MatchDao.loadAll()
     val tempMatch: LiveData<Match> = MatchDao.loadGameWithId("-1")
@@ -107,6 +108,23 @@ class MatchRepository {
                 MessageStatus(
                     Status.ERROR,
                     e.message ?: "Something went wrong while saving game"
+                )
+            )
+        }
+    }
+
+    @WorkerThread
+    suspend fun refreshMatchList() {
+        refreshMatchListState.postValue(MessageStatus(Status.LOADING))
+        try {
+            val matchList = ParseManager.getMatchList()
+            MatchDao.replaceAll(matchList)
+            refreshMatchListState.postValue(MessageStatus(Status.SUCCESS))
+        } catch (e: Exception) {
+            refreshMatchListState.postValue(
+                MessageStatus(
+                    Status.ERROR,
+                    e.message ?: "Something went wrong while refreshing match list"
                 )
             )
         }

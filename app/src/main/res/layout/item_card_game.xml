@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/game_card_height"
         android:layout_marginBottom="@dimen/card_spacing"
-        android:padding="@dimen/card_margin"
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardUseCompatPadding="true">
 

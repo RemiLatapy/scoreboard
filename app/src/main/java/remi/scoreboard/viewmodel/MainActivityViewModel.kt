@@ -26,6 +26,12 @@ class MainActivityViewModel() : ViewModel() {
         parentJob.cancel()
     }
 
+    fun refreshUser() {
+        scope.launch(Dispatchers.IO) {
+            userRepository.refreshCurrentUser() // Need to fetch user to get it ACL
+        }
+    }
+
     fun saveAndDeleteTempMatch() {
         scope.launch(Dispatchers.IO) {
             userRepository.refreshCurrentUser() // Need to fetch user to get it ACL
