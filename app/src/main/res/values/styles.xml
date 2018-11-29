@@ -21,5 +21,8 @@
         <item name="android:textSize">@dimen/match_first_row_player_size</item>
     </style>
 
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorAccent">@color/white</item>
+    </style>
 
 </resources>
