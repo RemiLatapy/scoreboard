@@ -27,7 +27,7 @@
         app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
-        app:contentPadding="@dimen/card_margin">
+        app:contentPadding="@dimen/middle_padding">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/big_padding"
                 android:orientation="vertical"
-                android:paddingHorizontal="@dimen/fragment_padding"
                 app:layout_constraintEnd_toEndOf="@+id/text_date"
                 app:layout_constraintStart_toStartOf="@+id/img_game_thumb"
                 app:layout_constraintTop_toBottomOf="@+id/img_game_thumb">
