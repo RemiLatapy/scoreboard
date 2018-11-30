@@ -12,6 +12,10 @@
             type="Boolean" />
 
         <variable
+            name="searchIsEmpty"
+            type="Boolean" />
+
+        <variable
             name="managePlayerListener"
             type="android.view.View.OnClickListener" />
 
@@ -20,13 +24,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".activity.MainActivity">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
@@ -39,6 +44,24 @@
                 tools:listitem="@layout/item_card_choose_player" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <FrameLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_btn_layout_height"
+            android:background="@color/white"
+            android:elevation="@dimen/bottom_bar_elevation"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Button
+                android:id="@+id/start_btn"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/small_padding"
+                android:text="@string/start" />
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -74,6 +97,11 @@
                 android:textColor="@color/colorPrimary"
                 android:theme="@style/Base.Widget.AppCompat.Button.Borderless" />
         </LinearLayout>
+
+        <include
+            android:id="@+id/included_empty_search_view"
+            layout="@layout/empty_search_view"
+            android:visibility="@{searchIsEmpty &amp;&amp; !playerListIsEmpty ? View.VISIBLE : View.GONE}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

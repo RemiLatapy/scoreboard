@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/big_padding"
-                android:text='@{"Player " + Integer.toString(playerScore.number + 1)}'
+                android:text='@{"Player " + Integer.toString(playerScore.order + 1)}'
                 android:textColor="@color/darkgray"
                 android:textSize="@dimen/player_number_text_size"
                 app:layout_constraintStart_toEndOf="@id/avatar"

@@ -6,14 +6,9 @@
 
     <data>
 
-        <import type="java.util.List" />
-
-        <import type="remi.scoreboard.data.Player" />
-
-        <!--TODO bind list size instead of whole list-->
         <variable
-            name="playerList"
-            type="List&lt;Player&gt;" />
+            name="playerNumber"
+            type="Integer" />
 
         <variable
             name="clickListener"
@@ -64,7 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{Integer.toString(playerList.size()) + " player(s)"}'
+            android:text='@{playerNumber + " player(s)"}'
             android:textColor="@color/gray"
             android:textSize="@dimen/manage_player_btn_subtext_size"
             app:layout_constraintBottom_toBottomOf="parent"

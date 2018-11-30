@@ -13,7 +13,7 @@
         android:id="@+id/progress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/signup_spinner_spacing"
+        android:layout_marginTop="@dimen/spinner_spacing"
         android:indeterminate="true"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"

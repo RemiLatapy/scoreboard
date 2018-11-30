@@ -4,4 +4,5 @@
     <item name="fastadapter_manageplayer_id" type="id" />
     <item name="fastadapter_game_id" type="id" />
     <item name="fastadapter_playerscore_id" type="id" />
+    <item name="fastadapter_match_id" type="id" />
 </resources>

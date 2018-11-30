@@ -1,8 +1,14 @@
 package remi.scoreboard.fragment
 
 import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.*
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -13,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
+import com.mikepenz.fastadapter.listeners.ItemFilterListener
 import kotlinx.android.synthetic.main.dialog_new_user.view.*
 import kotlinx.android.synthetic.main.item_card_manage_player.view.*
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +67,10 @@ class ManagePlayerFragment : Fragment() {
             activity?.invalidateOptionsMenu()
             fastAdapter.setNewList(user.playerList.map { ManagePlayerItem(it) })
         })
+    }
 
+    override fun onResume() {
+        super.onResume()
         userViewModel.refreshUser()
     }
 
@@ -72,16 +82,16 @@ class ManagePlayerFragment : Fragment() {
         binding.addPlayerListener = View.OnClickListener { showAddPlayerDialog() }
         binding.recycler.adapter = fastAdapter
         // https://stackoverflow.com/a/34012893/9994620
-        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val topRowVerticalPosition =
-                    if (recyclerView.childCount == 0)
-                        0
-                    else
-                        recyclerView.getChildAt(0).top
-                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
-            }
-        })
+//        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                val topRowVerticalPosition =
+//                    if (recyclerView.childCount == 0)
+//                        0
+//                    else
+//                        recyclerView.getChildAt(0).top
+//                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
+//            }
+//        })
         binding.swipeRefresh.setOnRefreshListener { userViewModel.refreshUser() }
 
         return binding.root
@@ -103,7 +113,8 @@ class ManagePlayerFragment : Fragment() {
             ) {
                 activity?.let {
                     AlertDialog.Builder(it)
-                        .setTitle(getString(R.string.confirm_delete_player_format, playerItem.player.username))
+                        .setTitle(getString(R.string.confirm_delete_player_title))
+                        .setMessage(getString(R.string.confirm_delete_player_body, playerItem.player.username))
                         .setPositiveButton(R.string.action_delete) { _: DialogInterface, _: Int ->
                             userViewModel.deletePlayer(playerItem.player.id)
                         }.setNegativeButton(R.string.action_cancel, null)
@@ -133,12 +144,35 @@ class ManagePlayerFragment : Fragment() {
                 }.await()
             }
         }
+        adapter.itemFilter.withItemFilterListener(object : ItemFilterListener<ManagePlayerItem> {
+            override fun onReset() {
+                binding.searchIsEmpty = false
+            }
+
+            override fun itemsFiltered(constraint: CharSequence?, results: MutableList<ManagePlayerItem>?) {
+                results?.also {
+                    binding.searchIsEmpty = it.size == 0
+                    if (it.size == 0) {
+                        val builder = SpannableStringBuilder()
+                        val txt = getString(R.string.player_empty_search_text)
+                        builder.append(txt)
+                        val txtSpan = SpannableString(constraint)
+                        txtSpan.setSpan(StyleSpan(Typeface.BOLD), 0, txtSpan.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                        builder.append(txtSpan)
+                        binding.includedEmptySearchView.emptySearchText.setText(builder, TextView.BufferType.SPANNABLE)
+                    }
+                }
+            }
+        })
         return adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_manage_player, menu)
-        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.setOnQueryTextListener(queryTextListener)
+        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.apply {
+            setOnQueryTextListener(queryTextListener)
+            maxWidth = Integer.MAX_VALUE
+        }
     }
 
     private val queryTextListener = object : SearchView.OnQueryTextListener {

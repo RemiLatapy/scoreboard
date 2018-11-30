@@ -2,16 +2,17 @@ package remi.scoreboard.fragment
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter_extensions.drag.ItemTouchCallback
 import com.mikepenz.fastadapter_extensions.drag.SimpleDragCallback
-import kotlinx.android.synthetic.main.dialog_add_score.view.*
 import remi.scoreboard.R
+import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentGamePlayBinding
 import remi.scoreboard.fastadapter.item.PlayerScoreItem
 import remi.scoreboard.viewmodel.GamePlayViewModel
@@ -28,31 +29,50 @@ class GamePlayFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        activity?.let { activity ->
-            val matchId = GamePlayFragmentArgs.fromBundle(activity.intent.extras).matchId
-            viewmodel = ViewModelProviders.of(this, GamePlayViewModel.GamePlayViewModelFactory(matchId))
-                .get(GamePlayViewModel::class.java)
-            viewmodel.currentMatch.observe(this, Observer { match ->
-                fastAdapter.setNewList(match.scorePlayerList
-                    .map { playerScore -> PlayerScoreItem(playerScore) }
-                    .sortedBy { it.playerScore.number })
-            })
-        }
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        fastAdapter = getFastAdapter()
+            viewmodel = ViewModelProviders.of(activity).get(GamePlayViewModel::class.java)
+            viewmodel.currentPlayerScoreList.observe(this, Observer { playerScoreList ->
+                fastAdapter.setNewList(playerScoreList
+                    .map { playerScore -> PlayerScoreItem(playerScore) }
+                    .sortedBy { it.playerScore.order })
+            })
+            viewmodel.saveLocalMatchState.observe(this, Observer {
+                if (it.status == Status.SUCCESS)
+                    viewmodel.deleteLocalMatch()
+                if (it.status == Status.ERROR)
+                    view?.let { view ->
+                        if (it.message.isNotEmpty())
+                            Snackbar.make(view, it.message, Snackbar.LENGTH_SHORT).show()
+                    }
+            })
+            viewmodel.deleteLocalMatchState.observe(this, Observer {
+                if (it.status == Status.SUCCESS) {
+                    activity.finish()
+                } else if (it.status == Status.ERROR)
+                    view?.let { view ->
+                        if (it.message.isNotEmpty())
+                            Snackbar.make(view, it.message, Snackbar.LENGTH_SHORT).show()
+                    }
+            })
+
+            fastAdapter = getFastAdapter()
+        }
     }
 
     private fun getFastAdapter(): FastItemAdapter<PlayerScoreItem> =
         FastItemAdapter<PlayerScoreItem>().apply {
             setHasStableIds(true)
             withOnClickListener { _, _, item, _ ->
-                showAddPointsDialog(item)
+                viewmodel.showAddPointsDialog(activity, item.playerScore)
                 true
             }
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = FragmentGamePlayBinding.inflate(inflater, container, false)
+        binding = FragmentGamePlayBinding.inflate(inflater, container, false)
         binding.recycler.adapter = fastAdapter
 
         val touchHelper = ItemTouchHelper(SimpleDragCallback(object : ItemTouchCallback {
@@ -62,13 +82,15 @@ class GamePlayFragment : Fragment() {
             }
 
             override fun itemTouchDropped(oldPosition: Int, newPosition: Int) {
-                viewmodel.updatePlayerScoreList(fastAdapter.adapterItems.map { it.playerScore })
+                viewmodel.reorderPlayerScoreList(fastAdapter.adapterItems.map { it.playerScore })
             }
 
         }))
         touchHelper.attachToRecyclerView(binding.recycler)
 
-        binding.finishGameListener = View.OnClickListener { activity?.finish() }
+        binding.viewmodel = viewmodel
+        binding.finishGameListener = View.OnClickListener { viewmodel.showConfirmFinishDialog(activity) }
+        binding.setLifecycleOwner(this)
 
         return binding.root
     }
@@ -79,29 +101,11 @@ class GamePlayFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.action_finish_game -> {
-                activity?.finish()
+            android.R.id.home -> {
+                viewmodel.showConfirmExitDialog(activity)
                 true
             }
             else -> return super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun showAddPointsDialog(playerScoreItem: PlayerScoreItem) {
-        val builder: AlertDialog.Builder? = activity?.let {
-            AlertDialog.Builder(it)
-        }
-        builder?.let {
-            val view = layoutInflater.inflate(R.layout.dialog_add_score, null)
-            it.setTitle("Add points to ${playerScoreItem.playerScore.player?.username}")
-                .setView(view)
-                .setPositiveButton(
-                    "Add"
-                ) { _, _ ->
-                    viewmodel.addPoints(playerScoreItem.playerScore, view.txt_points.text.toString().toInt())
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
         }
     }
 }

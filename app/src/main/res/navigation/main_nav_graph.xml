@@ -35,6 +35,9 @@
         <action
             android:id="@+id/actionManagePlayers"
             app:destination="@id/manage_player_activity_dest" />
+        <action
+            android:id="@+id/action_edit_user"
+            app:destination="@id/edit_user_activity_dest" />
     </fragment>
     <activity
         android:id="@+id/loginSignupActivity"
@@ -52,5 +55,9 @@
             android:name="gameId"
             app:argType="string" />
     </activity>
+    <activity
+        android:id="@+id/edit_user_activity_dest"
+        android:name="remi.scoreboard.activity.EditUserActivity"
+        android:label="Edit account" />
 
 </navigation>

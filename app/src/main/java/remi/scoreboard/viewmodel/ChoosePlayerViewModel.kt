@@ -30,6 +30,7 @@ class ChoosePlayerViewModel(application: Application) : AndroidViewModel(applica
 
     val updateUserState: LiveData<MessageStatus> = userRepository.updateUserState
     val createMatchState: LiveData<MessageStatus> = matchRepository.createMatchState
+    val createLocalMatchState: LiveData<MessageStatus> = matchRepository.createLocalMatchState
 
     fun getGameById(id: String): LiveData<Game> = gameRepository.getGameById(id)
 
@@ -42,13 +43,14 @@ class ChoosePlayerViewModel(application: Application) : AndroidViewModel(applica
         scope.launch(Dispatchers.IO) { userRepository.refreshCurrentUser() }
     }
 
-    fun createMatch(game: Game, playerList: List<Player>) {
+    fun createLocalMatch(game: Game, playerList: List<Player>) {
+        // TODO no realm here
         Realm.getDefaultInstance().use {
             val unmanagedPlayerList = it.copyFromRealm(playerList)
             val unmanagedGame = it.copyFromRealm(game)
 
             val match = Match(unmanagedGame, unmanagedPlayerList)
-            scope.launch(Dispatchers.IO) { matchRepository.create(match) }
+            scope.launch(Dispatchers.IO) { matchRepository.createLocal(match) }
         }
 
     }

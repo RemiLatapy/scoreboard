@@ -5,39 +5,59 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="remi.scoreboard.data.Status" />
+
+        <variable
+            name="viewmodel"
+            type="remi.scoreboard.viewmodel.GamePlayViewModel" />
+
         <variable
             name="finishGameListener"
             type="android.view.View.OnClickListener" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:clipToPadding="false"
             android:padding="@dimen/fragment_padding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/bottom_layout"
+            app:layout_constraintTop_toTopOf="parent"
             tools:context=".activity.PlayActivity"
             tools:listitem="@layout/item_card_player_score" />
 
-        <Button
-            android:id="@+id/finish_match_btn"
+        <FrameLayout
+            android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/fragment_padding"
-            android:layout_marginBottom="@dimen/fragment_padding"
-            android:layout_weight="0"
-            android:background="@color/colorPrimary"
-            android:onClick="@{finishGameListener}"
-            android:text="@string/finish_game_btn_text"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:layout_height="@dimen/bottom_btn_layout_height"
+            android:background="@color/white"
+            android:elevation="@dimen/bottom_bar_elevation"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-    </LinearLayout>
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/small_padding"
+                android:background="@color/darkred"
+                android:enabled="true"
+                android:onClick="@{finishGameListener}"
+                android:text="@string/finish" />
+
+        </FrameLayout>
+
+        <include
+            layout="@layout/spinner_view"
+            android:visibility="@{viewmodel.saveLocalMatchStateStatus == Status.LOADING ? View.VISIBLE : View.GONE}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

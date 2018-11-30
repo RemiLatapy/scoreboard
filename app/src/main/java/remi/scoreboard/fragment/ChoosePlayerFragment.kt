@@ -1,15 +1,21 @@
 package remi.scoreboard.fragment
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.*
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
+import com.mikepenz.fastadapter.listeners.ItemFilterListener
 import com.mikepenz.fastadapter.select.SelectExtension
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import kotlinx.coroutines.Dispatchers
@@ -46,9 +52,9 @@ class ChoosePlayerFragment : Fragment() {
                         Snackbar.make(view, it.message, Snackbar.LENGTH_SHORT).show()
                 }
         })
-        choosePlayerViewModel.createMatchState.observe(this, Observer {
+        choosePlayerViewModel.createLocalMatchState.observe(this, Observer {
             if (it.status == Status.SUCCESS) {
-                val action = ChoosePlayerFragmentDirections.actionStartPlaying(it.message)
+                val action = ChoosePlayerFragmentDirections.actionStartPlaying()
                 findNavController().navigate(action)
                 activity?.finish()
             }
@@ -61,7 +67,8 @@ class ChoosePlayerFragment : Fragment() {
 
             restoreAdapterSelectionListFromBundleIfNeeded() // restore in case of background/foreground (pause/resume)
 
-            savedInstanceState?.let {// restore in case of destroy (rotation)
+            savedInstanceState?.let {
+                // restore in case of destroy (rotation)
                 fastAdapter.withSavedInstanceState(it)
             }
         })
@@ -73,19 +80,19 @@ class ChoosePlayerFragment : Fragment() {
                 })
         }
 
-        choosePlayerViewModel.refreshUser()
-
         fastAdapter = getFastAdapter()
-        selectExtension = fastAdapter.getExtension(SelectExtension::class.java)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        choosePlayerViewModel.refreshUser()
     }
 
     private fun getFastAdapter(): FastItemAdapter<ChoosePlayerItem> {
         val adapter: FastItemAdapter<ChoosePlayerItem> = FastItemAdapter()
         adapter.withSelectable(true)
-        adapter.withMultiSelect(true)
         adapter.setHasStableIds(true)
         adapter.withOnClickListener { v, _, _, _ ->
-            activity?.invalidateOptionsMenu()
             v?.findViewById<EasyFlipView>(R.id.avatar_flipview)?.flipTheView()
             true
         }
@@ -97,6 +104,36 @@ class ChoosePlayerFragment : Fragment() {
                 }.await()
             }
         }
+        adapter.itemFilter.withItemFilterListener(object : ItemFilterListener<ChoosePlayerItem> {
+            override fun onReset() {
+                binding.searchIsEmpty = false
+            }
+
+            override fun itemsFiltered(constraint: CharSequence?, results: MutableList<ChoosePlayerItem>?) {
+                results?.also {
+                    binding.searchIsEmpty = it.size == 0
+                    if (it.size == 0) {
+                        val builder = SpannableStringBuilder()
+                        val txt = getString(R.string.player_empty_search_text)
+                        builder.append(txt)
+                        val txtSpan = SpannableString(constraint)
+                        txtSpan.setSpan(StyleSpan(Typeface.BOLD), 0, txtSpan.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                        builder.append(txtSpan)
+                        binding.includedEmptySearchView.emptySearchText.setText(builder, TextView.BufferType.SPANNABLE)
+                    }
+                }
+            }
+        })
+
+        // TODO use selectExtension to manage animation
+        selectExtension = adapter.getExtension(SelectExtension::class.java)
+        selectExtension?.withMultiSelect(true)
+        selectExtension?.withSelectionListener { item, selected ->
+            selectExtension?.selectedItems?.let {
+                binding.startBtn.isEnabled = it.size >= 2 // TODO get min number of player to start from game
+            }
+        }
+
         return adapter
     }
 
@@ -108,28 +145,35 @@ class ChoosePlayerFragment : Fragment() {
         binding.managePlayerListener = View.OnClickListener { startManagePlayerFragment() }
         binding.recycler.adapter = fastAdapter
         // https://stackoverflow.com/a/34012893/9994620
-        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val topRowVerticalPosition =
-                    if (recyclerView.childCount == 0)
-                        0
-                    else
-                        recyclerView.getChildAt(0).top
-                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
-            }
-        })
+//        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                val topRowVerticalPosition =
+//                    if (recyclerView.childCount == 0)
+//                        0
+//                    else
+//                        recyclerView.getChildAt(0).top
+//                binding.swipeRefresh.isEnabled = topRowVerticalPosition >= 0
+//            }
+//        })
         binding.swipeRefresh.setOnRefreshListener {
             saveAdapterSelectionListToBundle()
             choosePlayerViewModel.refreshUser()
         }
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.startBtn.setOnClickListener { createMatchAndStartPlayActivity() }
+        selectExtension?.selectedItems?.let {
+            binding.startBtn.isEnabled = it.size >= 2 // TODO get min number of player to start from game
+        }
+        binding.setLifecycleOwner(this)
 
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu_choose_player, menu)
-        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.setOnQueryTextListener(queryTextListener)
+        (menu?.findItem(R.id.action_search)?.actionView as? SearchView)?.apply {
+            setOnQueryTextListener(queryTextListener)
+            maxWidth = Integer.MAX_VALUE
+        }
     }
 
     private val queryTextListener = object : SearchView.OnQueryTextListener {
@@ -148,21 +192,12 @@ class ChoosePlayerFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
         if (binding.playerListIsEmpty == true)
             menu?.removeItem(R.id.action_search)
-        selectExtension?.selectedItems?.let {
-            if (it.size < 2) {
-                menu?.removeItem(R.id.action_start_playing)
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_manage_player -> {
                 startManagePlayerFragment()
-                true
-            }
-            R.id.action_start_playing -> {
-                createMatchAndStartPlayActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -199,6 +234,6 @@ class ChoosePlayerFragment : Fragment() {
     private fun createMatchAndStartPlayActivity() {
         val playerList = selectExtension?.selectedItems?.map { it.player }
         if (playerList != null && ::currentGame.isInitialized)
-            choosePlayerViewModel.createMatch(currentGame, playerList)
+            choosePlayerViewModel.createLocalMatch(currentGame, playerList)
     }
 }

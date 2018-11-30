@@ -89,5 +89,4 @@ dependencies {
     debugImplementation 'com.facebook.stetho:stetho:1.5.0'
     debugImplementation 'com.facebook.stetho:stetho-okhttp:1.5.0'
     debugImplementation 'com.uphyca:stetho_realm:2.1.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
 }

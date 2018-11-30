@@ -61,13 +61,11 @@
     <string name="empty_text_stats">Played games will appear here</string>
     <string name="empty_text_add_players">Start adding your first player</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_delete">Delete</string>
     <string name="action_rename">Rename</string>
     <string name="action_manage_player">Manage players</string>
     <string name="action_cancel">Cancel</string>
-    <string name="confirm_delete_player_format">Delete player %s?</string>
+    <string name="confirm_delete_player_title">Delete player</string>
     <string name="confirm_delete_all_player">Delete all players?</string>
     <string name="delete_all_player_message">You are about to delete all players from your account.</string>
     <string name="choose_player_emptyview_text">You don\'t have any player yet</string>
@@ -80,4 +78,22 @@
     <string name="checked_player_icon">Checked player icon</string>
     <string name="finish_game_btn_text">Finish game</string>
     <string name="action_finish_game">Finish game</string>
+    <string name="action_edit_user">Edit user</string>
+    <string name="prompt_display_name">Display name</string>
+    <string name="action_save_user">Save</string>
+    <string name="profile_image">Profile image</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="select_from_gallery">Select From Gallery</string>
+    <string name="dialog_choose_photo_source_title">Edit Profile Picture</string>
+    <string name="confirm_delete_player_body">Delete player %s from your account?</string>
+    <string name="player_empty_search_text">No player matching\u0020</string>
+    <string name="game_empty_search_text">No game matching\u0020</string>
+    <string name="start">start</string>
+    <string name="finish">finish</string>
+    <string name="exit">Exit</string>
+    <string name="discard_finish_dialog_message">Discard or finish game?</string>
+    <string name="cancel">cancel</string>
+    <string name="discard">discard</string>
+    <string name="finish_game_dialog_title">Finish game</string>
+    <string name="finish_game_dialog_message">You are about to end the game.</string>
 </resources>

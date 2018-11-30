@@ -20,11 +20,7 @@
     <activity
         android:id="@+id/play_activity"
         android:name="remi.scoreboard.activity.PlayActivity"
-        android:label="Play" >
-        <argument
-            android:name="matchId"
-            app:argType="string" />
-    </activity>
+        android:label="Play" />
     <fragment
         android:id="@+id/manage_player_fragment"
         android:name="remi.scoreboard.fragment.ManagePlayerFragment"
