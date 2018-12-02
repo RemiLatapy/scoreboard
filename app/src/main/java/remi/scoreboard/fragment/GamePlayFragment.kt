@@ -1,17 +1,20 @@
 package remi.scoreboard.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter_extensions.drag.ItemTouchCallback
 import com.mikepenz.fastadapter_extensions.drag.SimpleDragCallback
 import remi.scoreboard.R
+import remi.scoreboard.activity.MainActivity
 import remi.scoreboard.data.Status
 import remi.scoreboard.databinding.FragmentGamePlayBinding
 import remi.scoreboard.fastadapter.item.PlayerScoreItem
@@ -40,8 +43,14 @@ class GamePlayFragment : Fragment() {
                     .sortedBy { it.playerScore.order })
             })
             viewmodel.saveLocalMatchState.observe(this, Observer {
-                if (it.status == Status.SUCCESS)
+                if (it.status == Status.SUCCESS) {
+                    binding.unbind()
+                    LocalBroadcastManager.getInstance(activity)
+                        .sendBroadcast(Intent(MainActivity.navigateIntentFilter).apply {
+                            putExtra("dest", R.id.stats_dest)
+                        })
                     viewmodel.deleteLocalMatch()
+                }
                 if (it.status == Status.ERROR)
                     view?.let { view ->
                         if (it.message.isNotEmpty())
@@ -49,13 +58,12 @@ class GamePlayFragment : Fragment() {
                     }
             })
             viewmodel.deleteLocalMatchState.observe(this, Observer {
-                if (it.status == Status.SUCCESS) {
-                    activity.finish()
-                } else if (it.status == Status.ERROR)
+                if (it.status == Status.ERROR)
                     view?.let { view ->
                         if (it.message.isNotEmpty())
                             Snackbar.make(view, it.message, Snackbar.LENGTH_SHORT).show()
                     }
+                activity.finish() // whatever happen, this activity have to be kill as model is already unbinded
             })
 
             fastAdapter = getFastAdapter()

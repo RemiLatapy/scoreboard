@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import remi.scoreboard.R
-import remi.scoreboard.activity.MainActivity
 import remi.scoreboard.data.PlayerScore
 import remi.scoreboard.repository.MatchRepository
 import remi.scoreboard.repository.PlayerScoreRepository
@@ -71,12 +70,10 @@ class GamePlayViewModel : ViewModel() {
                 setTitle(act.getString(R.string.exit))
                 setMessage(act.getString(R.string.discard_finish_dialog_message))
                 setPositiveButton(act.getString(R.string.finish)) { _, _ ->
-                    MainActivity.fragmentDest = R.id.stats_dest
                     saveLocalMatch()
                 }
                 setNeutralButton(act.getString(R.string.cancel), null)
                 setNegativeButton(act.getString(R.string.discard)) { _, _ ->
-                    MainActivity.fragmentDest = R.id.game_list_dest
                     deleteLocalMatch()
                 }
                 show()
@@ -90,8 +87,8 @@ class GamePlayViewModel : ViewModel() {
                 setTitle(act.getString(R.string.finish_game_dialog_title))
                 setMessage(act.getString(R.string.finish_game_dialog_message))
                 setPositiveButton(act.getString(R.string.finish)) { _, _ ->
-                    MainActivity.fragmentDest = R.id.stats_dest
-                    saveLocalMatch() }
+                    saveLocalMatch()
+                }
                 setNegativeButton(act.getString(R.string.cancel), null)
                 show()
             }

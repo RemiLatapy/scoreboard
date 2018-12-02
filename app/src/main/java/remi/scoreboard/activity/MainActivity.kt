@@ -1,6 +1,9 @@
 package remi.scoreboard.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavOptions
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -26,7 +29,20 @@ import remi.scoreboard.viewmodel.MainActivityViewModel
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        var fragmentDest = -1
+        val navigateIntentFilter = "navigate-to-dest"
+    }
+
+    var fragmentDest = -1
+
+    private val fragmentNavReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val dest = it.getIntExtra("dest", -1)
+//                TODO Navigation using nav component cannot be done while activity is paused
+//                https://stackoverflow.com/questions/51895243/ignoring-navigate-call-fragmentmanager-has-already-saved-its-state?noredirect=1&lq=1
+                fragmentDest = dest
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val host: NavHostFragment = supportFragmentManager
+        val host = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment? ?: return
         val navController = host.navController
 
@@ -47,6 +63,9 @@ class MainActivity : AppCompatActivity() {
         bottomNav?.setupWithNavController(navController)
 
         showTempMatchRecoverDialogIfNeeded()
+
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(fragmentNavReceiver, IntentFilter(navigateIntentFilter))
 
         // TODO is it the right place to prepopulate DB -- (temp) disable offline mode
 //        val gameViewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
@@ -80,10 +99,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (fragmentDest != -1) {
-            val options = NavOptions.Builder().apply {
-                setPopUpTo(fragmentDest, true)
-            }.build()
-            findNavController(R.id.nav_host_fragment_main).navigate(fragmentDest, null, options)
+            findNavController(R.id.nav_host_fragment_main).navigate(fragmentDest)
             fragmentDest = -1
         }
     }
@@ -101,5 +117,10 @@ class MainActivity : AppCompatActivity() {
 // TODO this way lead to fragment stacking instead of replacing (= back button navigate back instead of exit)
         return item.onNavDestinationSelected(findNavController(R.id.nav_host_fragment_main))
                 || super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(fragmentNavReceiver)
     }
 }
