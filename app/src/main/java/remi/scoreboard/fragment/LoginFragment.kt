@@ -70,7 +70,7 @@ class LoginFragment : Fragment() {
             when (cb.status) {
                 Status.SUCCESS -> {
                     progressBar.visibility = View.INVISIBLE
-                    val action = LoginFragmentDirections.ActionLoginToMain()
+                    val action = LoginFragmentDirections.actionLoginToMain()
                     findNavController().navigate(action)
                     activity?.finish()
                 }
